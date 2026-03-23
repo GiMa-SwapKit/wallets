@@ -63,8 +63,6 @@ jobs:
       - name: Create Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1.4.10
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           title: ":tada: Publish Wallets Release"
           version: bun version-bump
