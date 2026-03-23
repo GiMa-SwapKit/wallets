@@ -12,7 +12,7 @@ import {
   WalletOption,
 } from "@swapkit-dev/helpers";
 import type { DerivedAddress, FullWallet } from "@swapkit-dev/toolboxes";
-import { createWallet, getWalletSupportedChains } from "@swapkit-dev/wallet-core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export {
   decryptFromKeystore,

@@ -1,1 +1,1 @@
-export * from "@swapkit-dev/wallet-extensions/okx";
+export * from "@swapkit/wallet-extensions/okx";

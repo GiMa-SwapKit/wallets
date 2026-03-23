@@ -5,7 +5,7 @@
     "@scure/bip39": "2.0.1",
     "@swapkit-dev/helpers": "^4.11.0",
     "@swapkit-dev/toolboxes": "^4.11.2",
-    "@swapkit-dev/wallet-core": "workspace:*"
+    "@swapkit/wallet-core": "workspace:*"
   },
   "description": "SwapKit - Wallet Keystore",
   "exports": {
@@ -22,7 +22,7 @@
   ],
   "homepage": "https://github.com/swapkit/wallets",
   "license": "SEE LICENSE IN LICENSE",
-  "name": "@swapkit-dev/wallet-keystore",
+  "name": "@swapkit/wallet-keystore",
   "publishConfig": {
     "access": "restricted"
   },

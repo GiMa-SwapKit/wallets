@@ -1,1 +1,1 @@
-export * from "@swapkit-dev/wallet-keystore";
+export * from "@swapkit/wallet-keystore";

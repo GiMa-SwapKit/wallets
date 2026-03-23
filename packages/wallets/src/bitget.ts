@@ -1,1 +1,1 @@
-export * from "@swapkit-dev/wallet-extensions/bitget";
+export * from "@swapkit/wallet-extensions/bitget";

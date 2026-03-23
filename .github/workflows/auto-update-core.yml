@@ -2,7 +2,7 @@ name: Auto-update Core Dependencies
 
 on:
   repository_dispatch:
-    types: [core-published]
+    types: [sdk-release]
 
 jobs:
   update-deps:
@@ -19,16 +19,18 @@ jobs:
 
       - name: Setup Repo
         uses: ./tools/github/setup-repo
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Update @swapkit-dev/* dependencies
         shell: bash
         run: |
-          echo "📦 Core published new versions:"
-          echo '${{ toJson(github.event.client_payload.updates) }}'
+          echo "📦 SDK published new versions:"
+          echo '${{ toJson(github.event.client_payload.packages) }}'
 
           # Update each published package across all workspace package.json files
-          for row in $(echo '${{ toJson(github.event.client_payload.updates) }}' | jq -c '.[]'); do
-            PKG=$(echo "$row" | jq -r '.package')
+          for row in $(echo '${{ toJson(github.event.client_payload.packages) }}' | jq -c '.[]'); do
+            PKG=$(echo "$row" | jq -r '.name')
             VER=$(echo "$row" | jq -r '.version')
 
             echo "Updating $PKG to ^$VER"
@@ -61,7 +63,7 @@ jobs:
       - name: Create changeset
         shell: bash
         run: |
-          UPDATES=$(echo '${{ toJson(github.event.client_payload.updates) }}' | jq -r '.[] | "\(.package)@\(.version)"' | tr '\n' ', ' | sed 's/,$//')
+          UPDATES=$(echo '${{ toJson(github.event.client_payload.packages) }}' | jq -r '.[] | "\(.name)@\(.version)"' | tr '\n' ', ' | sed 's/,$//')
 
           mkdir -p .changeset
           CHANGESET_ID="core-update-$(date +%s)"
@@ -71,8 +73,8 @@ jobs:
           for pkg_json in packages/*/package.json; do
             PKG_NAME=$(jq -r '.name' "$pkg_json")
             # Check if any updated core dep is in this package
-            for row in $(echo '${{ toJson(github.event.client_payload.updates) }}' | jq -c '.[]'); do
-              DEP=$(echo "$row" | jq -r '.package')
+            for row in $(echo '${{ toJson(github.event.client_payload.packages) }}' | jq -c '.[]'); do
+              DEP=$(echo "$row" | jq -r '.name')
               if jq -e ".dependencies[\"$DEP\"] // .devDependencies[\"$DEP\"]" "$pkg_json" > /dev/null 2>&1; then
                 BUMPS="$BUMPS
           '$PKG_NAME': patch"
@@ -114,10 +116,10 @@ jobs:
 
             **Updated packages:**
             ```
-            ${{ toJson(github.event.client_payload.updates) }}
+            ${{ toJson(github.event.client_payload.packages) }}
             ```
 
-            > 🤖 This PR was created automatically by the `core-published` dispatch event.
+            > 🤖 This PR was created automatically by the `sdk-release` dispatch event.
           branch: auto/core-dep-update
           delete-branch: true
           labels: dependencies,automated

@@ -19,7 +19,7 @@
   ],
   "homepage": "https://github.com/swapkit/wallets",
   "license": "SEE LICENSE IN LICENSE",
-  "name": "@swapkit-dev/wallet-mobile",
+  "name": "@swapkit/wallet-mobile",
   "publishConfig": {
     "access": "restricted"
   },

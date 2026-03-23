@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   build-lint-test:
@@ -18,6 +18,8 @@ jobs:
 
       - name: Setup Repo
         uses: ./tools/github/setup-repo
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
 
       - run: bun build:ci
       - run: bun lint
@@ -43,6 +45,8 @@ jobs:
 
       - name: Setup Repo
         uses: ./tools/github/setup-repo
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Upgrade npm for OIDC trusted publishing
         run: npm install -g npm@latest
@@ -59,6 +63,8 @@ jobs:
       - name: Create Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1.4.10
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           title: ":tada: Publish Wallets Release"
           version: bun version-bump

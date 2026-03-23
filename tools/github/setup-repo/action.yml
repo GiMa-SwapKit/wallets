@@ -2,6 +2,11 @@ name: Setup
 description: 'Setup JS workflow, install dependencies and cache them'
 author: 'swapkit-dev'
 
+inputs:
+  npm-token:
+    description: 'NPM token for private @swapkit-dev packages'
+    required: true
+
 runs:
   using: 'composite'
   steps:
@@ -16,4 +21,6 @@ runs:
 
     - name: Install packages
       shell: bash
+      env:
+        NPM_TOKEN: ${{ inputs.npm-token }}
       run: bun install
