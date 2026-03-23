@@ -19,8 +19,10 @@ runs:
         node-version: '22'
         registry-url: 'https://registry.npmjs.org'
 
+    - name: Configure npm auth
+      shell: bash
+      run: echo "//registry.npmjs.org/:_authToken=${{ inputs.npm-token }}" >> .npmrc
+
     - name: Install packages
       shell: bash
-      env:
-        NPM_TOKEN: ${{ inputs.npm-token }}
       run: bun install
