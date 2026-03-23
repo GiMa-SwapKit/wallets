@@ -1,0 +1,382 @@
+# @swapkit-dev/wallets
+
+## 4.5.15
+
+### Patch Changes
+
+- Updated dependencies [[`686341c`](https://github.com/swapkit/sdk/commit/686341cc66cc09b6389d19f57787203c72566ff8)]:
+  - @swapkit-dev/toolboxes@4.11.2
+  - @swapkit-dev/helpers@4.11.0
+  - @swapkit-dev/wallet-extensions@4.3.6
+  - @swapkit-dev/wallet-hardware@4.5.6
+  - @swapkit-dev/wallet-keystore@4.3.6
+
+## 4.5.14
+
+### Patch Changes
+
+- Updated dependencies [[`f661bbe`](https://github.com/swapkit/sdk/commit/f661bbe11f4b4562ecebbfd1f6a024f5ecbb35ad)]:
+  - @swapkit-dev/toolboxes@4.11.1
+  - @swapkit-dev/helpers@4.11.0
+  - @swapkit-dev/wallet-extensions@4.3.5
+  - @swapkit-dev/wallet-hardware@4.5.5
+  - @swapkit-dev/wallet-keystore@4.3.5
+
+## 4.5.13
+
+### Patch Changes
+
+- [#139](https://github.com/swapkit/sdk/pull/139) [`de2ae45`](https://github.com/swapkit/sdk/commit/de2ae45af86d78a25c4a3132e6f452362370a910) Thanks [@towanTG](https://github.com/towanTG)! - Add TON support for Trust Wallet: create dedicated trustwallet connector handling both EVM and TON chains, update widget chain config
+
+- Updated dependencies [[`de2ae45`](https://github.com/swapkit/sdk/commit/de2ae45af86d78a25c4a3132e6f452362370a910), [`9804504`](https://github.com/swapkit/sdk/commit/9804504d0500d2a30dcc2677dba084a8a77cbcc7), [`997361a`](https://github.com/swapkit/sdk/commit/997361a6dabb079731268785c76d92e8e022b2be), [`9804504`](https://github.com/swapkit/sdk/commit/9804504d0500d2a30dcc2677dba084a8a77cbcc7), [`9804504`](https://github.com/swapkit/sdk/commit/9804504d0500d2a30dcc2677dba084a8a77cbcc7)]:
+  - @swapkit-dev/wallet-extensions@4.3.4
+  - @swapkit-dev/toolboxes@4.11.0
+  - @swapkit-dev/helpers@4.11.0
+  - @swapkit-dev/wallet-keystore@4.3.4
+  - @swapkit-dev/wallet-hardware@4.5.4
+  - @swapkit-dev/wallet-core@4.1.19
+
+## 4.5.12
+
+### Patch Changes
+
+- Updated dependencies [[`c2de41f`](https://github.com/swapkit/sdk/commit/c2de41f9773f0814a11d3ec0d191598b253d67da)]:
+  - @swapkit-dev/toolboxes@4.10.3
+  - @swapkit-dev/helpers@4.10.7
+  - @swapkit-dev/wallet-extensions@4.3.3
+  - @swapkit-dev/wallet-hardware@4.5.3
+  - @swapkit-dev/wallet-keystore@4.3.3
+  - @swapkit-dev/wallet-core@4.1.18
+
+## 4.5.11
+
+### Patch Changes
+
+- Updated dependencies [[`80dd152`](https://github.com/swapkit/sdk/commit/80dd1525a812573e6bb4d2218ea3a7b3e5e9eef6)]:
+  - @swapkit-dev/wallet-hardware@4.5.2
+  - @swapkit-dev/helpers@4.10.6
+  - @swapkit-dev/toolboxes@4.10.2
+  - @swapkit-dev/wallet-core@4.1.17
+  - @swapkit-dev/wallet-extensions@4.3.2
+  - @swapkit-dev/wallet-keystore@4.3.2
+
+## 4.5.10
+
+### Patch Changes
+
+- Updated dependencies [[`6346a4a`](https://github.com/swapkit/sdk/commit/6346a4a3c5cdde95f282b841d80d79c8eece47a8)]:
+  - @swapkit-dev/helpers@4.10.5
+  - @swapkit-dev/toolboxes@4.10.1
+  - @swapkit-dev/wallet-core@4.1.16
+  - @swapkit-dev/wallet-extensions@4.3.1
+  - @swapkit-dev/wallet-hardware@4.5.1
+  - @swapkit-dev/wallet-keystore@4.3.1
+
+## 4.5.9
+
+### Patch Changes
+
+- [#120](https://github.com/swapkit/sdk/pull/120) [`0fd10ee`](https://github.com/swapkit/sdk/commit/0fd10eedd1c39324d4559c3e44f94ab1d55e644a) Thanks [@towanTG](https://github.com/towanTG)! - feat(utxo): replace bitcoinjs-lib with scure-btc-signer for all UTXO chains
+
+  Introduces @swapkit-dev/utxo-signer as a standalone signing package built on @noble/hashes and @scure/btc-signer. Refactors UTXO toolbox with HD wallet derivation, RBF (replace-by-fee) support, Zcash PCZT transaction builder, improved fee estimation, and batch UTXO fetching for Dogecoin. Hardware wallets (Ledger, Trezor, KeepKey) and keystore wallet updated to use the new signer.
+
+- Updated dependencies [[`0fd10ee`](https://github.com/swapkit/sdk/commit/0fd10eedd1c39324d4559c3e44f94ab1d55e644a)]:
+  - @swapkit-dev/utxo-signer@2.1.0
+  - @swapkit-dev/toolboxes@4.10.0
+  - @swapkit-dev/helpers@4.10.4
+  - @swapkit-dev/wallet-hardware@4.5.0
+  - @swapkit-dev/wallet-keystore@4.3.0
+  - @swapkit-dev/wallet-extensions@4.3.0
+  - @swapkit-dev/wallet-core@4.1.15
+
+## 4.5.8
+
+### Patch Changes
+
+- Updated dependencies [[`365fd35`](https://github.com/swapkit/sdk/commit/365fd35f35e9ad171509ead07c234244187e0a1c)]:
+  - @swapkit-dev/toolboxes@4.9.7
+  - @swapkit-dev/helpers@4.10.3
+  - @swapkit-dev/wallet-extensions@4.2.18
+  - @swapkit-dev/wallet-hardware@4.4.19
+  - @swapkit-dev/wallet-keystore@4.2.18
+
+## 4.5.7
+
+### Patch Changes
+
+- Updated dependencies [[`861ab82`](https://github.com/swapkit/sdk/commit/861ab8293b8ec9ab486ff3a9fec09dbaa89d3bae)]:
+  - @swapkit-dev/wallet-hardware@4.4.18
+
+## 4.5.6
+
+### Patch Changes
+
+- Updated dependencies [[`cb3f8b4`](https://github.com/swapkit/sdk/commit/cb3f8b426eda4e65513b0d1fbfc263dff961a30d)]:
+  - @swapkit-dev/helpers@4.10.3
+  - @swapkit-dev/toolboxes@4.9.6
+  - @swapkit-dev/wallet-core@4.1.14
+  - @swapkit-dev/wallet-extensions@4.2.17
+  - @swapkit-dev/wallet-hardware@4.4.17
+  - @swapkit-dev/wallet-keystore@4.2.17
+
+## 4.5.5
+
+### Patch Changes
+
+- Updated dependencies [[`36f0c95`](https://github.com/swapkit/sdk/commit/36f0c9535bec4d608a853d5a00f178b4f4cc09f4), [`3fbec61`](https://github.com/swapkit/sdk/commit/3fbec61cf9b4a5a6b8604c6c3b94d15a3e9de0d7)]:
+  - @swapkit-dev/wallet-hardware@4.4.16
+  - @swapkit-dev/toolboxes@4.9.5
+  - @swapkit-dev/helpers@4.10.2
+  - @swapkit-dev/wallet-extensions@4.2.16
+  - @swapkit-dev/wallet-keystore@4.2.16
+  - @swapkit-dev/wallet-core@4.1.13
+
+## 4.5.4
+
+### Patch Changes
+
+- Updated dependencies [[`d49a4f2`](https://github.com/swapkit/sdk/commit/d49a4f21cd8929212161321f3ed9956dceb8d7c1)]:
+  - @swapkit-dev/helpers@4.10.1
+  - @swapkit-dev/toolboxes@4.9.4
+  - @swapkit-dev/wallet-core@4.1.12
+  - @swapkit-dev/wallet-extensions@4.2.15
+  - @swapkit-dev/wallet-hardware@4.4.15
+  - @swapkit-dev/wallet-keystore@4.2.15
+
+## 4.5.3
+
+### Patch Changes
+
+- Updated dependencies [[`6b26d26`](https://github.com/swapkit/sdk/commit/6b26d26ab61fa4a05021bae1055fbefca14516f2), [`2a3f741`](https://github.com/swapkit/sdk/commit/2a3f74120c83724dc61360ac3bcae848683218c1), [`6b26d26`](https://github.com/swapkit/sdk/commit/6b26d26ab61fa4a05021bae1055fbefca14516f2), [`6b26d26`](https://github.com/swapkit/sdk/commit/6b26d26ab61fa4a05021bae1055fbefca14516f2), [`39e2cff`](https://github.com/swapkit/sdk/commit/39e2cff71fd205e4840545b1f3e394ec6933b33e), [`4c85d18`](https://github.com/swapkit/sdk/commit/4c85d1813a55cc3d205f647788ed56ace6372ebd), [`f041b69`](https://github.com/swapkit/sdk/commit/f041b69431a9c891780c931e591b8691a2a85daa)]:
+  - @swapkit-dev/helpers@4.10.0
+  - @swapkit-dev/toolboxes@4.9.3
+  - @swapkit-dev/wallet-hardware@4.4.14
+  - @swapkit-dev/wallet-extensions@4.2.14
+  - @swapkit-dev/wallet-core@4.1.11
+  - @swapkit-dev/wallet-keystore@4.2.14
+
+## 4.5.2
+
+### Patch Changes
+
+- Updated dependencies [[`61296c8`](https://github.com/swapkit/sdk/commit/61296c81f33981c96bfba590c98298ee5629a06f)]:
+  - @swapkit-dev/helpers@4.9.5
+  - @swapkit-dev/toolboxes@4.9.2
+  - @swapkit-dev/wallet-core@4.1.10
+  - @swapkit-dev/wallet-extensions@4.2.13
+  - @swapkit-dev/wallet-hardware@4.4.13
+  - @swapkit-dev/wallet-keystore@4.2.13
+
+## 4.5.1
+
+### Patch Changes
+
+- Updated dependencies [[`01cfad6`](https://github.com/swapkit/sdk/commit/01cfad601398e39fb852f97f4fa6dbf6309bb680), [`01cfad6`](https://github.com/swapkit/sdk/commit/01cfad601398e39fb852f97f4fa6dbf6309bb680), [`01cfad6`](https://github.com/swapkit/sdk/commit/01cfad601398e39fb852f97f4fa6dbf6309bb680), [`bdd6a23`](https://github.com/swapkit/sdk/commit/bdd6a237c41cb6a14465b04c9acbc3fbe2899be4)]:
+  - @swapkit-dev/helpers@4.9.4
+  - @swapkit-dev/toolboxes@4.9.1
+  - @swapkit-dev/wallet-core@4.1.9
+  - @swapkit-dev/wallet-extensions@4.2.12
+  - @swapkit-dev/wallet-hardware@4.4.12
+  - @swapkit-dev/wallet-keystore@4.2.12
+
+## 4.5.0
+
+### Minor Changes
+
+- [#54](https://github.com/swapkit/sdk/pull/54) [`123f2d6`](https://github.com/swapkit/sdk/commit/123f2d6454e8023d28d0d878f95c876ca5738d10) Thanks [@ice-chillios](https://github.com/ice-chillios)! - feat(ripple): add XRPL token support with trust line management
+
+  - Add token transfer support for XRPL issued currencies
+  - Add trust line management: `getTrustLines`, `hasTrustLine`, `setTrustLine`, `setTrustLineAndBroadcast`
+  - Add currency encoding utilities for hex/ASCII XRPL currency codes
+  - Add known tokens list with verified issuers (USDC, RLUSD, Bitstamp, GateHub, Sologenic)
+  - Add Xaman wallet support for token transfers and trust line operations
+  - Add new Ripple-specific error codes
+  - Mark Ripple as case-sensitive chain for asset identifiers
+
+### Patch Changes
+
+- Updated dependencies [[`8e2587a`](https://github.com/swapkit/sdk/commit/8e2587a0bfcd41a1023fadb821903a4961d0aeef), [`1640cd7`](https://github.com/swapkit/sdk/commit/1640cd7ba5ff3397d278ce6a08f84ee98cfd356f), [`123f2d6`](https://github.com/swapkit/sdk/commit/123f2d6454e8023d28d0d878f95c876ca5738d10)]:
+  - @swapkit-dev/toolboxes@4.9.0
+  - @swapkit-dev/helpers@4.9.3
+  - @swapkit-dev/wallet-extensions@4.2.11
+  - @swapkit-dev/wallet-hardware@4.4.11
+  - @swapkit-dev/wallet-keystore@4.2.11
+  - @swapkit-dev/wallet-core@4.1.8
+
+## 4.4.10
+
+### Patch Changes
+
+- Updated dependencies [[`4d1ea1d`](https://github.com/swapkit/sdk/commit/4d1ea1da6528da59861d5e1f7de51cad41a1f0cc)]:
+  - @swapkit-dev/wallet-extensions@4.2.10
+  - @swapkit-dev/wallet-hardware@4.4.10
+  - @swapkit-dev/helpers@4.9.2
+  - @swapkit-dev/toolboxes@4.8.1
+  - @swapkit-dev/wallet-core@4.1.7
+  - @swapkit-dev/wallet-keystore@4.2.10
+
+## 4.4.9
+
+### Patch Changes
+
+- Updated dependencies [[`8d9fd7d`](https://github.com/swapkit/sdk/commit/8d9fd7d56dbfe57638204060d029680452e08c39)]:
+  - @swapkit-dev/toolboxes@4.8.0
+  - @swapkit-dev/helpers@4.9.1
+  - @swapkit-dev/wallet-extensions@4.2.9
+  - @swapkit-dev/wallet-hardware@4.4.9
+  - @swapkit-dev/wallet-keystore@4.2.9
+  - @swapkit-dev/wallet-core@4.1.6
+
+## 4.4.8
+
+### Patch Changes
+
+- Updated dependencies [[`08d41d2`](https://github.com/swapkit/sdk/commit/08d41d2476c56a6f81f5ea83902e6c497278c995)]:
+  - @swapkit-dev/helpers@4.9.0
+  - @swapkit-dev/toolboxes@4.7.0
+  - @swapkit-dev/wallet-core@4.1.5
+  - @swapkit-dev/wallet-extensions@4.2.8
+  - @swapkit-dev/wallet-hardware@4.4.8
+  - @swapkit-dev/wallet-keystore@4.2.8
+
+## 4.4.7
+
+### Patch Changes
+
+- Updated dependencies [[`e8b5bd5`](https://github.com/swapkit/sdk/commit/e8b5bd5e2cb9709265a488b2a0201077342c89b4)]:
+  - @swapkit-dev/toolboxes@4.6.7
+  - @swapkit-dev/helpers@4.8.4
+  - @swapkit-dev/wallet-extensions@4.2.7
+  - @swapkit-dev/wallet-hardware@4.4.7
+  - @swapkit-dev/wallet-keystore@4.2.7
+
+## 4.4.6
+
+### Patch Changes
+
+- Updated dependencies [[`f220ae3`](https://github.com/swapkit/sdk/commit/f220ae38a32408093cebddc10b68a40bd088a64e)]:
+  - @swapkit-dev/toolboxes@4.6.6
+  - @swapkit-dev/helpers@4.8.4
+  - @swapkit-dev/wallet-extensions@4.2.6
+  - @swapkit-dev/wallet-hardware@4.4.6
+  - @swapkit-dev/wallet-keystore@4.2.6
+
+## 4.4.5
+
+### Patch Changes
+
+- Updated dependencies [[`71d84ca`](https://github.com/swapkit/sdk/commit/71d84ca4c243cbce6617cfdea7ea2f0feb696fd7)]:
+  - @swapkit-dev/toolboxes@4.6.5
+  - @swapkit-dev/helpers@4.8.4
+  - @swapkit-dev/wallet-extensions@4.2.5
+  - @swapkit-dev/wallet-hardware@4.4.5
+  - @swapkit-dev/wallet-keystore@4.2.5
+
+## 4.4.4
+
+### Patch Changes
+
+- Updated dependencies [[`c11cd18`](https://github.com/swapkit/sdk/commit/c11cd18052ca4e2f8c8fe0d678378e8d880073cd), [`fd43ab5`](https://github.com/swapkit/sdk/commit/fd43ab57e16d4ebac6960afc507678d427edf278), [`5d34cc2`](https://github.com/swapkit/sdk/commit/5d34cc2feb111517058a355d5215c66658469df6)]:
+  - @swapkit-dev/helpers@4.8.4
+  - @swapkit-dev/toolboxes@4.6.4
+  - @swapkit-dev/wallet-core@4.1.4
+  - @swapkit-dev/wallet-extensions@4.2.4
+  - @swapkit-dev/wallet-hardware@4.4.4
+  - @swapkit-dev/wallet-keystore@4.2.4
+
+## 4.4.3
+
+### Patch Changes
+
+- Updated dependencies [[`34c9a02`](https://github.com/swapkit/sdk/commit/34c9a024716424e6b1ad0afe1d13097aca8aaca3), [`c79c65a`](https://github.com/swapkit/sdk/commit/c79c65ab5aabde6219e017501e7b1e3238ea316c), [`63c9069`](https://github.com/swapkit/sdk/commit/63c9069c76004e08beb42d289ed6d046c79e4e7f)]:
+  - @swapkit-dev/toolboxes@4.6.3
+  - @swapkit-dev/helpers@4.8.3
+  - @swapkit-dev/wallet-extensions@4.2.3
+  - @swapkit-dev/wallet-hardware@4.4.3
+  - @swapkit-dev/wallet-keystore@4.2.3
+  - @swapkit-dev/wallet-core@4.1.3
+
+## 4.4.2
+
+### Patch Changes
+
+- Updated dependencies [[`38b55e7`](https://github.com/swapkit/sdk/commit/38b55e7e1455149f932a575cac4837d2b0a144db)]:
+  - @swapkit-dev/toolboxes@4.6.2
+  - @swapkit-dev/helpers@4.8.2
+  - @swapkit-dev/wallet-extensions@4.2.2
+  - @swapkit-dev/wallet-hardware@4.4.2
+  - @swapkit-dev/wallet-keystore@4.2.2
+  - @swapkit-dev/wallet-core@4.1.2
+
+## 4.4.1
+
+### Patch Changes
+
+- [`50c49f8`](https://github.com/swapkit/sdk/commit/50c49f88c22c149fede95b109bab1b3ea0b300c4) Thanks [@ice-chillios](https://github.com/ice-chillios)! - Bump
+
+- Updated dependencies [[`49f58fb`](https://github.com/swapkit/sdk/commit/49f58fb78fd08c82bccae0d49d6f9eb9e9e04b2a), [`50c49f8`](https://github.com/swapkit/sdk/commit/50c49f88c22c149fede95b109bab1b3ea0b300c4)]:
+  - @swapkit-dev/toolboxes@4.6.1
+  - @swapkit-dev/helpers@4.8.1
+  - @swapkit-dev/wallet-core@4.1.1
+  - @swapkit-dev/wallet-extensions@4.2.1
+  - @swapkit-dev/wallet-hardware@4.4.1
+  - @swapkit-dev/wallet-keystore@4.2.1
+
+## 4.4.0
+
+### Minor Changes
+
+- [`a4402e9`](https://github.com/swapkit/sdk/commit/a4402e91de5d634da24aa0c752f5e473132a4c71) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Removes async toolboxes and adapts code for it
+
+- [#19](https://github.com/swapkit/sdk/pull/19) [`941d648`](https://github.com/swapkit/sdk/commit/941d648516ce8aca2c5e21827a27f75b34163cee) Thanks [@ice-chillios](https://github.com/ice-chillios)! - Add sync resolving for toolboxes and server sync methods
+
+### Patch Changes
+
+- Updated dependencies [[`a4402e9`](https://github.com/swapkit/sdk/commit/a4402e91de5d634da24aa0c752f5e473132a4c71), [`941d648`](https://github.com/swapkit/sdk/commit/941d648516ce8aca2c5e21827a27f75b34163cee)]:
+  - @swapkit-dev/helpers@4.8.0
+  - @swapkit-dev/toolboxes@4.6.0
+  - @swapkit-dev/wallet-core@4.1.0
+  - @swapkit-dev/wallet-extensions@4.2.0
+  - @swapkit-dev/wallet-hardware@4.4.0
+  - @swapkit-dev/wallet-keystore@4.2.0
+
+## 4.3.15
+
+### Patch Changes
+
+- [#24](https://github.com/swapkit/sdk/pull/24) [`81936df`](https://github.com/swapkit/sdk/commit/81936df75586c2686ffd4b7b228f47b7461fa8d9) Thanks [@towanTG](https://github.com/towanTG)! - Validates Tron address before fetching balance
+
+- Updated dependencies [[`148cd88`](https://github.com/swapkit/sdk/commit/148cd88c64ad573514454334e392bd7c65bb62e2), [`81936df`](https://github.com/swapkit/sdk/commit/81936df75586c2686ffd4b7b228f47b7461fa8d9)]:
+  - @swapkit-dev/toolboxes@4.5.3
+  - @swapkit-dev/wallet-core@4.0.57
+  - @swapkit-dev/wallet-extensions@4.1.15
+  - @swapkit-dev/wallet-hardware@4.3.3
+  - @swapkit-dev/wallet-keystore@4.1.14
+
+## 4.3.14
+
+### Patch Changes
+
+- [`799ccc8`](https://github.com/swapkit/sdk/commit/799ccc82896823a3233a48f97745b979622d5076) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Manual update to fix release
+
+- Updated dependencies [[`799ccc8`](https://github.com/swapkit/sdk/commit/799ccc82896823a3233a48f97745b979622d5076)]:
+  - @swapkit-dev/helpers@4.7.2
+  - @swapkit-dev/toolboxes@4.5.2
+  - @swapkit-dev/wallet-core@4.0.56
+  - @swapkit-dev/wallet-extensions@4.1.14
+  - @swapkit-dev/wallet-hardware@4.3.2
+  - @swapkit-dev/wallet-keystore@4.1.13
+
+## 4.3.13
+
+### Patch Changes
+
+- [`4d60682`](https://github.com/swapkit/sdk/commit/4d606827eda5a8e1842cad9bcf1c88ff0d6f5517) Thanks [@towanTG](https://github.com/towanTG)! - Releases latest changes from public repo - enables monad for some wallets, fixes sui tokens tx building and fixes vultisig
+
+- Updated dependencies [[`2b554fa`](https://github.com/swapkit/sdk/commit/2b554fa2c8c2b7cf5e9c4b8c2b7570393889c443), [`4d60682`](https://github.com/swapkit/sdk/commit/4d606827eda5a8e1842cad9bcf1c88ff0d6f5517), [`2b554fa`](https://github.com/swapkit/sdk/commit/2b554fa2c8c2b7cf5e9c4b8c2b7570393889c443), [`f6d9e39`](https://github.com/swapkit/sdk/commit/f6d9e390a3dc47d777c934d891626c2e8e97e45b)]:
+  - @swapkit-dev/wallet-extensions@4.1.13
+  - @swapkit-dev/helpers@4.6.0
+  - @swapkit-dev/toolboxes@4.5.0
+  - @swapkit-dev/wallet-core@4.0.55
+  - @swapkit-dev/wallet-hardware@4.3.1
+  - @swapkit-dev/wallet-keystore@4.1.12

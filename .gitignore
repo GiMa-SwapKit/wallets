@@ -1,0 +1,6 @@
+node_modules/
+dist/
+*.tsbuildinfo
+.tsconfig.tmp.json
+build/data.json
+.DS_Store

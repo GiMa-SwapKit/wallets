@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-lint-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Repo
+        uses: ./tools/github/setup-repo
+
+      - run: bun build:ci
+      - run: bun lint
+      - run: bun type-check:ci
+
+  publish:
+    needs: [build-lint-test]
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Repo
+        uses: ./tools/github/setup-repo
+
+      - name: Upgrade npm for OIDC trusted publishing
+        run: npm install -g npm@latest
+
+      - name: Copy npmrc config
+        run: cp .npmrc.prod .npmrc
+
+      - name: Set job params
+        shell: bash
+        run: |
+          git config --global user.email "swapkit@users.noreply.github.com"
+          git config --global user.name "swapkit"
+
+      - name: Create Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1.4.10
+        with:
+          title: ":tada: Publish Wallets Release"
+          version: bun version-bump
+          publish: bun publish-packages
+          setupGitUser: false
+          createGithubReleases: false

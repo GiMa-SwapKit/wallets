@@ -1,0 +1,123 @@
+name: Auto-update Core Dependencies
+
+on:
+  repository_dispatch:
+    types: [core-published]
+
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Repo
+        uses: ./tools/github/setup-repo
+
+      - name: Update @swapkit-dev/* dependencies
+        shell: bash
+        run: |
+          echo "📦 Core published new versions:"
+          echo '${{ toJson(github.event.client_payload.updates) }}'
+
+          # Update each published package across all workspace package.json files
+          for row in $(echo '${{ toJson(github.event.client_payload.updates) }}' | jq -c '.[]'); do
+            PKG=$(echo "$row" | jq -r '.package')
+            VER=$(echo "$row" | jq -r '.version')
+
+            echo "Updating $PKG to ^$VER"
+
+            # Update dependencies and devDependencies in all packages
+            for pkg_json in packages/*/package.json; do
+              if jq -e ".dependencies[\"$PKG\"]" "$pkg_json" > /dev/null 2>&1; then
+                jq ".dependencies[\"$PKG\"] = \"^$VER\"" "$pkg_json" > tmp.json && mv tmp.json "$pkg_json"
+                echo "  ✅ Updated $PKG in $pkg_json (dependencies)"
+              fi
+              if jq -e ".devDependencies[\"$PKG\"]" "$pkg_json" > /dev/null 2>&1; then
+                jq ".devDependencies[\"$PKG\"] = \"$VER\"" "$pkg_json" > tmp.json && mv tmp.json "$pkg_json"
+                echo "  ✅ Updated $PKG in $pkg_json (devDependencies)"
+              fi
+            done
+          done
+
+      - name: Install updated dependencies
+        run: bun install
+
+      - name: Build and verify
+        run: bun build:ci
+
+      - name: Lint
+        run: bun lint
+
+      - name: Type check
+        run: bun type-check:ci
+
+      - name: Create changeset
+        shell: bash
+        run: |
+          UPDATES=$(echo '${{ toJson(github.event.client_payload.updates) }}' | jq -r '.[] | "\(.package)@\(.version)"' | tr '\n' ', ' | sed 's/,$//')
+
+          mkdir -p .changeset
+          CHANGESET_ID="core-update-$(date +%s)"
+
+          # Determine which packages need a patch bump
+          BUMPS=""
+          for pkg_json in packages/*/package.json; do
+            PKG_NAME=$(jq -r '.name' "$pkg_json")
+            # Check if any updated core dep is in this package
+            for row in $(echo '${{ toJson(github.event.client_payload.updates) }}' | jq -c '.[]'); do
+              DEP=$(echo "$row" | jq -r '.package')
+              if jq -e ".dependencies[\"$DEP\"] // .devDependencies[\"$DEP\"]" "$pkg_json" > /dev/null 2>&1; then
+                BUMPS="$BUMPS
+          '$PKG_NAME': patch"
+                break
+              fi
+            done
+          done
+
+          cat > ".changeset/$CHANGESET_ID.md" << EOF
+          ---
+          $BUMPS
+          ---
+
+          Update core dependencies: $UPDATES
+          EOF
+
+          echo "📝 Created changeset for: $BUMPS"
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request
+        if: steps.changes.outputs.has_changes == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update @swapkit-dev/* core dependencies"
+          title: "chore: auto-update core dependencies"
+          body: |
+            ## Auto-update from core repo
+
+            The core repo published new package versions. This PR bumps all `@swapkit-dev/*` dependencies.
+
+            **Updated packages:**
+            ```
+            ${{ toJson(github.event.client_payload.updates) }}
+            ```
+
+            > 🤖 This PR was created automatically by the `core-published` dispatch event.
+          branch: auto/core-dep-update
+          delete-branch: true
+          labels: dependencies,automated

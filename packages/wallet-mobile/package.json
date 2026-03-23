@@ -1,0 +1,40 @@
+{
+  "author": "swapkit-dev",
+  "dependencies": {
+    "@swapkit-dev/helpers": "^4.11.0",
+    "@swapkit-dev/toolboxes": "^4.11.2"
+  },
+  "description": "SwapKit - Wallet Mobile",
+  "exports": {
+    ".": {
+      "bun": "./src/index.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/",
+    "src/"
+  ],
+  "homepage": "https://github.com/swapkit/wallets",
+  "license": "SEE LICENSE IN LICENSE",
+  "name": "@swapkit-dev/wallet-mobile",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swapkit/wallets.git",
+    "directory": "packages/wallet-mobile"
+  },
+  "scripts": {
+    "build": "bun run ./build.ts",
+    "build:clean": "rm -rf dist && bun run ./build.ts",
+    "clean": "rm -rf dist node_modules *.tsbuildinfo",
+    "type-check": "bun tsc --noEmit",
+    "type-check:go": "tsgo"
+  },
+  "type": "module",
+  "version": "4.1.25"
+}

@@ -1,0 +1,5 @@
+{
+  "compilerOptions": { "types": ["@types/bun"] },
+  "exclude": ["dist"],
+  "extends": "./tools/typescript/base.json"
+}
