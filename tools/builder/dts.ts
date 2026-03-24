@@ -68,6 +68,7 @@ const dtsPlugin = {
           xrpl: ["../../node_modules/xrpl"],
         } as Record<string, string[]>,
         rootDir: "./src",
+        skipLibCheck: true,
         tsBuildInfoFile: "./tsconfig.tsbuildinfo",
       },
       exclude: ["**/*.test.ts", "**/*.spec.ts"],
