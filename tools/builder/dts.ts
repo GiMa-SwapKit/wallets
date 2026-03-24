@@ -1,4 +1,44 @@
-import { $ } from "bun";
+import { $, Glob } from "bun";
+import { existsSync, mkdirSync, readdirSync, symlinkSync } from "node:fs";
+import { join, resolve } from "node:path";
+
+/**
+ * Bun stores dependencies in node_modules/.bun/ instead of hoisting them
+ * to standard node_modules/<pkg> locations. tsc with declaration emit (TS2742)
+ * can't resolve types through .bun/ paths, so we symlink them before building.
+ */
+async function symlinkBunDeps() {
+  const rootNodeModules = resolve("node_modules");
+  const bunDir = join(rootNodeModules, ".bun");
+
+  if (!existsSync(bunDir)) return;
+
+  for (const entry of readdirSync(bunDir)) {
+    // entries look like: @scope+pkg@version+hash or pkg@version+hash
+    const match = entry.match(/^(@[^+]+)\+([^@]+)@/) || entry.match(/^([^@][^+]*)@/);
+    if (!match) continue;
+
+    const isScoped = entry.startsWith("@");
+    const scope = isScoped ? match[1] : null;
+    const pkgName = isScoped ? match[2] : match[1];
+
+    const fullPkgName = scope ? `${scope}/${pkgName}` : pkgName;
+    const target = join(bunDir, entry, "node_modules", fullPkgName);
+    const link = join(rootNodeModules, fullPkgName);
+
+    if (!existsSync(target) || existsSync(link)) continue;
+
+    if (scope) {
+      mkdirSync(join(rootNodeModules, scope), { recursive: true });
+    }
+
+    try {
+      symlinkSync(target, link, "dir");
+    } catch {
+      // already exists or permission issue — skip
+    }
+  }
+}
 
 const dtsPlugin = {
   name: "@swapkit-dev/bun-dts-plugin",
@@ -18,6 +58,7 @@ const dtsPlugin = {
         isolatedDeclarations: false,
         noEmit: false,
         outDir: "./dist/types",
+        preserveSymlinks: true,
         paths: {
           "@cosmjs/*": ["../../node_modules/@cosmjs/*"],
           "@near-wallet-selector/*": ["../../node_modules/@near-wallet-selector/*"],
@@ -52,7 +93,6 @@ const dtsPlugin = {
 };
 
 export const orderedPackages = [
-  "utxo-signer",
   "wallet-core",
   "wallet-extensions",
   "wallet-hardware",
@@ -60,6 +100,10 @@ export const orderedPackages = [
   "wallet-mobile",
   "wallets",
 ];
+
+// Symlink .bun/ deps to standard node_modules/ paths so tsc can resolve them
+console.info("Symlinking .bun/ dependencies for tsc compatibility...");
+await symlinkBunDeps();
 
 for (const pkg of orderedPackages) {
   console.info(`Building @swapkit-dev/${pkg} d.ts files`);
