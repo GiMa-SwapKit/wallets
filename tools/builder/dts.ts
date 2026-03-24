@@ -7,7 +7,7 @@ import { join, resolve } from "node:path";
  * to standard node_modules/<pkg> locations. tsc with declaration emit (TS2742)
  * can't resolve types through .bun/ paths, so we symlink them before building.
  */
-async function symlinkBunDeps() {
+function symlinkBunDeps() {
   const rootNodeModules = resolve("node_modules");
   const bunDir = join(rootNodeModules, ".bun");
 
