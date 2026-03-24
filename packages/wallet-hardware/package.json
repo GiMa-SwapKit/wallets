@@ -1,7 +1,9 @@
 {
   "author": "swapkit-dev",
   "dependencies": {
+    "@cosmjs/amino": "~0.37.0",
     "@cosmjs/crypto": "0.37.0",
+    "@cosmjs/proto-signing": "~0.37.0",
     "@keepkey/keepkey-sdk": "~0.2.62",
     "@ledgerhq/devices": "~8.10.0",
     "@ledgerhq/errors": "~6.29.0",
@@ -27,11 +29,14 @@
     "cosmjs-types": "~0.10.1",
     "ethers": "^6.14.0",
     "ripple-binary-codec": "2.5.1",
-    "ts-pattern": "^5.9.0"
+    "ts-pattern": "^5.9.0",
+    "xrpl": "~4.4.2"
   },
   "description": "SwapKit - Wallet Hardware",
   "devDependencies": {
+    "@cosmjs/amino": "0.37.0",
     "@cosmjs/crypto": "0.37.0",
+    "@cosmjs/proto-signing": "0.37.0",
     "@keepkey/keepkey-sdk": "0.2.62",
     "@ledgerhq/devices": "8.10.0",
     "@ledgerhq/errors": "6.29.0",
@@ -53,7 +58,8 @@
     "cosmjs-types": "0.10.1",
     "ethers": "6.16.0",
     "ripple-binary-codec": "2.5.1",
-    "ts-pattern": "^5.9.0"
+    "ts-pattern": "^5.9.0",
+    "xrpl": "4.4.2"
   },
   "exports": {
     ".": {
