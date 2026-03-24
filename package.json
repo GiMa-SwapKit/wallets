@@ -6,7 +6,7 @@
   "scripts": {
     "build": "bun run --filter './packages/*' build",
     "build:clean": "bun run --filter './packages/*' build:clean",
-    "build:ci": "bun build && bun build:dts",
+    "build:ci": "bun run build && bun run build:dts",
     "build:dts": "bun run ./tools/builder/dts.ts",
     "lint": "bunx @biomejs/biome check --fix .",
     "type-check": "bun run --filter './packages/*' type-check",
@@ -14,7 +14,7 @@
     "test": "bun test",
     "changeset": "bunx changeset",
     "version-bump": "bunx changeset version",
-    "publish-packages": "bun build:ci && bunx changeset publish"
+    "publish-packages": "bun run build:ci && bunx changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "2.3.11",
