@@ -58,7 +58,6 @@ const dtsPlugin = {
         isolatedDeclarations: false,
         noEmit: false,
         outDir: "./dist/types",
-        preserveSymlinks: true,
         paths: {
           "@cosmjs/*": ["../../node_modules/@cosmjs/*"],
           "@near-wallet-selector/*": ["../../node_modules/@near-wallet-selector/*"],
@@ -68,7 +67,6 @@ const dtsPlugin = {
           xrpl: ["../../node_modules/xrpl"],
         } as Record<string, string[]>,
         rootDir: "./src",
-        skipLibCheck: true,
         tsBuildInfoFile: "./tsconfig.tsbuildinfo",
       },
       exclude: ["**/*.test.ts", "**/*.spec.ts"],
