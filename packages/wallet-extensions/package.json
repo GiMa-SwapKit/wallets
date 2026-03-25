@@ -142,7 +142,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "name": "@swapkit/wallet-extensions",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "repository": {
     "type": "git",

@@ -211,7 +211,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "name": "@swapkit/wallets",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "repository": {
     "type": "git",

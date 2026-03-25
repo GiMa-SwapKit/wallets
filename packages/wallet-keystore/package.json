@@ -23,7 +23,7 @@
   "license": "SEE LICENSE IN LICENSE",
   "name": "@swapkit/wallet-keystore",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "repository": {
     "type": "git",
