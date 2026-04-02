@@ -9,17 +9,17 @@ import {
   SwapKitError,
   type UTXOChain,
   WalletOption,
-} from "@swapkit-dev/helpers";
+} from "@swapkit/helpers";
 import {
   createHDWalletHelpers,
   getNetworkForChain,
   getUtxoApi,
   type UTXOToolboxes,
   type UTXOType,
-} from "@swapkit-dev/toolboxes/utxo";
-import type { BTCNetwork, PCZT, Transaction, ZcashTransaction } from "@swapkit-dev/utxo-signer";
-import { NETWORKS, ZcashConsensusBranchId, ZcashVersionGroupId } from "@swapkit-dev/utxo-signer";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+} from "@swapkit/toolboxes/utxo";
+import type { BTCNetwork, PCZT, Transaction, ZcashTransaction } from "@swapkit/utxo-signer";
+import { NETWORKS, ZcashConsensusBranchId, ZcashVersionGroupId } from "@swapkit/utxo-signer";
+import { createWallet, getWalletSupportedChains } from "../core";
 
 function decodeOpReturnData(script: Uint8Array): string | null {
   if (script.length < 2 || script[0] !== 0x6a) return null;
@@ -106,7 +106,7 @@ async function buildPCZTOutputsForTrezor(pczt: PCZT, address_n: number[], myAddr
 
 async function decodeOutputAddress(script: Uint8Array): Promise<string | undefined> {
   try {
-    const { OutScript, Address } = await import("@swapkit-dev/utxo-signer");
+    const { OutScript, Address } = await import("@swapkit/utxo-signer");
     const decoded = OutScript.decode(script);
     if (decoded.type === "pkh" || decoded.type === "pk") {
       return Address(NETWORKS.zcash).encode(decoded);
@@ -118,7 +118,7 @@ async function decodeOutputAddress(script: Uint8Array): Promise<string | undefin
 }
 
 async function extractSignaturesFromSignedTx(signedTxHex: string, pczt: PCZT): Promise<PCZT> {
-  const { ZcashTransaction: ZcashTx, Script } = await import("@swapkit-dev/utxo-signer");
+  const { ZcashTransaction: ZcashTx, Script } = await import("@swapkit/utxo-signer");
   const signedTx = ZcashTx.fromHex(signedTxHex, { allowUnknownOutputs: true });
   const signedPczt = pczt.clone();
 
@@ -239,7 +239,7 @@ async function getTrezorWallet<T extends Chain>({
     case Chain.Optimism:
     case Chain.Polygon:
     case Chain.XLayer: {
-      const { getProvider, getEvmToolboxAsync } = await import("@swapkit-dev/toolboxes/evm");
+      const { getProvider, getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
       const { getEVMSigner } = await import("./evmSigner");
 
       const provider = await getProvider(chain);
@@ -251,7 +251,7 @@ async function getTrezorWallet<T extends Chain>({
     }
 
     case Chain.Zcash: {
-      const { getUtxoToolbox } = await import("@swapkit-dev/toolboxes/utxo");
+      const { getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
 
       const derivationPathStr = derivationPathToString(derivationPath);
 
@@ -369,9 +369,9 @@ async function getTrezorWallet<T extends Chain>({
           });
         }
 
-        const { createPCZT, OutScript } = await import("@swapkit-dev/utxo-signer");
+        const { createPCZT, OutScript } = await import("@swapkit/utxo-signer");
         const { hex: hexEncode } = await import("@scure/base");
-        const { getUtxoApi } = await import("@swapkit-dev/toolboxes/utxo");
+        const { getUtxoApi } = await import("@swapkit/toolboxes/utxo");
 
         const feeRate = params.feeRate || (await toolbox.getFeeRates())[params.feeOptionKey || FeeOption.Fast];
 
@@ -428,7 +428,7 @@ async function getTrezorWallet<T extends Chain>({
     case Chain.Dash:
     case Chain.Dogecoin:
     case Chain.Litecoin: {
-      const { toCashAddress, getUtxoToolbox } = await import("@swapkit-dev/toolboxes/utxo");
+      const { toCashAddress, getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
       const scriptType = getScriptType(derivationPath);
 
       if (!scriptType) {

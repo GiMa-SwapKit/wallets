@@ -1,5 +1,11 @@
 # @swapkit-dev/wallet-mobile
 
+## 4.2.0
+
+### Minor Changes
+
+- Migrate all dependencies from @swapkit-dev to @swapkit org; inline wallet-core and wallet-keystore packages
+
 ## 4.1.25
 
 ### Patch Changes

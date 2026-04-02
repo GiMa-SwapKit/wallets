@@ -9,10 +9,10 @@ import {
   SwapKitError,
   switchEVMWalletNetwork,
   WalletOption,
-} from "@swapkit-dev/helpers";
-import type { SolanaProvider } from "@swapkit-dev/toolboxes/solana";
-import { Transaction } from "@swapkit-dev/utxo-signer";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+} from "@swapkit/helpers";
+import type { SolanaProvider } from "@swapkit/toolboxes/solana";
+import { Transaction } from "@swapkit/utxo-signer";
+import { createWallet, getWalletSupportedChains } from "../core";
 import {
   AddressPurpose,
   BitcoinNetworkType,
@@ -37,7 +37,7 @@ async function getPasskeyWallet() {
 function getWalletMethods({ wallet, chain: paramChain }: { wallet: Wallet; chain: Chain }) {
   return match(paramChain)
     .with(Chain.Bitcoin, async (chain) => {
-      const { getUtxoToolbox } = await import("@swapkit-dev/toolboxes/utxo");
+      const { getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
       const provider = await wallet.getProvider("bitcoin");
 
       if (!provider) {
@@ -101,7 +101,7 @@ function getWalletMethods({ wallet, chain: paramChain }: { wallet: Wallet; chain
       return { ...toolbox, address };
     })
     .with(...EVMChains, async (chain) => {
-      const { getProvider, getEvmToolboxAsync } = await import("@swapkit-dev/toolboxes/evm");
+      const { getProvider, getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
       const { BrowserProvider } = await import("ethers");
 
       const walletProvider = await wallet.getProvider("ethereum");
@@ -130,7 +130,7 @@ function getWalletMethods({ wallet, chain: paramChain }: { wallet: Wallet; chain
       return { ...prepareNetworkSwitch({ chain, provider: browserProvider, toolbox }), address };
     })
     .with(Chain.Solana, async () => {
-      const { getSolanaToolbox } = await import("@swapkit-dev/toolboxes/solana");
+      const { getSolanaToolbox } = await import("@swapkit/toolboxes/solana");
       const provider = (await wallet.getProvider("solana")) as any as SolanaProvider;
       const providerConnection = await provider.connect();
       const address = providerConnection.publicKey.toString();

@@ -6,8 +6,8 @@ import {
   SwapKitError,
   switchEVMWalletNetwork,
   WalletOption,
-} from "@swapkit-dev/helpers";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+} from "@swapkit/helpers";
+import { createWallet, getWalletSupportedChains } from "../core";
 import type { Eip1193Provider } from "ethers";
 
 export const talismanWallet = createWallet({
@@ -53,7 +53,7 @@ async function getWeb3WalletMethods({
   walletProvider: Eip1193Provider | undefined;
   chain: EVMChain;
 }) {
-  const { getEvmToolboxAsync } = await import("@swapkit-dev/toolboxes/evm");
+  const { getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
   const { BrowserProvider } = await import("ethers");
 
   if (!walletProvider) {
@@ -103,7 +103,7 @@ async function getWalletMethods(chain: Chain) {
 
     case Chain.Polkadot:
     case Chain.Chainflip: {
-      const { getSubstrateToolbox, SubstrateNetwork } = await import("@swapkit-dev/toolboxes/substrate");
+      const { getSubstrateToolbox, SubstrateNetwork } = await import("@swapkit/toolboxes/substrate");
 
       const injectedExtension = window?.injectedWeb3?.talisman;
       const rawExtension = await injectedExtension?.enable?.("talisman");

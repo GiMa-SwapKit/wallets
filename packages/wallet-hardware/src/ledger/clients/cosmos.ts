@@ -3,7 +3,7 @@ import {
   derivationPathToString,
   NetworkDerivationPath,
   SwapKitError,
-} from "@swapkit-dev/helpers";
+} from "@swapkit/helpers";
 import { CosmosLedgerInterface } from "../interfaces/CosmosLedgerInterface";
 
 export class CosmosLedger extends CosmosLedgerInterface {

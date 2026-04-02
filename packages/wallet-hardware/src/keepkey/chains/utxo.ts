@@ -8,15 +8,15 @@ import {
   type GenericTransferParams,
   SwapKitError,
   type UTXOChain,
-} from "@swapkit-dev/helpers";
+} from "@swapkit/helpers";
 import {
   createHDWalletHelpers,
   getNetworkForChain,
   getUtxoApi,
   stripToCashAddress,
   type UTXOToolboxes,
-} from "@swapkit-dev/toolboxes/utxo";
-import type { Transaction } from "@swapkit-dev/utxo-signer";
+} from "@swapkit/toolboxes/utxo";
+import type { Transaction } from "@swapkit/utxo-signer";
 import { bip32ToAddressNList, ChainToKeepKeyName } from "../coins";
 
 interface KeepKeyInputObject {
@@ -37,7 +37,7 @@ export async function utxoWalletMethods({
   chain: Exclude<UTXOChain, typeof Chain.Zcash>;
   derivationPath?: DerivationPathArray;
 }) {
-  const { getUtxoToolbox } = await import("@swapkit-dev/toolboxes/utxo");
+  const { getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
   // This might not work for BCH
   const toolbox = await getUtxoToolbox(chain);
   const scriptType = [Chain.Bitcoin, Chain.Litecoin].includes(chain as typeof Chain.Bitcoin)

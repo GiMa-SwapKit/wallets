@@ -5,8 +5,8 @@ import {
   SKConfig,
   SwapKitError,
   WalletOption,
-} from "@swapkit-dev/helpers";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+} from "@swapkit/helpers";
+import { createWallet, getWalletSupportedChains } from "../core";
 
 export const radixWallet = createWallet({
   connect: ({ addChain, supportedChains, walletType }) =>
@@ -37,7 +37,7 @@ export const RADIX_SUPPORTED_CHAINS = getWalletSupportedChains(radixWallet);
 
 async function getWalletMethods() {
   const { RadixDappToolkit } = await import("@radixdlt/radix-dapp-toolkit");
-  const { getRadixToolbox } = await import("@swapkit-dev/toolboxes/radix");
+  const { getRadixToolbox } = await import("@swapkit/toolboxes/radix");
 
   const dappConfig = SKConfig.get("integrations").radix;
   const rdt = RadixDappToolkit({ ...dappConfig, networkId: dappConfig.network.networkId });

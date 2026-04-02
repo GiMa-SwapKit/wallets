@@ -5,7 +5,7 @@ import {
   derivationPathToString,
   NetworkDerivationPath,
   SwapKitError,
-} from "@swapkit-dev/helpers";
+} from "@swapkit/helpers";
 
 import { getLedgerTransport } from "../helpers/getLedgerTransport";
 

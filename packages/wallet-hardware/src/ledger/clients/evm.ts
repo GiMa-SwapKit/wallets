@@ -5,7 +5,7 @@ import {
   derivationPathToString,
   NetworkDerivationPath,
   SwapKitError,
-} from "@swapkit-dev/helpers";
+} from "@swapkit/helpers";
 import {
   AbstractSigner,
   type Provider,
@@ -93,7 +93,7 @@ class EVMLedgerInterface extends AbstractSigner {
     value: Record<string, unknown>,
     explicitPrimaryType?: string,
   ) => {
-    const { buildEIP712DomainType } = await import("@swapkit-dev/toolboxes/evm");
+    const { buildEIP712DomainType } = await import("@swapkit/toolboxes/evm");
     const { Signature, TypedDataEncoder } = await import("ethers");
     await this.createTransportAndLedger();
 

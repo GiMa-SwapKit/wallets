@@ -1,4 +1,4 @@
-import { Chain, type DerivationPathArray, type EVMChain, SwapKitError, WalletOption } from "@swapkit-dev/helpers";
+import { Chain, type DerivationPathArray, type EVMChain, SwapKitError, WalletOption } from "@swapkit/helpers";
 
 import { CosmosLedger } from "../clients/cosmos";
 import {
@@ -99,7 +99,7 @@ export const getLedgerClient = async <T extends LedgerSupportedChain>({
         Chain.Base,
         Chain.XLayer,
         async () => {
-          const { getProvider } = await import("@swapkit-dev/toolboxes/evm");
+          const { getProvider } = await import("@swapkit/toolboxes/evm");
           const params = { derivationPath, provider: await getProvider(chain as EVMChain) };
 
           return match(chain as Chain)

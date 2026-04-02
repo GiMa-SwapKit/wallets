@@ -1,5 +1,5 @@
-import { Chain, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit-dev/helpers";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+import { Chain, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
+import { createWallet, getWalletSupportedChains } from "../core";
 
 export const petraWallet = createWallet({
   connect: ({ addChain, supportedChains, walletType }) =>
@@ -44,7 +44,7 @@ async function getWalletMethods(_chain: PetraSupportedChain) {
   }
 
   const { createAptosExtensionTransfer, getAptosToolbox, validateAptosAddress } = await import(
-    "@swapkit-dev/toolboxes/aptos"
+    "@swapkit/toolboxes/aptos"
   );
   const { address } = await petra.connect();
 

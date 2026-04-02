@@ -1,5 +1,5 @@
-import { Chain, SwapKitError, WalletOption } from "@swapkit-dev/helpers";
-import { getTronToolbox, type TronTransaction } from "@swapkit-dev/toolboxes/tron";
+import { Chain, SwapKitError, WalletOption } from "@swapkit/helpers";
+import { getTronToolbox, type TronTransaction } from "@swapkit/toolboxes/tron";
 import type { TronLinkWindow } from "./types.js";
 import { TronLinkResponseCode } from "./types.js";
 

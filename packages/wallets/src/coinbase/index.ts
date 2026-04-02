@@ -1,5 +1,5 @@
-import { Chain, ChainToChainId, filterSupportedChains, SKConfig, WalletOption } from "@swapkit-dev/helpers";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+import { Chain, ChainToChainId, filterSupportedChains, SKConfig, WalletOption } from "@swapkit/helpers";
+import { createWallet, getWalletSupportedChains } from "../core";
 
 import { getWalletMethods } from "./signer";
 

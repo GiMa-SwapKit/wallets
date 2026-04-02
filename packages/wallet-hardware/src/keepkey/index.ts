@@ -7,11 +7,11 @@ import {
   SKConfig,
   SwapKitError,
   WalletOption,
-} from "@swapkit-dev/helpers";
+} from "@swapkit/helpers";
 
 export type { PairingInfo } from "@keepkey/keepkey-sdk";
 
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+import { createWallet, getWalletSupportedChains } from "../core";
 import { cosmosWalletMethods } from "./chains/cosmos";
 import { KeepKeySigner } from "./chains/evm";
 import { mayachainWalletMethods } from "./chains/mayachain";
@@ -89,7 +89,7 @@ async function getWalletMethods({
   chain: Chain;
   derivationPath?: DerivationPathArray;
 }) {
-  const { getProvider, getEvmToolboxAsync } = await import("@swapkit-dev/toolboxes/evm");
+  const { getProvider, getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
 
   switch (chain) {
     case Chain.BinanceSmartChain:

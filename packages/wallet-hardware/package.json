@@ -1,5 +1,5 @@
 {
-  "author": "swapkit-dev",
+  "author": "swapkit",
   "dependencies": {
     "@cosmjs/amino": "~0.37.0",
     "@cosmjs/crypto": "0.37.0",
@@ -21,10 +21,9 @@
     "@near-js/crypto": "~2.5.0",
     "@near-js/transactions": "~2.5.0",
     "@scure/base": "2.0.0",
-    "@swapkit-dev/helpers": "^4.12.0",
-    "@swapkit-dev/toolboxes": "^4.11.2",
-    "@swapkit-dev/utxo-signer": "^2.1.0",
-    "@swapkit/wallet-core": "workspace:*",
+    "@swapkit/helpers": "^4.12.0",
+    "@swapkit/toolboxes": "^4.11.2",
+    "@swapkit/utxo-signer": "^2.1.0",
     "@trezor/connect-web": "~9.6.4",
     "cosmjs-types": "~0.10.1",
     "ethers": "^6.14.0",
@@ -109,5 +108,5 @@
     "type-check:go": "tsgo"
   },
   "type": "module",
-  "version": "4.5.6"
+  "version": "4.6.0"
 }

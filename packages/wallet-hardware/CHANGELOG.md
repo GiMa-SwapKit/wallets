@@ -1,5 +1,11 @@
 # @swapkit-dev/wallet-hardware
 
+## 4.6.0
+
+### Minor Changes
+
+- Migrate all dependencies from @swapkit-dev to @swapkit org; inline wallet-core and wallet-keystore packages
+
 ## 4.5.6
 
 ### Patch Changes

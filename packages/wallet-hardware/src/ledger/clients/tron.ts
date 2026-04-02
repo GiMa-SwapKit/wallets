@@ -4,8 +4,8 @@ import {
   derivationPathToString,
   NetworkDerivationPath,
   SwapKitError,
-} from "@swapkit-dev/helpers";
-import type { TronSignedTransaction, TronSigner, TronTransaction } from "@swapkit-dev/toolboxes/tron";
+} from "@swapkit/helpers";
+import type { TronSignedTransaction, TronSigner, TronTransaction } from "@swapkit/toolboxes/tron";
 
 import { getLedgerTransport } from "../helpers/getLedgerTransport";
 

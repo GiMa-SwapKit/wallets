@@ -1,4 +1,4 @@
-import { type DerivationPathArray, LedgerErrorCode, NetworkDerivationPath, SwapKitError } from "@swapkit-dev/helpers";
+import { type DerivationPathArray, LedgerErrorCode, NetworkDerivationPath, SwapKitError } from "@swapkit/helpers";
 
 import { THORChainApp } from "../clients/thorchain/lib";
 import { getLedgerTransport } from "../helpers/getLedgerTransport";

@@ -1,5 +1,11 @@
 # @swapkit-dev/wallet-extensions
 
+## 4.4.0
+
+### Minor Changes
+
+- Migrate all dependencies from @swapkit-dev to @swapkit org; inline wallet-core and wallet-keystore packages
+
 ## 4.3.6
 
 ### Patch Changes

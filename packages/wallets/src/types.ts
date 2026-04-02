@@ -1,4 +1,4 @@
-import { WalletOption } from "@swapkit-dev/helpers";
+import { WalletOption } from "@swapkit/helpers";
 import type { bitgetWallet } from "@swapkit/wallet-extensions/bitget";
 import type { cosmostationWallet } from "@swapkit/wallet-extensions/cosmostation";
 import type { ctrlWallet } from "@swapkit/wallet-extensions/ctrl";

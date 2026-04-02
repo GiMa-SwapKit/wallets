@@ -1,5 +1,5 @@
-import { Chain, EVMChains, filterSupportedChains, WalletOption } from "@swapkit-dev/helpers";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+import { Chain, EVMChains, filterSupportedChains, WalletOption } from "@swapkit/helpers";
+import { createWallet, getWalletSupportedChains } from "../core";
 
 import { getWalletMethods } from "./helpers";
 

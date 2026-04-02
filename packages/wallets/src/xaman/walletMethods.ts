@@ -1,4 +1,4 @@
-import { SwapKitError } from "@swapkit-dev/helpers";
+import { SwapKitError } from "@swapkit/helpers";
 import type { Xumm } from "xumm";
 import type { XamanPaymentParams, XamanTrustSetParams } from "./types";
 

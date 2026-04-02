@@ -6,9 +6,9 @@ import {
   derivationPathToString,
   getWalletFormatFor,
   SwapKitError,
-} from "@swapkit-dev/helpers";
-import type { UTXOType } from "@swapkit-dev/toolboxes/utxo";
-import type { PCZT, Transaction } from "@swapkit-dev/utxo-signer";
+} from "@swapkit/helpers";
+import type { UTXOType } from "@swapkit/toolboxes/utxo";
+import type { PCZT, Transaction } from "@swapkit/utxo-signer";
 
 import { getLedgerTransport } from "../helpers/getLedgerTransport";
 
@@ -142,7 +142,7 @@ const BaseLedgerUTXO = ({
         btcApp = new BitcoinApp({ currency: chain, transport });
       },
       getAddress: async () => {
-        const { toCashAddress } = await import("@swapkit-dev/toolboxes/utxo");
+        const { toCashAddress } = await import("@swapkit/toolboxes/utxo");
 
         await checkBtcAppAndCreateTransportWebUSB(false);
 
@@ -173,7 +173,7 @@ const BaseLedgerUTXO = ({
 
         await createTransportWebUSB();
 
-        const { ZcashTransaction, Script } = await import("@swapkit-dev/utxo-signer");
+        const { ZcashTransaction, Script } = await import("@swapkit/utxo-signer");
 
         const global = pczt.getGlobal();
 

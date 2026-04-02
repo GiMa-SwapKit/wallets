@@ -9,9 +9,9 @@ import {
   SwapKitError,
   switchEVMWalletNetwork,
   WalletOption,
-} from "@swapkit-dev/helpers";
-import type { TONTransactionMessage } from "@swapkit-dev/toolboxes/ton";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+} from "@swapkit/helpers";
+import type { TONTransactionMessage } from "@swapkit/toolboxes/ton";
+import { createWallet, getWalletSupportedChains } from "../core";
 import type { Eip1193Provider } from "ethers";
 
 export type TrustWalletTonProvider = {
@@ -59,7 +59,7 @@ async function connectTon() {
     throw new SwapKitError("core_wallet_connection_not_found");
   }
 
-  const { getTONToolbox } = await import("@swapkit-dev/toolboxes/ton");
+  const { getTONToolbox } = await import("@swapkit/toolboxes/ton");
   const toolbox = getTONToolbox();
 
   async function sendTonTransaction(messages: TONTransactionMessage[]) {
@@ -91,7 +91,7 @@ async function connectEvm(chain: EVMChain) {
   if (!walletProvider) throw new SwapKitError("wallet_evm_extensions_not_found");
 
   const { BrowserProvider } = await import("ethers");
-  const { getEvmToolboxAsync } = await import("@swapkit-dev/toolboxes/evm");
+  const { getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
 
   const provider = new BrowserProvider(walletProvider, "any");
   await provider.send("eth_requestAccounts", []);

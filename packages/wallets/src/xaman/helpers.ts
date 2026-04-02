@@ -1,4 +1,4 @@
-import { type AssetValue, Chain, SwapKitError } from "@swapkit-dev/helpers";
+import { type AssetValue, Chain, SwapKitError } from "@swapkit/helpers";
 import { match } from "ts-pattern";
 import type { Xumm } from "xumm";
 import { sendXamanTransaction, sendXamanTrustSet } from "./walletMethods";
@@ -12,7 +12,7 @@ interface GetWalletForChainParams {
 export function getWalletForChain({ xumm, chain, address }: GetWalletForChainParams) {
   return match(chain)
     .with(Chain.Ripple, async () => {
-      const { getRippleToolbox } = await import("@swapkit-dev/toolboxes/ripple");
+      const { getRippleToolbox } = await import("@swapkit/toolboxes/ripple");
       const toolbox = await getRippleToolbox({});
 
       const transfer = async ({

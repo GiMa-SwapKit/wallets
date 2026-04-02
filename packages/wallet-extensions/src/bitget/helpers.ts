@@ -6,9 +6,9 @@ import {
   prepareNetworkSwitch,
   SwapKitError,
   switchEVMWalletNetwork,
-} from "@swapkit-dev/helpers";
-import type { TronTransaction } from "@swapkit-dev/toolboxes/tron";
-import { Transaction } from "@swapkit-dev/utxo-signer";
+} from "@swapkit/helpers";
+import type { TronTransaction } from "@swapkit/toolboxes/tron";
+import { Transaction } from "@swapkit/utxo-signer";
 import type { Eip1193Provider } from "ethers";
 
 export async function getWalletMethods(chain: Chain) {
@@ -50,7 +50,7 @@ export async function getWalletMethods(chain: Chain) {
       }
       const { unisat: wallet } = bitget;
 
-      const { getUtxoToolbox } = await import("@swapkit-dev/toolboxes/utxo");
+      const { getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
       const [address] = await wallet.requestAccounts();
 
       async function signTransaction(tx: InstanceType<typeof Transaction>) {
@@ -77,7 +77,7 @@ export async function getWalletMethods(chain: Chain) {
       const accounts = await offlineSigner.getAccounts();
       if (!accounts?.[0]) throw new SwapKitError("wallet_bitkeep_no_accounts", { chain: Chain.Cosmos });
 
-      const { getCosmosToolbox } = await import("@swapkit-dev/toolboxes/cosmos");
+      const { getCosmosToolbox } = await import("@swapkit/toolboxes/cosmos");
       const [{ address }] = accounts;
 
       const signer = {
@@ -95,7 +95,7 @@ export async function getWalletMethods(chain: Chain) {
         throw new SwapKitError("wallet_bitkeep_not_found");
       }
 
-      const { getSolanaToolbox } = await import("@swapkit-dev/toolboxes/solana");
+      const { getSolanaToolbox } = await import("@swapkit/toolboxes/solana");
       const provider = bitget?.solana;
 
       const providerConnection = await provider.connect();
@@ -112,7 +112,7 @@ export async function getWalletMethods(chain: Chain) {
         throw new SwapKitError("wallet_bitkeep_not_found");
       }
 
-      const { getTronToolbox } = await import("@swapkit-dev/toolboxes/tron");
+      const { getTronToolbox } = await import("@swapkit/toolboxes/tron");
       const { tronLink, tronWeb } = bitget;
 
       const response = await tronLink.request({ method: "tron_requestAccounts" });
@@ -147,9 +147,9 @@ export async function getWalletMethods(chain: Chain) {
       }
 
       const { createAptosExtensionTransfer, getAptosToolbox, validateAptosAddress } = await import(
-        "@swapkit-dev/toolboxes/aptos"
+        "@swapkit/toolboxes/aptos"
       );
-      const aptosProvider = bitget.aptos as import("@swapkit-dev/toolboxes/aptos").AptosExtensionProvider;
+      const aptosProvider = bitget.aptos as import("@swapkit/toolboxes/aptos").AptosExtensionProvider;
 
       const { address } = await aptosProvider.connect();
       if (!validateAptosAddress(address)) throw new SwapKitError("wallet_bitkeep_not_found");
@@ -170,7 +170,7 @@ export const getWeb3WalletMethods = async ({
   walletProvider?: Eip1193Provider;
   chain: EVMChain;
 }) => {
-  const { getEvmToolboxAsync } = await import("@swapkit-dev/toolboxes/evm");
+  const { getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
   const { BrowserProvider } = await import("ethers");
   if (!walletProvider) throw new SwapKitError("wallet_provider_not_found");
 
