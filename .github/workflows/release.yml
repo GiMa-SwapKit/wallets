@@ -48,6 +48,12 @@ jobs:
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
 
+      - name: Setup Node with working npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.16.0'
+          registry-url: 'https://registry.npmjs.org'
+
       - name: Upgrade npm for OIDC trusted publishing
         run: npm install -g npm@11
 
