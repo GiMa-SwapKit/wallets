@@ -1,5 +1,11 @@
 # @swapkit/sdk
 
+## 4.6.0
+
+### Minor Changes
+
+- [#4](https://github.com/swapkit/wallets/pull/4) [`9883a17`](https://github.com/swapkit/wallets/commit/9883a176197b111c00f369a4d680bbae7aa05a5e) Thanks [@towanTG](https://github.com/towanTG)! - feat: move SDK package to wallets repo for unified release cycle
+
 ## 4.5.23
 
 ### Patch Changes
