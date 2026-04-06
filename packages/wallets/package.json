@@ -7,15 +7,15 @@
     "@near-wallet-selector/bitget-wallet": "~10.1.0",
     "@near-wallet-selector/core": "~10.1.0",
     "@near-wallet-selector/modal-ui-js": "~10.1.0",
+    "@noble/hashes": "~2.0.0",
     "@passkeys/core": "~4.1.0",
     "@passkeys/react": "~3.0.1",
     "@radixdlt/babylon-gateway-api-sdk": "~1.10.0",
     "@radixdlt/radix-dapp-toolkit": "~2.2.0",
-    "@noble/hashes": "~2.0.0",
     "@scure/base": "~2.0.0",
     "@scure/bip39": "~2.0.0",
-    "@swapkit/helpers": "^4.12.0",
-    "@swapkit/toolboxes": "^4.11.2",
+    "@swapkit/helpers": "^4.12.4",
+    "@swapkit/toolboxes": "^4.13.2",
     "@swapkit/utxo-signer": "^2.1.0",
     "@swapkit/wallet-extensions": "^4.4.0",
     "@swapkit/wallet-hardware": "^4.6.0",
@@ -204,20 +204,12 @@
       "types": "./dist/types/xaman/index.d.ts"
     }
   },
-  "files": [
-    "dist/"
-  ],
+  "files": ["dist/"],
   "homepage": "https://github.com/swapkit/wallets",
   "license": "SEE LICENSE IN LICENSE",
   "name": "@swapkit/wallets",
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/swapkit/wallets.git",
-    "directory": "packages/wallets"
-  },
+  "publishConfig": { "access": "public" },
+  "repository": { "directory": "packages/wallets", "type": "git", "url": "git+https://github.com/swapkit/wallets.git" },
   "scripts": {
     "build": "bun run ./build.ts",
     "build:clean": "rm -rf dist && bun run ./build.ts",

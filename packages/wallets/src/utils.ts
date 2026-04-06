@@ -46,10 +46,7 @@ export async function loadWallet<W extends WalletOption>(walletOption: W): Promi
     .with(WalletOption.PASSKEYS, async () => (await import("./passkeys")).passkeysWallet)
     .with(WalletOption.PETRA, async () => (await import("@swapkit/wallet-extensions/petra")).petraWallet)
     .with(WalletOption.PHANTOM, async () => (await import("@swapkit/wallet-extensions/phantom")).phantomWallet)
-    .with(
-      WalletOption.POLKADOT_JS,
-      async () => (await import("@swapkit/wallet-extensions/polkadotjs")).polkadotWallet,
-    )
+    .with(WalletOption.POLKADOT_JS, async () => (await import("@swapkit/wallet-extensions/polkadotjs")).polkadotWallet)
     .with(WalletOption.RADIX_WALLET, async () => (await import("./radix")).radixWallet)
     .with(WalletOption.TALISMAN, async () => (await import("@swapkit/wallet-extensions/talisman")).talismanWallet)
     .with(WalletOption.TRONLINK, async () => (await import("@swapkit/wallet-extensions/tronlink")).tronlinkWallet)

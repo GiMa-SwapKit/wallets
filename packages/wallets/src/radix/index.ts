@@ -1,11 +1,4 @@
-import {
-  type AssetValue,
-  Chain,
-  filterSupportedChains,
-  SKConfig,
-  SwapKitError,
-  WalletOption,
-} from "@swapkit/helpers";
+import { type AssetValue, Chain, filterSupportedChains, SKConfig, SwapKitError, WalletOption } from "@swapkit/helpers";
 import { createWallet, getWalletSupportedChains } from "../core";
 
 export const radixWallet = createWallet({

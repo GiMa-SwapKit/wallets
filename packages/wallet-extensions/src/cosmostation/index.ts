@@ -1,12 +1,5 @@
 import type { Keplr } from "@keplr-wallet/types";
-import {
-  Chain,
-  ChainId,
-  ChainToChainId,
-  filterSupportedChains,
-  SwapKitError,
-  WalletOption,
-} from "@swapkit/helpers";
+import { Chain, ChainId, ChainToChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
 import { createWallet, getWalletSupportedChains } from "../core";
 
 const cosmostationSupportedChainIds = [ChainId.Cosmos, ChainId.Kujira, ChainId.Noble, ChainId.THORChain] as const;
