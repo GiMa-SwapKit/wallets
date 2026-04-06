@@ -1,5 +1,15 @@
 # @swapkit-dev/wallets
 
+## 4.6.2
+
+### Patch Changes
+
+- [`b7087d7`](https://github.com/swapkit/wallets/commit/b7087d79f8c105a163825c21a512d33cfe9049ab) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Update core dependencies from SDK release
+
+- Updated dependencies [[`b7087d7`](https://github.com/swapkit/wallets/commit/b7087d79f8c105a163825c21a512d33cfe9049ab)]:
+  - @swapkit/wallet-extensions@4.4.1
+  - @swapkit/wallet-hardware@4.6.1
+
 ## 4.6.0
 
 ### Minor Changes
