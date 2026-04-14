@@ -17,8 +17,8 @@
     "@swapkit/helpers": "^4.12.4",
     "@swapkit/toolboxes": "^4.13.2",
     "@swapkit/utxo-signer": "^2.1.0",
-    "@swapkit/wallet-extensions": "^4.4.0",
-    "@swapkit/wallet-hardware": "^4.6.0",
+    "@swapkit/wallet-extensions": "^4.4.1",
+    "@swapkit/wallet-hardware": "^4.6.1",
     "@walletconnect/modal": "~2.7.0",
     "@walletconnect/sign-client": "~2.23.0",
     "cosmjs-types": "~0.10.1",
@@ -218,5 +218,5 @@
     "type-check:go": "tsgo"
   },
   "type": "module",
-  "version": "4.6.1"
+  "version": "4.6.2"
 }

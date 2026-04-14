@@ -4,6 +4,15 @@
   "workspaces": {
     "": {
       "name": "swapkit-wallets",
+      "dependencies": {
+        "@swapkit/core": "4.4.5",
+        "@swapkit/helpers": "4.12.4",
+        "@swapkit/plugins": "4.6.19",
+        "@swapkit/server": "4.2.30",
+        "@swapkit/toolboxes": "4.13.2",
+        "@swapkit/wallet-core": "4.1.24",
+        "@swapkit/wallet-keystore": "4.3.11",
+      },
       "devDependencies": {
         "@biomejs/biome": "2.3.11",
         "@changesets/changelog-github": "0.6.0",
