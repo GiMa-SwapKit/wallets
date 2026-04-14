@@ -1,6 +1,9 @@
 {
   "author": "swapkit",
-  "dependencies": { "@swapkit/helpers": "^4.12.4", "@swapkit/toolboxes": "^4.13.2" },
+  "dependencies": {
+    "@swapkit/helpers": "^4.12.4",
+    "@swapkit/toolboxes": "^4.13.2"
+  },
   "description": "SwapKit - Wallet Mobile",
   "exports": {
     ".": {
@@ -10,11 +13,15 @@
       "types": "./dist/types/index.d.ts"
     }
   },
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "homepage": "https://github.com/swapkit/wallets",
   "license": "SEE LICENSE IN LICENSE",
   "name": "@swapkit/wallet-mobile",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": {
     "directory": "packages/wallet-mobile",
     "type": "git",
@@ -28,5 +35,5 @@
     "type-check:go": "tsgo"
   },
   "type": "module",
-  "version": "4.2.1"
+  "version": "4.2.2"
 }
