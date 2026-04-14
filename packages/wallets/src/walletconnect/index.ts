@@ -12,10 +12,10 @@ import {
 import type { ThorchainDepositParams } from "@swapkit/toolboxes/cosmos";
 import type { NearSigner } from "@swapkit/toolboxes/near";
 import type { TronSignedTransaction, TronSigner, TronTransaction } from "@swapkit/toolboxes/tron";
-import { createWallet, getWalletSupportedChains } from "../core";
 import type { WalletConnectModal } from "@walletconnect/modal";
 import type { SignClient } from "@walletconnect/sign-client";
 import type { SessionTypes, SignClientTypes } from "@walletconnect/types";
+import { createWallet, getWalletSupportedChains } from "../core";
 import {
   DEFAULT_APP_METADATA,
   DEFAULT_COSMOS_METHODS,

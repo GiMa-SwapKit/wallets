@@ -11,8 +11,8 @@ import {
   WalletOption,
 } from "@swapkit/helpers";
 import type { TONTransactionMessage } from "@swapkit/toolboxes/ton";
-import { createWallet, getWalletSupportedChains } from "../core";
 import type { Eip1193Provider } from "ethers";
+import { createWallet, getWalletSupportedChains } from "../core";
 
 export type TrustWalletTonProvider = {
   adapter: { handler: (request: { method: string; params?: unknown }) => Promise<unknown>; strategy: string };

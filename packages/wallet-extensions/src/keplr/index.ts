@@ -1,11 +1,4 @@
-import {
-  Chain,
-  ChainId,
-  ChainToChainId,
-  filterSupportedChains,
-  SwapKitError,
-  WalletOption,
-} from "@swapkit/helpers";
+import { Chain, ChainId, ChainToChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
 import { createWallet, getWalletSupportedChains } from "../core";
 import { chainRegistry } from "./chainRegistry";
 

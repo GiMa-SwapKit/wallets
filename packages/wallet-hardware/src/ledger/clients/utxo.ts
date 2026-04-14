@@ -1,12 +1,7 @@
 import type BitcoinApp from "@ledgerhq/hw-app-btc";
 import type { CreateTransactionArg } from "@ledgerhq/hw-app-btc/lib-es/createTransaction";
 import { hex } from "@scure/base";
-import {
-  type DerivationPathArray,
-  derivationPathToString,
-  getWalletFormatFor,
-  SwapKitError,
-} from "@swapkit/helpers";
+import { type DerivationPathArray, derivationPathToString, getWalletFormatFor, SwapKitError } from "@swapkit/helpers";
 import type { UTXOType } from "@swapkit/toolboxes/utxo";
 import type { PCZT, Transaction } from "@swapkit/utxo-signer";
 

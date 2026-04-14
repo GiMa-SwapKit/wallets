@@ -1,6 +1,6 @@
-import { $, Glob } from "bun";
 import { existsSync, mkdirSync, readdirSync, symlinkSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { $ } from "bun";
 
 /**
  * Bun stores dependencies in node_modules/.bun/ instead of hoisting them
@@ -91,12 +91,7 @@ const dtsPlugin = {
   },
 };
 
-export const orderedPackages = [
-  "wallet-extensions",
-  "wallet-hardware",
-  "wallet-mobile",
-  "wallets",
-];
+export const orderedPackages = ["wallet-extensions", "wallet-hardware", "wallet-mobile", "wallets"];
 
 // Symlink .bun/ deps to standard node_modules/ paths so tsc can resolve them
 console.info("Symlinking .bun/ dependencies for tsc compatibility...");

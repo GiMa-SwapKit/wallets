@@ -30,11 +30,11 @@
       "version": "4.6.0",
       "dependencies": {
         "@stricahq/typhonjs": "~3.0.1",
-        "@swapkit/core": "^4.4.4",
-        "@swapkit/helpers": "^4.12.3",
+        "@swapkit/core": "^4.4.5",
+        "@swapkit/helpers": "^4.12.4",
         "@swapkit/plugins": "^4.6.18",
         "@swapkit/server": "^4.2.29",
-        "@swapkit/toolboxes": "^4.13.1",
+        "@swapkit/toolboxes": "^4.13.2",
         "@swapkit/wallet-core": "^4.1.23",
         "@swapkit/wallet-keystore": "^4.3.10",
         "@swapkit/wallets": "workspace:*",
@@ -55,8 +55,8 @@
         "@near-js/transactions": "~2.5.0",
         "@scure/base": "~2.0.0",
         "@solana/web3.js": "~1.98.4",
-        "@swapkit/helpers": "^4.12.0",
-        "@swapkit/toolboxes": "^4.11.2",
+        "@swapkit/helpers": "^4.12.4",
+        "@swapkit/toolboxes": "^4.13.2",
         "@swapkit/utxo-signer": "^2.1.0",
         "cosmjs-types": "0.10.1",
         "ethers": "^6.14.0",
@@ -104,8 +104,8 @@
         "@near-js/crypto": "~2.5.0",
         "@near-js/transactions": "~2.5.0",
         "@scure/base": "2.0.0",
-        "@swapkit/helpers": "^4.12.0",
-        "@swapkit/toolboxes": "^4.11.2",
+        "@swapkit/helpers": "^4.12.4",
+        "@swapkit/toolboxes": "^4.13.2",
         "@swapkit/utxo-signer": "^2.1.0",
         "@trezor/connect-web": "~9.6.4",
         "cosmjs-types": "~0.10.1",
@@ -147,8 +147,8 @@
       "name": "@swapkit/wallet-mobile",
       "version": "4.2.0",
       "dependencies": {
-        "@swapkit/helpers": "^4.12.0",
-        "@swapkit/toolboxes": "^4.11.2",
+        "@swapkit/helpers": "^4.12.4",
+        "@swapkit/toolboxes": "^4.13.2",
       },
     },
     "packages/wallets": {
@@ -169,8 +169,8 @@
         "@radixdlt/radix-dapp-toolkit": "~2.2.0",
         "@scure/base": "~2.0.0",
         "@scure/bip39": "~2.0.0",
-        "@swapkit/helpers": "^4.12.0",
-        "@swapkit/toolboxes": "^4.11.2",
+        "@swapkit/helpers": "^4.12.4",
+        "@swapkit/toolboxes": "^4.13.2",
         "@swapkit/utxo-signer": "^2.1.0",
         "@swapkit/wallet-extensions": "^4.4.0",
         "@swapkit/wallet-hardware": "^4.6.0",
@@ -756,7 +756,7 @@
 
     "@stricahq/bip32ed25519": ["@stricahq/bip32ed25519@1.1.2", "", { "dependencies": { "blakejs": "^1.1.1", "bn.js": "^5.2.0", "buffer": "^6.0.3", "elliptic": "6.6.1", "hash.js": "^1.1.7", "pbkdf2": "^3.1.2" } }, "sha512-YfjVRvJzTWodEbrl4TQlL9Isxg1mrZr9hoPxY75JpgFAS0l6MT8R6Lev21TbQtIJy5LfHMUoK25UICKXFmYvKQ=="],
 
-    "@stricahq/cbors": ["@stricahq/cbors@1.0.4", "", { "dependencies": { "bignumber.js": "^9.0.2", "buffer": "^6.0.3" } }, "sha512-0VmdpoYIi3lxgF10gOYvY0+BxD+u7/M6H6afmPWuc8Klg6Zpj9mRQnsw5zv6nYeflfIDvD0NjSQDkANe3psBxg=="],
+    "@stricahq/cbors": ["@stricahq/cbors@1.0.2", "", { "dependencies": { "bignumber.js": "^9.0.2", "buffer": "^6.0.3" } }, "sha512-6ePsEiq7EGHA5IiPn9poA7sF5iXPqt30kKw3pjR/BhP7S+XHZNu/OPumESWnVl4AM+IEYC2x9eL+4qRPsTPVww=="],
 
     "@stricahq/typhonjs": ["@stricahq/typhonjs@3.0.1", "", { "dependencies": { "@stricahq/cbors": "1.0.2", "bech32": "^2.0.0", "bignumber.js": "^9.0.1", "blakejs": "^1.2.1", "bs58": "^5.0.0", "buffer": "^6.0.3", "lodash": "^4.17.21" } }, "sha512-8gXn5W52PiPZ+cyz7TkjhGPwuRGbv2xLrg6BNak8Yl5k/p659j3uFro/rhAeZjk7ScEYplnGwLgyRMOebxgWhg=="],
 
@@ -2192,7 +2192,7 @@
 
     "@stellar/stellar-sdk/axios": ["axios@1.13.6", "", { "dependencies": { "follow-redirects": "^1.15.11", "form-data": "^4.0.5", "proxy-from-env": "^1.1.0" } }, "sha512-ChTCHMouEe2kn713WHbQGcuYrr6fXTBiu460OTwWrWob16g1bXn4vtz07Ope7ewMozJAnEquLk5lWQWtBig9DQ=="],
 
-    "@stricahq/typhonjs/@stricahq/cbors": ["@stricahq/cbors@1.0.2", "", { "dependencies": { "bignumber.js": "^9.0.2", "buffer": "^6.0.3" } }, "sha512-6ePsEiq7EGHA5IiPn9poA7sF5iXPqt30kKw3pjR/BhP7S+XHZNu/OPumESWnVl4AM+IEYC2x9eL+4qRPsTPVww=="],
+    "@swapkit/toolboxes/@stricahq/cbors": ["@stricahq/cbors@1.0.4", "", { "dependencies": { "bignumber.js": "^9.0.2", "buffer": "^6.0.3" } }, "sha512-0VmdpoYIi3lxgF10gOYvY0+BxD+u7/M6H6afmPWuc8Klg6Zpj9mRQnsw5zv6nYeflfIDvD0NjSQDkANe3psBxg=="],
 
     "@swc/helpers/tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
 

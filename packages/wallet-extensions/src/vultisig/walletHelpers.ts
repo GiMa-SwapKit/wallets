@@ -201,9 +201,7 @@ export function getVultisigMethods(provider: BrowserProvider, chain: EVMChain) {
       if (!contractAddress) {
         throw new SwapKitError("wallet_vultisig_contract_address_not_provided");
       }
-      const { createContract, getCreateContractTxObject, isStateChangingCall } = await import(
-        "@swapkit/toolboxes/evm"
-      );
+      const { createContract, getCreateContractTxObject, isStateChangingCall } = await import("@swapkit/toolboxes/evm");
 
       const isStateChanging = isStateChangingCall({ abi, funcName });
 
