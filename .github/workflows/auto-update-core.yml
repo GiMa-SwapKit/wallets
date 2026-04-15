@@ -46,6 +46,16 @@ jobs:
                 echo "  ✅ Updated $PKG in $pkg_json (devDependencies)"
               fi
             done
+
+            # Also sync root package.json dependencies + overrides (prevents transitive drift)
+            if jq -e ".dependencies[\"$PKG\"]" package.json > /dev/null 2>&1; then
+              jq ".dependencies[\"$PKG\"] = \"$VER\"" package.json > tmp.json && mv tmp.json package.json
+              echo "  ✅ Updated $PKG in root package.json (dependencies)"
+            fi
+            if jq -e ".overrides[\"$PKG\"]" package.json > /dev/null 2>&1; then
+              jq ".overrides[\"$PKG\"] = \"$VER\"" package.json > tmp.json && mv tmp.json package.json
+              echo "  ✅ Updated $PKG in root package.json (overrides)"
+            fi
           done
 
       - name: Install updated dependencies
