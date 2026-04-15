@@ -134,7 +134,7 @@ export async function getWalletMethods(chain: Chain) {
 
         const { getCosmosToolbox } = await import("@swapkit/toolboxes/cosmos");
         const [{ address }] = accounts;
-        const toolbox = getCosmosToolbox(Chain.Cosmos);
+        const toolbox = await getCosmosToolbox(Chain.Cosmos, { signer: offlineSigner });
 
         return { ...toolbox, address, transfer: cosmosTransfer(address) };
       })
