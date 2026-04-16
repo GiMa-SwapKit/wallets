@@ -12,7 +12,7 @@ import {
 } from "@swapkit/helpers";
 import type { TONTransactionMessage } from "@swapkit/toolboxes/ton";
 import type { Eip1193Provider } from "ethers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export type TrustWalletTonProvider = {
   adapter: { handler: (request: { method: string; params?: unknown }) => Promise<unknown>; strategy: string };
@@ -41,6 +41,10 @@ export const trustwalletWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    ...Object.fromEntries(EVMChains.map((chain) => [chain, true])),
+    // Ton: no signer wired
+  },
   name: "connectTrustWallet",
   supportedChains: [...EVMChains, Chain.Ton],
   walletType: WalletOption.TRUSTWALLET_WEB,

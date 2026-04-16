@@ -1,5 +1,5 @@
 import { Chain, ChainId, ChainToChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import { chainRegistry } from "./chainRegistry";
 
 const keplrSupportedChainIds = [ChainId.Cosmos, ChainId.Kujira, ChainId.Noble, ChainId.THORChain] as const;
@@ -43,6 +43,12 @@ export const keplrWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Cosmos]: true,
+    [Chain.Kujira]: true,
+    [Chain.Noble]: true,
+    [Chain.THORChain]: true,
+  },
   name: "connectKeplr",
   supportedChains: [Chain.Cosmos, Chain.Kujira, Chain.Noble, Chain.THORChain],
 });

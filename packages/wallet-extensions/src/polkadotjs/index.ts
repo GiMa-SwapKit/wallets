@@ -1,5 +1,5 @@
 import { Chain, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export const polkadotWallet = createWallet({
   connect: ({ addChain, supportedChains, walletType }) =>
@@ -16,6 +16,8 @@ export const polkadotWallet = createWallet({
 
       return true;
     },
+  // Polkadot is not in V3 swap chain list
+  directSigningSupport: {},
   name: "connectPolkadotJs",
   supportedChains: [Chain.Polkadot],
   walletType: WalletOption.POLKADOT_JS,

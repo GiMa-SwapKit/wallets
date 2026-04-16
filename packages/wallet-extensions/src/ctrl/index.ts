@@ -6,7 +6,7 @@ import {
   SwapKitError,
   WalletOption,
 } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import { getCtrlAddress, getCtrlProvider, walletTransfer } from "./walletHelpers";
 
 export const ctrlWallet = createWallet({
@@ -25,6 +25,27 @@ export const ctrlWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Aurora]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.Berachain]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Bitcoin]: true,
+    [Chain.Cosmos]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Gnosis]: true,
+    [Chain.Kujira]: true,
+    [Chain.Monad]: true,
+    [Chain.Near]: true,
+    [Chain.Noble]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.Solana]: true,
+    [Chain.XLayer]: true,
+    // BCH/DOGE/LTC/THORChain/Maya: blocked on CTRL provider — no raw signing RPC
+  },
   name: "connectCtrl",
   supportedChains: [
     Chain.Arbitrum,

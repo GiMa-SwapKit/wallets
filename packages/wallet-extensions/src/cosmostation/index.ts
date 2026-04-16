@@ -1,6 +1,6 @@
 import type { Keplr } from "@keplr-wallet/types";
 import { Chain, ChainId, ChainToChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 const cosmostationSupportedChainIds = [ChainId.Cosmos, ChainId.Kujira, ChainId.Noble, ChainId.THORChain] as const;
 const cosmostationSupportedEVMChains = [
@@ -98,6 +98,20 @@ export const cosmostationWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Cosmos]: true,
+    [Chain.Kujira]: true,
+    [Chain.Noble]: true,
+    [Chain.THORChain]: true,
+    [Chain.Ethereum]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Polygon]: true,
+    [Chain.Arbitrum]: true,
+    [Chain.Optimism]: true,
+    [Chain.Base]: true,
+    [Chain.XLayer]: true,
+  },
   name: "connectCosmostation",
   supportedChains: [
     Chain.Cosmos,

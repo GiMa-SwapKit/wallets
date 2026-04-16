@@ -12,7 +12,7 @@ import {
   WalletOption,
 } from "@swapkit/helpers";
 import type { DerivedAddress, FullWallet } from "@swapkit/toolboxes";
-import { createWallet, getWalletSupportedChains } from "./core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export {
   decryptFromKeystore,
@@ -101,6 +101,21 @@ export const keystoreWallet = createWallet({
 
       return true;
     },
+  // Keystore holds the private key — direct signing works for every supported chain.
+  directSigningSupport: {
+    ...Object.fromEntries(EVMChains.map((chain) => [chain, true])),
+    ...Object.fromEntries(UTXOChains.map((chain) => [chain, true])),
+    ...Object.fromEntries(CosmosChains.filter((chain) => chain !== Chain.Harbor).map((chain) => [chain, true])),
+    [Chain.Aptos]: true,
+    [Chain.Cardano]: true,
+    [Chain.Near]: true,
+    [Chain.Ripple]: true,
+    [Chain.Solana]: true,
+    [Chain.Stellar]: true,
+    [Chain.Sui]: true,
+    [Chain.Ton]: true,
+    [Chain.Tron]: true,
+  },
   name: "connectKeystore",
   supportedChains: [
     ...EVMChains,

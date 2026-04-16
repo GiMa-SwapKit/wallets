@@ -18,6 +18,7 @@ import {
   POLYGON_MAINNET_ID,
   THORCHAIN_MAINNET_ID,
   TRON_MAINNET_ID,
+  XLAYER_MAINNET_ID,
 } from "./constants";
 
 export const getAddressByChain = (
@@ -67,6 +68,8 @@ export const chainToChainId = (chain: Chain) => {
     }
     case Chain.Tron:
       return TRON_MAINNET_ID;
+    case Chain.XLayer:
+      return XLAYER_MAINNET_ID;
     default:
       return "";
   }

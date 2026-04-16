@@ -22,7 +22,7 @@ import {
   signTransaction as satsSignTransaction,
 } from "sats-connect";
 import { match } from "ts-pattern";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 async function getPasskeyWallet() {
   const appId = SKConfig.get("apiKeys").passkeys;
@@ -178,6 +178,11 @@ export const passkeysWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    ...Object.fromEntries(EVMChains.map((chain) => [chain, true])),
+    [Chain.Bitcoin]: true,
+    [Chain.Solana]: true,
+  },
   name: "connectPasskeys",
   supportedChains: [...EVMChains, Chain.Bitcoin, Chain.Solana],
   walletType: WalletOption.PASSKEYS,

@@ -23,7 +23,7 @@ import {
   type UTXOForMultiAddressTransfer,
 } from "@swapkit/toolboxes/utxo";
 import type { Transaction } from "@swapkit/utxo-signer";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import { getLedgerAddress, getLedgerClient } from "./helpers";
 
 export const ledgerWallet = createWallet({
@@ -39,6 +39,27 @@ export const ledgerWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Aurora]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.Berachain]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Gnosis]: true,
+    [Chain.Monad]: true,
+    [Chain.Cosmos]: true,
+    [Chain.Near]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.Ripple]: true,
+    [Chain.Sui]: true,
+    [Chain.Tron]: true,
+    [Chain.XLayer]: true,
+    // BTC/BCH/DASH/DOGE/LTC/ZEC: pending PSBT signer (V3 plan PRs)
+    // THORChain: needs signAmino added to THORChainLedger (V3 plan PR)
+  },
   name: "connectLedger",
   supportedChains: [
     Chain.Arbitrum,
@@ -289,9 +310,9 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
       const { createSigningStargateClient, getMsgSendDenom, getCosmosToolbox } = await import(
         "@swapkit/toolboxes/cosmos"
       );
-      const toolbox = getCosmosToolbox(Chain.Cosmos);
       const signer = await getLedgerClient({ chain, derivationPath });
       const address = await getLedgerAddress({ chain, ledgerClient: signer });
+      const toolbox = await getCosmosToolbox(Chain.Cosmos, { signer });
 
       const transfer = async ({ assetValue, recipient, memo }: GenericTransferParams) => {
         if (!assetValue) throw new SwapKitError("wallet_ledger_invalid_asset");

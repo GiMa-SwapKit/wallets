@@ -1,6 +1,6 @@
 import { AssetValue, Chain, ChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
 import type { Eip1193Provider } from "ethers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import {
   getKEEPKEYAddress,
   getKEEPKEYMethods,
@@ -26,6 +26,19 @@ export const keepkeyBexWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Cosmos]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Kujira]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.XLayer]: true,
+    // BTC/BCH/DASH/DOGE/LTC/Ripple/Solana/THORChain/Maya: provider lacks raw-sign RPC
+  },
   name: "connectKeepkeyBex",
   supportedChains: [
     Chain.Arbitrum,

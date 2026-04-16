@@ -15,7 +15,7 @@ import type { TronSignedTransaction, TronSigner, TronTransaction } from "@swapki
 import type { WalletConnectModal } from "@walletconnect/modal";
 import type { SignClient } from "@walletconnect/sign-client";
 import type { SessionTypes, SignClientTypes } from "@walletconnect/types";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import {
   DEFAULT_APP_METADATA,
   DEFAULT_COSMOS_METHODS,
@@ -65,6 +65,20 @@ export const walletconnectWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Aurora]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.Berachain]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Monad]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.XLayer]: true,
+    // Cosmos/Kujira/Maya/THORChain: cosmos toolbox built without signer; Tron/Near: signer wired but pending hardening (V3 plan PRs)
+  },
   name: "connectWalletconnect",
   supportedChains: [
     Chain.Arbitrum,
@@ -107,8 +121,10 @@ async function getToolbox<T extends (typeof WC_SUPPORTED_CHAINS)[number]>({
 
   switch (chain) {
     case Chain.Arbitrum:
+    case Chain.Aurora:
     case Chain.Avalanche:
     case Chain.Base:
+    case Chain.Berachain:
     case Chain.BinanceSmartChain:
     case Chain.Ethereum:
     case Chain.Monad:
