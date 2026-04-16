@@ -74,7 +74,7 @@ async function getWalletMethods(chain: PhantomSupportedChain) {
     case Chain.Ethereum:
     case Chain.Monad: {
       const { getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
-      const { prepareNetworkSwitch, switchEVMWalletNetwork } = await import("@swapkit/helpers");
+      const { prepareNetworkSwitch } = await import("@swapkit/helpers");
       const { BrowserProvider } = await import("ethers");
 
       const provider = new BrowserProvider(phantom?.ethereum, "any");
@@ -82,11 +82,6 @@ async function getWalletMethods(chain: PhantomSupportedChain) {
 
       const signer = await provider.getSigner();
       const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
-
-      if (chain !== Chain.Ethereum) {
-        const networkParams = toolbox.getNetworkParams();
-        await switchEVMWalletNetwork(provider, chain, networkParams);
-      }
 
       return { ...prepareNetworkSwitch({ chain, provider, toolbox }), address };
     }

@@ -7,7 +7,6 @@ import {
   getRPCUrl,
   prepareNetworkSwitch,
   SwapKitError,
-  switchEVMWalletNetwork,
 } from "@swapkit/helpers";
 import type { TronSignedTransaction, TronSigner, TronTransaction } from "@swapkit/toolboxes/tron";
 import { Transaction } from "@swapkit/utxo-signer";
@@ -48,14 +47,6 @@ async function getWeb3WalletMethods({
   const provider = new BrowserProvider(walletProvider, "any");
   const signer = await provider.getSigner();
   const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
-
-  try {
-    if (chain !== Chain.Ethereum && "getNetworkParams" in toolbox) {
-      await switchEVMWalletNetwork(provider, chain, toolbox.getNetworkParams());
-    }
-  } catch {
-    throw new SwapKitError("wallet_okx_failed_to_switch_network", { chain });
-  }
 
   return prepareNetworkSwitch({ chain, provider, toolbox });
 }

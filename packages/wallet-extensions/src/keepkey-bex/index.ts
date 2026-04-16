@@ -125,7 +125,7 @@ async function getWalletMethods(chain: (typeof KEEPKEY_BEX_SUPPORTED_CHAINS)[num
     case Chain.Optimism:
     case Chain.Polygon:
     case Chain.Avalanche: {
-      const { prepareNetworkSwitch, switchEVMWalletNetwork } = await import("@swapkit/helpers");
+      const { prepareNetworkSwitch } = await import("@swapkit/helpers");
       const { getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
       const { BrowserProvider } = await import("ethers");
       const ethereumWindowProvider = getKEEPKEYProvider(chain) as Eip1193Provider;
@@ -138,18 +138,6 @@ async function getWalletMethods(chain: (typeof KEEPKEY_BEX_SUPPORTED_CHAINS)[num
       const signer = await provider.getSigner();
       const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
       const keepkeyMethods = getKEEPKEYMethods(provider, chain);
-
-      try {
-        if (chain !== Chain.Ethereum) {
-          const networkParams = toolbox.getNetworkParams();
-          await switchEVMWalletNetwork(provider, chain, networkParams);
-        }
-      } catch {
-        throw new SwapKitError({
-          errorKey: "wallet_failed_to_add_or_switch_network",
-          info: { chain, wallet: WalletOption.KEEPKEY },
-        });
-      }
 
       return prepareNetworkSwitch({ chain, provider, toolbox: { ...toolbox, ...keepkeyMethods } });
     }
