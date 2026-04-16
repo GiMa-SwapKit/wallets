@@ -1,5 +1,33 @@
 # @swapkit-dev/wallet-extensions
 
+## 4.5.0
+
+### Minor Changes
+
+- [#17](https://github.com/swapkit/wallets/pull/17) [`5a5a117`](https://github.com/swapkit/wallets/commit/5a5a11738b1c8a2fd08fc571cc2156947ee05bd0) Thanks [@towanTG](https://github.com/towanTG)! - Per-wallet `directSigningSupport` mappings for the V3 swap flow
+
+  - Bump `@swapkit/wallet-core` to `^4.2.0` and delete the duplicated local `core.ts` files in `wallets`, `wallet-extensions`, and `wallet-hardware` — every wallet module now imports `createWallet` / `getWalletSupportedChains` from `@swapkit/wallet-core` directly.
+  - Stamp `directSigningSupport: Partial<Record<Chain, boolean>>` on every `createWallet({...})` call so the SDK can decide V3 routing per (wallet, chain) without consulting a central map.
+  - Wire two real signers as part of the rollout:
+    - **Xaman / Ripple** — `submitXamanPayload` now exposes the signed `hex` blob and accepts `{ submit: false }`; a new `ChainSigner` wraps `xumm.payload.createAndSubscribe` and is passed to `getRippleToolbox({ signer })`, unblocking V3 for XRPL.
+    - **Ledger / Cosmos Hub** — pass the existing `CosmosLedger` (already an `OfflineAminoSigner`) into `getCosmosToolbox(Chain.Cosmos, { signer })`, unblocking V3 for ATOM. Bespoke `transfer` retained for back-compat.
+  - BitGet Cosmos: switch `getOfflineSignerOnlyAmino` → `getOfflineSignerAuto` so V3 proto SignDocs sign natively (Ledger via BitGet still falls back to amino).
+  - WalletConnect EVM: fix latent bugs flagged by the V3 audit — add Aurora and Berachain to the EVM `getToolbox` switch, register `XLAYER_MAINNET_ID` so XLayer's namespace negotiation works.
+
+### Patch Changes
+
+- [#14](https://github.com/swapkit/wallets/pull/14) [`f7f0f94`](https://github.com/swapkit/wallets/commit/f7f0f94596d77727a0b5eeff4f70264177aba1ee) Thanks [@towanTG](https://github.com/towanTG)! - BitGet: drop dead `signTransaction` stub on Cosmos and stop spreading the Solana provider so toolbox synthesis of `signAndBroadcastTransaction` can use the real signer methods (V3 swap flow).
+
+- [#11](https://github.com/swapkit/wallets/pull/11) [`67d6989`](https://github.com/swapkit/wallets/commit/67d698968b20e68b92537b56d04a415ad516b84a) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update core dependencies: @swapkit/contracts@4.1.3,@swapkit/core@4.4.11,@swapkit/helpers@4.12.9,@swapkit/tokens@4.2.5,@swapkit/toolboxes@4.14.4,@swapkit/types@0.7.3,@swapkit/utxo-signer@2.1.1
+
+- [#12](https://github.com/swapkit/wallets/pull/12) [`9dd5073`](https://github.com/swapkit/wallets/commit/9dd50734580ba787f335c925032dad82293523a7) Thanks [@towanTG](https://github.com/towanTG)! - CTRL: sign Bitcoin transactions via sats-connect `sign_psbt`, enabling V3 raw-transaction swap flow. BCH/DOGE/LTC continue to use the bespoke `walletTransfer` path.
+
+- [#18](https://github.com/swapkit/wallets/pull/18) [`b4b4666`](https://github.com/swapkit/wallets/commit/b4b4666fccee2861aa733cf589a9a50aaf4ed981) Thanks [@towanTG](https://github.com/towanTG)! - Defer EVM network switch from wallet connect to method call time. On connect we now just read the wallet's currently selected address and wire the toolbox; `prepareNetworkSwitch` handles the chain switch lazily when a transaction method is invoked. Stops the "add chain" prompt storm users saw on first connect.
+
+  Affected: evm-extensions (Metamask / Brave / Coinbase / EIP-6963), bitget, ctrl, okx, onekey, trustwallet, vultisig, phantom, talisman, keepkey-bex, passkeys.
+
+- [#13](https://github.com/swapkit/wallets/pull/13) [`5202c86`](https://github.com/swapkit/wallets/commit/5202c86388c8b371b48e09c12aa7e5b2419d8ce6) Thanks [@towanTG](https://github.com/towanTG)! - OKX: pass the Keplr-compatible offline signer into `getCosmosToolbox` so the toolbox can synthesize `signAndBroadcastTransaction`, unblocking the V3 SwapKit swap flow for OKX Cosmos.
+
 ## 4.4.3
 
 ### Patch Changes
