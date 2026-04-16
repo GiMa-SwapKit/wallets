@@ -1,4 +1,5 @@
 import type { AminoSignResponse, OfflineAminoSigner, StdSignature, StdSignDoc } from "@cosmjs/amino";
+import type { OfflineDirectSigner } from "@cosmjs/proto-signing";
 import type { Keplr } from "@keplr-wallet/types";
 import type { EthereumWindowProvider } from "@swapkit/helpers";
 import type { SolanaProvider } from "@swapkit/toolboxes/solana";
@@ -90,6 +91,7 @@ declare global {
           signature: StdSignature,
         ) => Promise<boolean>;
         getOfflineSignerOnlyAmino: (chainId: string) => OfflineAminoSigner;
+        getOfflineSignerAuto: (chainId: string) => Promise<OfflineAminoSigner | OfflineDirectSigner>;
       };
       solana: SolanaProvider;
       ethereum: EthereumWindowProvider;
