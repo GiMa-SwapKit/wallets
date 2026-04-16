@@ -103,7 +103,63 @@ async function getWalletMethods(chain: (typeof CTRL_SUPPORTED_CHAINS)[number]) {
       return toolbox;
     }
 
-    case Chain.Bitcoin:
+    case Chain.Bitcoin: {
+      const { getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
+      const { Transaction } = await import("@swapkit/utxo-signer");
+      const provider = getCtrlProvider(Chain.Bitcoin) as
+        | { request: (args: { method: string; params: unknown }, cb?: (err: unknown, res: unknown) => void) => unknown }
+        | undefined;
+
+      if (!provider) {
+        throw new SwapKitError("wallet_ctrl_not_found", { chain: Chain.Bitcoin });
+      }
+
+      const address = await getCtrlAddress(Chain.Bitcoin);
+      if (!address) {
+        throw new SwapKitError({ errorKey: "wallet_provider_not_found", info: { chain, wallet: WalletOption.CTRL } });
+      }
+
+      const ctrlRequest = <T>(args: { method: string; params: unknown }): Promise<T> =>
+        new Promise<T>((resolve, reject) => {
+          const handler = (err: unknown, res: unknown) => (err ? reject(err) : resolve(res as T));
+          const maybePromise = provider.request(args, handler);
+          if (maybePromise && typeof (maybePromise as { then?: unknown }).then === "function") {
+            (maybePromise as Promise<T>).then(
+              (res) => handler(null, res),
+              (err) => handler(err, null),
+            );
+          }
+        });
+
+      const signer = {
+        getAddress: async () => address,
+        signTransaction: async (tx: InstanceType<typeof Transaction>) => {
+          const psbtB64 = Buffer.from(tx.toPSBT()).toString("base64");
+          const signingIndexes = Array.from({ length: tx.inputsLength }, (_, i) => i);
+
+          const response = await ctrlRequest<{ status: string; result: { psbt: string } }>({
+            method: "sign_psbt",
+            params: {
+              psbt: psbtB64,
+              signInputs: { [address]: signingIndexes },
+              allowedSignHash: 1,
+              broadcast: false,
+            },
+          });
+
+          if (response?.status !== "success" || !response.result?.psbt) {
+            throw new SwapKitError("plugin_swapkit_invalid_transaction", { chain: Chain.Bitcoin });
+          }
+
+          return Transaction.fromPSBT(new Uint8Array(Buffer.from(response.result.psbt, "base64")));
+        },
+      };
+
+      const toolbox = await getUtxoToolbox(Chain.Bitcoin, { signer });
+
+      return { ...toolbox, address };
+    }
+
     case Chain.BitcoinCash:
     case Chain.Dogecoin:
     case Chain.Litecoin: {
