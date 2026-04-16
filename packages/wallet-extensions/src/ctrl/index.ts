@@ -160,12 +160,7 @@ async function getWalletMethods(chain: (typeof CTRL_SUPPORTED_CHAINS)[number]) {
 
           const response = await ctrlRequest<{ status: string; result: { psbt: string } }>({
             method: "sign_psbt",
-            params: {
-              psbt: psbtB64,
-              signInputs: { [address]: signingIndexes },
-              allowedSignHash: 1,
-              broadcast: false,
-            },
+            params: { psbt: psbtB64, signInputs: { [address]: signingIndexes }, allowedSignHash: 1, broadcast: false },
           });
 
           if (response?.status !== "success" || !response.result?.psbt) {
@@ -202,7 +197,7 @@ async function getWalletMethods(chain: (typeof CTRL_SUPPORTED_CHAINS)[number]) {
     case Chain.Optimism:
     case Chain.Polygon:
     case Chain.XLayer: {
-      const { prepareNetworkSwitch, switchEVMWalletNetwork } = await import("@swapkit/helpers");
+      const { prepareNetworkSwitch } = await import("@swapkit/helpers");
       const { getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
       const { BrowserProvider } = await import("ethers");
       const ethereumWindowProvider = getCtrlProvider(chain);
@@ -214,18 +209,6 @@ async function getWalletMethods(chain: (typeof CTRL_SUPPORTED_CHAINS)[number]) {
       const provider = new BrowserProvider(ethereumWindowProvider, "any");
       const signer = await provider.getSigner();
       const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
-
-      try {
-        if (chain !== Chain.Ethereum) {
-          const networkParams = toolbox.getNetworkParams();
-          await switchEVMWalletNetwork(provider, chain, networkParams);
-        }
-      } catch {
-        throw new SwapKitError({
-          errorKey: "wallet_failed_to_add_or_switch_network",
-          info: { chain, wallet: WalletOption.CTRL },
-        });
-      }
 
       return prepareNetworkSwitch({ chain, provider, toolbox });
     }

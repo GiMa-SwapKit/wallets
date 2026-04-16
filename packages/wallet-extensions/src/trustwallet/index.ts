@@ -4,10 +4,8 @@ import {
   EVMChains,
   filterSupportedChains,
   type GenericTransferParams,
-  getChainConfig,
   prepareNetworkSwitch,
   SwapKitError,
-  switchEVMWalletNetwork,
   WalletOption,
 } from "@swapkit/helpers";
 import type { TONTransactionMessage } from "@swapkit/toolboxes/ton";
@@ -103,17 +101,6 @@ async function connectEvm(chain: EVMChain) {
   const address = await signer.getAddress();
 
   const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
-  const { chainIdHex } = getChainConfig(chain);
-
-  const currentNetwork = await provider.getNetwork();
-  if (currentNetwork.chainId.toString() !== chainIdHex) {
-    try {
-      const networkParams = toolbox.getNetworkParams();
-      await switchEVMWalletNetwork(provider, chain, networkParams);
-    } catch {
-      throw new SwapKitError("wallet_evm_extensions_failed_to_switch_network", { chain });
-    }
-  }
 
   const disconnect = () => provider.send("wallet_revokePermissions", [{ eth_accounts: {} }]);
 

@@ -139,7 +139,7 @@ async function getWalletMethods(chain: (typeof VULTISIG_SUPPORTED_CHAINS)[number
       Chain.Polygon,
       Chain.XLayer,
       async () => {
-        const { prepareNetworkSwitch, switchEVMWalletNetwork } = await import("@swapkit/helpers");
+        const { prepareNetworkSwitch } = await import("@swapkit/helpers");
         const { getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
         const { BrowserProvider } = await import("ethers");
         const ethereumWindowProvider = await getVultisigProvider(chain as EVMChain);
@@ -152,18 +152,6 @@ async function getWalletMethods(chain: (typeof VULTISIG_SUPPORTED_CHAINS)[number
         const signer = await provider.getSigner();
         const toolbox = await getEvmToolboxAsync(chain as EVMChain, { provider, signer });
         const vultisigMethods = getVultisigMethods(provider, chain as EVMChain);
-
-        try {
-          if (chain !== Chain.Ethereum) {
-            const networkParams = toolbox.getNetworkParams();
-            await switchEVMWalletNetwork(provider, chain, networkParams);
-          }
-        } catch {
-          throw new SwapKitError({
-            errorKey: "wallet_failed_to_add_or_switch_network",
-            info: { chain, wallet: WalletOption.VULTISIG },
-          });
-        }
 
         return prepareNetworkSwitch({ chain, provider, toolbox: { ...toolbox, ...vultisigMethods } });
       },

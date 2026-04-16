@@ -1,12 +1,5 @@
 import { hex } from "@scure/base";
-import {
-  Chain,
-  type EVMChain,
-  GAIAConfig,
-  prepareNetworkSwitch,
-  SwapKitError,
-  switchEVMWalletNetwork,
-} from "@swapkit/helpers";
+import { Chain, type EVMChain, GAIAConfig, prepareNetworkSwitch, SwapKitError } from "@swapkit/helpers";
 import type { TronTransaction } from "@swapkit/toolboxes/tron";
 import { Transaction } from "@swapkit/utxo-signer";
 import type { Eip1193Provider } from "ethers";
@@ -175,14 +168,6 @@ export const getWeb3WalletMethods = async ({
   const provider = new BrowserProvider(walletProvider, "any");
   const signer = await provider.getSigner();
   const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
-
-  try {
-    if (chain !== Chain.Ethereum && "getNetworkParams" in toolbox) {
-      await switchEVMWalletNetwork(provider, chain, toolbox.getNetworkParams());
-    }
-  } catch {
-    throw new SwapKitError("wallet_bitkeep_failed_to_switch_network", { chain });
-  }
 
   return prepareNetworkSwitch({ chain, provider, toolbox });
 };

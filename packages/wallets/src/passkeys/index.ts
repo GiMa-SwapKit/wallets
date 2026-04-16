@@ -7,7 +7,6 @@ import {
   prepareNetworkSwitch,
   SKConfig,
   SwapKitError,
-  switchEVMWalletNetwork,
   WalletOption,
 } from "@swapkit/helpers";
 import type { SolanaProvider } from "@swapkit/toolboxes/solana";
@@ -117,15 +116,6 @@ function getWalletMethods({ wallet, chain: paramChain }: { wallet: Wallet; chain
       const signer = await browserProvider.getSigner();
       const address = await signer.getAddress();
       const toolbox = await getEvmToolboxAsync(chain, { provider: jsonRpcProvider, signer });
-
-      try {
-        if (chain !== Chain.Ethereum) {
-          const networkParams = toolbox.getNetworkParams();
-          await switchEVMWalletNetwork(browserProvider, chain, networkParams);
-        }
-      } catch {
-        throw new SwapKitError("wallet_passkeys_failed_to_switch_network", { chain });
-      }
 
       return { ...prepareNetworkSwitch({ chain, provider: browserProvider, toolbox }), address };
     })

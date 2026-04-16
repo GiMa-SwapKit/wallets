@@ -1,13 +1,5 @@
 import { base64 } from "@scure/base";
-import {
-  addEVMWalletNetwork,
-  Chain,
-  filterSupportedChains,
-  type NetworkParams,
-  prepareNetworkSwitch,
-  SwapKitError,
-  WalletOption,
-} from "@swapkit/helpers";
+import { Chain, filterSupportedChains, prepareNetworkSwitch, SwapKitError, WalletOption } from "@swapkit/helpers";
 import { Transaction } from "@swapkit/utxo-signer";
 import type { BitcoinProvider, GetAddressOptions, GetAddressResponse, SignTransactionOptions } from "sats-connect";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
@@ -123,15 +115,6 @@ async function getWalletMethodsForExtension(chain: Chain) {
       const address = await signer.getAddress();
 
       const toolbox = await getEvmToolboxAsync(chain, { provider: jsonRpcProvider, signer });
-      try {
-        if (chain !== Chain.Ethereum) {
-          const networkParams = toolbox.getNetworkParams() as NetworkParams;
-
-          await addEVMWalletNetwork(provider, networkParams);
-        }
-      } catch (error) {
-        throw new SwapKitError({ errorKey: "wallet_failed_to_add_or_switch_network", info: { chain, error } });
-      }
 
       return { address, ...prepareNetworkSwitch({ chain, provider, toolbox }) };
     }

@@ -4,7 +4,6 @@ import {
   filterSupportedChains,
   prepareNetworkSwitch,
   SwapKitError,
-  switchEVMWalletNetwork,
   WalletOption,
 } from "@swapkit/helpers";
 import type { Eip1193Provider } from "ethers";
@@ -78,17 +77,6 @@ async function getWeb3WalletMethods({
   const provider = new BrowserProvider(walletProvider, "any");
   const signer = await provider.getSigner();
   const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
-
-  try {
-    if (chain !== Chain.Ethereum) {
-      await switchEVMWalletNetwork(provider, chain, toolbox.getNetworkParams());
-    }
-  } catch {
-    throw new SwapKitError({
-      errorKey: "wallet_failed_to_add_or_switch_network",
-      info: { chain, wallet: WalletOption.TALISMAN },
-    });
-  }
 
   return prepareNetworkSwitch({ chain, provider, toolbox });
 }

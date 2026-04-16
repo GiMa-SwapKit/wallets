@@ -3,10 +3,8 @@ import {
   type EVMChain,
   EVMChains,
   filterSupportedChains,
-  getChainConfig,
   prepareNetworkSwitch,
   SwapKitError,
-  switchEVMWalletNetwork,
   WalletOption,
 } from "@swapkit/helpers";
 import type { BrowserProvider, Eip1193Provider } from "ethers";
@@ -51,17 +49,6 @@ export const getWeb3WalletMethods = async ({
 
   const signer = await provider.getSigner();
   const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
-  const { chainIdHex } = getChainConfig(chain);
-
-  const currentNetwork = await provider.getNetwork();
-  if (currentNetwork.chainId.toString() !== chainIdHex) {
-    try {
-      const networkParams = toolbox.getNetworkParams();
-      await switchEVMWalletNetwork(provider, chain, networkParams);
-    } catch {
-      throw new SwapKitError("wallet_evm_extensions_failed_to_switch_network", { chain });
-    }
-  }
 
   return prepareNetworkSwitch({
     chain,

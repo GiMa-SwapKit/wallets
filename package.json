@@ -28,7 +28,12 @@
     "@swapkit/toolboxes": "4.14.5",
     "@swapkit/types": "0.7.3",
     "@swapkit/wallet-core": "4.2.0",
-    "@swapkit/wallet-keystore": "4.3.18"
+    "@swapkit/wallet-extensions": "workspace:*",
+    "@swapkit/wallet-hardware": "workspace:*",
+    "@swapkit/wallet-keystore": "4.3.18",
+    "@swapkit/wallet-mobile": "workspace:*",
+    "@swapkit/wallets": "workspace:*",
+    "nuqs": "2.8.9"
   },
   "packageManager": "bun@1.3.4",
   "private": true,
@@ -45,5 +50,5 @@
     "type-check:ci": "bun run --filter './packages/*' type-check",
     "version-bump": "bunx changeset version"
   },
-  "workspaces": ["packages/*", "tools/*"]
+  "workspaces": ["packages/*", "playgrounds/*", "tools/*"]
 }
