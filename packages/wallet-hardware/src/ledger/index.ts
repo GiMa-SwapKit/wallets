@@ -49,7 +49,12 @@ export const ledgerWallet = createWallet({
     [Chain.Ethereum]: true,
     [Chain.Gnosis]: true,
     [Chain.Monad]: true,
+    [Chain.Bitcoin]: true,
+    [Chain.BitcoinCash]: true,
     [Chain.Cosmos]: true,
+    [Chain.Dash]: true,
+    [Chain.Dogecoin]: true,
+    [Chain.Litecoin]: true,
     [Chain.Near]: true,
     [Chain.Optimism]: true,
     [Chain.Polygon]: true,
@@ -57,7 +62,7 @@ export const ledgerWallet = createWallet({
     [Chain.Sui]: true,
     [Chain.Tron]: true,
     [Chain.XLayer]: true,
-    // BTC/BCH/DASH/DOGE/LTC/ZEC: pending PSBT signer (V3 plan PRs)
+    // ZEC: still on bespoke signPCZT path
     // THORChain: needs signAmino added to THORChainLedger (V3 plan PR)
   },
   name: "connectLedger",
@@ -137,10 +142,28 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
     case Chain.Zcash: {
       const { getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
       const utxoChain = chain as UTXOChain;
-      const toolbox = getUtxoToolbox(utxoChain);
 
       const signer = await getLedgerClient({ chain, derivationPath });
       const address = await getLedgerAddress({ chain, ledgerClient: signer });
+
+      // V3 toolbox signer:
+      //  - BTC/LTC use the modern `ledger-bitcoin` AppClient with native PSBT signing.
+      //  - BCH/DOGE/DASH use the legacy `hw-app-btc` adapter that pulls
+      //    `nonWitnessUtxo` (full prev-tx hex) out of the API PSBT.
+      //  - ZEC stays on the bespoke `signPCZT` flow for now.
+      let toolboxSigner: { getAddress: () => Promise<string>; signTransaction: (tx: Transaction) => Promise<Transaction> } | undefined;
+      if (chain === Chain.Bitcoin || chain === Chain.Litecoin) {
+        const { BitcoinPsbtLedger, LitecoinPsbtLedger } = await import("./clients/utxo-psbt");
+        const psbtClient = chain === Chain.Bitcoin ? BitcoinPsbtLedger(derivationPath) : LitecoinPsbtLedger(derivationPath);
+        toolboxSigner = { getAddress: psbtClient.getAddress, signTransaction: psbtClient.signTransaction };
+      } else if (chain === Chain.BitcoinCash || chain === Chain.Dogecoin || chain === Chain.Dash) {
+        const { createLegacyPsbtSigner } = await import("./clients/utxo-legacy-adapter");
+        toolboxSigner = createLegacyPsbtSigner({ address, chain: utxoChain, legacyClient: signer });
+      }
+
+      const toolbox = toolboxSigner
+        ? await getUtxoToolbox(utxoChain, { signer: toolboxSigner })
+        : getUtxoToolbox(utxoChain);
 
       const transfer = async (params: UTXOBuildTxParams) => {
         const feeRate = params.feeRate || (await toolbox.getFeeRates())[FeeOption.Average];
