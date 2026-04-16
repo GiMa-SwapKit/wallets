@@ -19,7 +19,7 @@ import {
 } from "@swapkit/toolboxes/utxo";
 import type { BTCNetwork, PCZT, Transaction, ZcashTransaction } from "@swapkit/utxo-signer";
 import { NETWORKS, ZcashConsensusBranchId, ZcashVersionGroupId } from "@swapkit/utxo-signer";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 function decodeOpReturnData(script: Uint8Array): string | null {
   if (script.length < 2 || script[0] !== 0x6a) return null;
@@ -763,6 +763,21 @@ export const trezorWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Aurora]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.Berachain]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Gnosis]: true,
+    [Chain.Monad]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.XLayer]: true,
+    // BTC/BCH/DASH/DOGE/LTC/ZEC: pending PSBT→TrezorConnect converter (V3 plan PR)
+  },
   name: "connectTrezor",
   supportedChains: [
     Chain.Arbitrum,

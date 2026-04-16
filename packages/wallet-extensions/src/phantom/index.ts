@@ -6,7 +6,7 @@ import {
   SwapKitError,
   WalletOption,
 } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export const phantomWallet = createWallet({
   connect: ({ addChain, supportedChains, walletType }) =>
@@ -29,6 +29,12 @@ export const phantomWallet = createWallet({
         throw new SwapKitError("wallet_connection_rejected_by_user", error);
       }
     },
+  directSigningSupport: {
+    [Chain.Bitcoin]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Monad]: true,
+    [Chain.Solana]: true,
+  },
   name: "connectPhantom",
   supportedChains: [Chain.Bitcoin, Chain.Ethereum, Chain.Monad, Chain.Solana],
   walletType: WalletOption.PHANTOM,

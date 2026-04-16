@@ -11,7 +11,7 @@ import {
   UTXOChains,
   WalletOption,
 } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import {
   getVultisigAddress,
   getVultisigMethods,
@@ -54,6 +54,17 @@ export const vultisigWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.XLayer]: true,
+    // BTC/BCH/DASH/DOGE/LTC/ZEC/Cosmos/Kujira/THORChain/Maya/Solana/Ripple: blocked on Vultisig provider — no raw-sign RPC
+  },
   name: "connectVultisig",
   supportedChains: [
     Chain.Arbitrum,

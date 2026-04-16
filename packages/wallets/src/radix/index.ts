@@ -1,5 +1,5 @@
 import { type AssetValue, Chain, filterSupportedChains, SKConfig, SwapKitError, WalletOption } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export const radixWallet = createWallet({
   connect: ({ addChain, supportedChains, walletType }) =>
@@ -21,6 +21,8 @@ export const radixWallet = createWallet({
 
       return true;
     },
+  // Radix is not in V3 swap chain list
+  directSigningSupport: {},
   name: "connectRadixWallet",
   supportedChains: [Chain.Radix],
   walletType: WalletOption.RADIX_WALLET,

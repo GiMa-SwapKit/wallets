@@ -10,7 +10,7 @@ import {
 } from "@swapkit/helpers";
 import { Transaction } from "@swapkit/utxo-signer";
 import type { BitcoinProvider, GetAddressOptions, GetAddressResponse, SignTransactionOptions } from "sats-connect";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 async function getWalletMethodsForExtension(chain: Chain) {
   switch (chain) {
@@ -162,6 +162,20 @@ export const onekeyWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Aurora]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Bitcoin]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Gnosis]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.Solana]: true,
+    [Chain.XLayer]: true,
+  },
   name: "connectOnekeyWallet",
   supportedChains: [
     Chain.Arbitrum,

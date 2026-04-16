@@ -1,5 +1,5 @@
 import { Chain, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export const petraWallet = createWallet({
   connect: ({ addChain, supportedChains, walletType }) =>
@@ -22,6 +22,8 @@ export const petraWallet = createWallet({
         throw new SwapKitError("wallet_connection_rejected_by_user", error);
       }
     },
+  // [Chain.Aptos]: blocked on toolbox — getAptosToolbox needs to accept AptosExtensionProvider
+  directSigningSupport: {},
   name: "connectPetra",
   supportedChains: [Chain.Aptos],
   walletType: WalletOption.PETRA,

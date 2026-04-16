@@ -11,7 +11,7 @@ import {
 
 export type { PairingInfo } from "@keepkey/keepkey-sdk";
 
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import { cosmosWalletMethods } from "./chains/cosmos";
 import { KeepKeySigner } from "./chains/evm";
 import { mayachainWalletMethods } from "./chains/mayachain";
@@ -52,6 +52,21 @@ export const keepkeyWallet = createWallet({
       );
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.Berachain]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Gnosis]: true,
+    [Chain.Monad]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.Ripple]: true,
+    [Chain.XLayer]: true,
+    // BTC/BCH/DASH/DOGE/LTC/Cosmos/THORChain/Maya: pending KeepKey SDK signer wrappers (V3 plan PRs)
+  },
   name: "connectKeepkey",
   supportedChains: [
     Chain.Arbitrum,

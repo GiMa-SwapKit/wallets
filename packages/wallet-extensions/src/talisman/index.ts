@@ -8,7 +8,7 @@ import {
   WalletOption,
 } from "@swapkit/helpers";
 import type { Eip1193Provider } from "ethers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export const talismanWallet = createWallet({
   connect: ({ addChain, supportedChains, walletType }) =>
@@ -25,6 +25,21 @@ export const talismanWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    [Chain.Arbitrum]: true,
+    [Chain.Avalanche]: true,
+    [Chain.Base]: true,
+    [Chain.Berachain]: true,
+    [Chain.BinanceSmartChain]: true,
+    [Chain.Chainflip]: true,
+    [Chain.Ethereum]: true,
+    [Chain.Gnosis]: true,
+    [Chain.Monad]: true,
+    [Chain.Optimism]: true,
+    [Chain.Polygon]: true,
+    [Chain.XLayer]: true,
+    // Polkadot: not in V3 chain list
+  },
   name: "connectTalisman",
   supportedChains: [
     Chain.Berachain,

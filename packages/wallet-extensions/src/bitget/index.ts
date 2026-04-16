@@ -1,5 +1,5 @@
 import { Chain, EVMChains, filterSupportedChains, WalletOption } from "@swapkit/helpers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 import { getWalletMethods } from "./helpers";
 
@@ -18,6 +18,14 @@ export const bitgetWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: {
+    ...Object.fromEntries(EVMChains.map((chain) => [chain, true])),
+    [Chain.Bitcoin]: true,
+    [Chain.Cosmos]: true,
+    [Chain.Solana]: true,
+    [Chain.Tron]: true,
+    // [Chain.Aptos]: blocked on toolbox — getAptosToolbox needs to accept AptosExtensionProvider
+  },
   name: "connectBitget",
   supportedChains: [...EVMChains, Chain.Cosmos, Chain.Bitcoin, Chain.Solana, Chain.Tron],
   walletType: WalletOption.BITGET,

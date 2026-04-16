@@ -1,6 +1,6 @@
 import { Chain, filterSupportedChains, SKConfig, SwapKitError, WalletOption } from "@swapkit/helpers";
 import { Xumm } from "xumm";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import { getWalletForChain } from "./helpers";
 import type { XamanConfig } from "./types";
 import { connectXamanWallet as connectXamanWalletMethod } from "./walletMethods";
@@ -51,6 +51,7 @@ export const xamanWallet = createWallet({
         xumm.authorize();
       });
     },
+  directSigningSupport: { [Chain.Ripple]: true },
   name: "connectXaman",
   supportedChains: [Chain.Ripple],
   walletType: WalletOption.XAMAN,

@@ -10,7 +10,7 @@ import {
   WalletOption,
 } from "@swapkit/helpers";
 import type { BrowserProvider, Eip1193Provider } from "ethers";
-import { createWallet, getWalletSupportedChains } from "../core";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 export type EVMWalletOptions =
   | WalletOption.BRAVE
@@ -107,6 +107,7 @@ export const evmWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: Object.fromEntries(EVMChains.map((chain) => [chain, true])),
   name: "connectEVMWallet",
   supportedChains: [...EVMChains] as EVMChain[],
 });
