@@ -73,18 +73,16 @@ export async function getWalletMethods(chain: Chain) {
       const { keplr: wallet } = bitget;
 
       await wallet.enable(GAIAConfig.chainId);
-      const offlineSigner = wallet.getOfflineSignerOnlyAmino(GAIAConfig.chainId);
+      const offlineSigner = await wallet.getOfflineSignerAuto(GAIAConfig.chainId);
       const accounts = await offlineSigner.getAccounts();
       if (!accounts?.[0]) throw new SwapKitError("wallet_bitkeep_no_accounts", { chain: Chain.Cosmos });
 
       const { getCosmosToolbox } = await import("@swapkit/toolboxes/cosmos");
       const [{ address }] = accounts;
 
-      const signer = {
-        ...offlineSigner,
+      const signer = Object.assign(offlineSigner, {
         getAddress: () => Promise.resolve(address),
-        signTransaction: async () => Promise.resolve({} as any),
-      };
+      });
 
       const toolbox = getCosmosToolbox(Chain.Cosmos, { signer });
 
@@ -98,10 +96,10 @@ export async function getWalletMethods(chain: Chain) {
       const { getSolanaToolbox } = await import("@swapkit/toolboxes/solana");
       const provider = bitget?.solana;
 
-      const providerConnection = await provider.connect();
-      const address: string = providerConnection.publicKey.toString();
+      const { publicKey } = await provider.connect();
+      const address: string = publicKey.toString();
 
-      const signer = { ...provider, getAddress: async () => address, publicKey: providerConnection.publicKey };
+      const signer = Object.assign(provider, { getAddress: async () => address });
 
       const toolbox = getSolanaToolbox({ signer });
 
