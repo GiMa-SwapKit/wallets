@@ -1,5 +1,27 @@
 # @swapkit-dev/wallet-hardware
 
+## 4.8.0
+
+### Minor Changes
+
+- [#21](https://github.com/swapkit/wallets/pull/21) [`159098d`](https://github.com/swapkit/wallets/commit/159098d3acbf75e0739115dab7fbe0ad17b17dd2) Thanks [@towanTG](https://github.com/towanTG)! - Add account-aware UTXO HD discovery methods for hardware wallets. Ledger, Trezor, and KeepKey now expose `getExtendedPublicKeyInfo`, account-aware `deriveAddressAtIndex`, and batched `deriveAddresses`, while dependencies are bumped to the SDK versions that provide shared UTXO HD helpers.
+
+- [#21](https://github.com/swapkit/wallets/pull/21) [`e87714a`](https://github.com/swapkit/wallets/commit/e87714a6e48aeff85674b7647b7b1a2943969b6b) Thanks [@towanTG](https://github.com/towanTG)! - Ledger UTXO V3 swap-flow signers:
+
+  - **BTC + LTC** via the modern `ledger-bitcoin` AppClient (`signPsbt` with `DefaultWalletPolicy`). The new client injects `PSBT_IN_BIP32_DERIVATION` per input using `app.getMasterFingerprint()` + the user's known derivation path (single-address account: same path for every input + change), then merges the partial signatures back into the PSBT and finalises.
+  - **BCH + DOGE + DASH** via a new legacy adapter that pulls `nonWitnessUtxo` (full prior-tx hex) out of the V3 PSBT, re-encodes via `RawTx.encode`, and feeds the existing `@ledgerhq/hw-app-btc.createPaymentTransaction` path. No prev-tx network fetch needed — the API PSBT carries everything.
+  - **ZEC** stays on the existing bespoke `signPCZT` path for now.
+
+  Bespoke `transfer` and the HD-wallet helpers (`deriveAddressAtIndex`, `transferFromMultipleAddresses`, `getExtendedPublicKey`) are retained for back-compat — the V3 path is additive via the toolbox-synthesised `signAndBroadcastTransaction`.
+
+  `directSigningSupport` flipped to `true` for BTC, LTC, BCH, DOGE, DASH on Ledger.
+
+  New deps: `ledger-bitcoin@0.3.0`, `@scure/bip32@2.0.1`.
+
+### Patch Changes
+
+- [#19](https://github.com/swapkit/wallets/pull/19) [`f181e26`](https://github.com/swapkit/wallets/commit/f181e26a24861d5b08284c583ab85e9fcfdd2008) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update core dependencies: @swapkit/core@4.4.13,@swapkit/toolboxes@4.15.0
+
 ## 4.7.0
 
 ### Minor Changes
