@@ -46,11 +46,11 @@
     "build:dts": "bun run ./tools/builder/dts.ts",
     "changeset": "bunx changeset",
     "lint": "bunx @biomejs/biome check --fix .",
-    "publish-packages": "bun run build:ci && bunx changeset publish",
+    "publish-packages": "bun run build:ci && bun run ./tools/builder/set-versions.ts && bunx changeset publish",
     "test": "bun test",
     "type-check": "bun run --filter './packages/*' type-check",
     "type-check:ci": "bun run --filter './packages/*' type-check",
-    "version-bump": "bunx changeset version"
+    "version-bump": "bunx changeset version && bun install"
   },
   "workspaces": ["packages/*", "playgrounds/*", "tools/*"]
 }

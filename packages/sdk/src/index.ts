@@ -116,12 +116,28 @@ export const defaultWallets = {
   ...xamanWallet,
 } as ReturnType<typeof createWallet>;
 
+export type SwapKitClient<
+  Plugins extends ReturnType<typeof createPlugin>,
+  Wallets extends ReturnType<typeof createWallet>,
+> = ReturnType<typeof SwapKit<typeof defaultPlugins & Plugins, typeof defaultWallets & Wallets>>;
+
 export function createSwapKit<
   Plugins extends ReturnType<typeof createPlugin>,
   Wallets extends ReturnType<typeof createWallet>,
->({ config, plugins, wallets }: { config?: SKConfigState; plugins?: Plugins; wallets?: Wallets } = {}) {
+>({
+  config,
+  plugins,
+  wallets,
+}: {
+  config?: SKConfigState;
+  plugins?: Plugins;
+  wallets?: Wallets;
+} = {}): SwapKitClient<Plugins, Wallets> {
   const mergedPlugins = { ...defaultPlugins, ...plugins };
   const mergedWallets = { ...defaultWallets, ...wallets };
 
-  return SwapKit({ config: config, plugins: mergedPlugins, wallets: mergedWallets });
+  return SwapKit({ config: config, plugins: mergedPlugins, wallets: mergedWallets }) as unknown as SwapKitClient<
+    Plugins,
+    Wallets
+  >;
 }

@@ -12,6 +12,8 @@ import type { TronSignedTransaction, TronSigner, TronTransaction } from "@swapki
 import { Transaction } from "@swapkit/utxo-signer";
 import type { Eip1193Provider } from "ethers";
 
+type WalletMethodsWithAddress = Record<string, unknown> & { address: string };
+
 const cosmosTransfer =
   (sender: string) =>
   async ({ recipient, assetValue, memo }: GenericTransferParams) => {
@@ -51,7 +53,7 @@ async function getWeb3WalletMethods({
   return prepareNetworkSwitch({ chain, provider, toolbox });
 }
 
-export async function getWalletMethods(chain: Chain) {
+export async function getWalletMethods(chain: Chain): Promise<WalletMethodsWithAddress> {
   const { match, P } = await import("ts-pattern");
 
   return (

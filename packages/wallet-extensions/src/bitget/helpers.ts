@@ -4,7 +4,9 @@ import type { TronTransaction } from "@swapkit/toolboxes/tron";
 import { Transaction } from "@swapkit/utxo-signer";
 import type { Eip1193Provider } from "ethers";
 
-export async function getWalletMethods(chain: Chain) {
+type WalletMethodsWithAddress = Record<string, unknown> & { address: string };
+
+export async function getWalletMethods(chain: Chain): Promise<WalletMethodsWithAddress> {
   const { match, P } = await import("ts-pattern");
   const bitget = window.bitkeep;
 

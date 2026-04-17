@@ -91,7 +91,7 @@ const dtsPlugin = {
   },
 };
 
-export const orderedPackages = ["wallet-extensions", "wallet-hardware", "wallet-mobile", "wallets"];
+export const orderedPackages = ["wallet-extensions", "wallet-hardware", "wallet-mobile", "wallets", "sdk"];
 
 // Symlink .bun/ deps to standard node_modules/ paths so tsc can resolve them
 console.info("Symlinking .bun/ dependencies for tsc compatibility...");
