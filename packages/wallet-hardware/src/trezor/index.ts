@@ -11,7 +11,10 @@ import {
   WalletOption,
 } from "@swapkit/helpers";
 import {
+  assertDerivationIndex,
   createHDWalletHelpers,
+  getUTXOAccountIndexFromPath,
+  getUTXOAccountPath,
   getNetworkForChain,
   getUtxoApi,
   type UTXOToolboxes,
@@ -429,6 +432,7 @@ async function getTrezorWallet<T extends Chain>({
     case Chain.Dogecoin:
     case Chain.Litecoin: {
       const { toCashAddress, getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
+      const utxoChain = chain as UTXOChain;
       const scriptType = getScriptType(derivationPath);
 
       if (!scriptType) {
@@ -625,11 +629,11 @@ async function getTrezorWallet<T extends Chain>({
 
       const toolbox = await getUtxoToolbox(chain);
 
-      const accountPath = derivationPathToString(derivationPath.slice(0, 3) as DerivationPathArray);
-
-      async function getExtendedPublicKey() {
+      async function getExtendedPublicKeyInfo({ accountIndex }: { accountIndex?: number } = {}) {
         const TrezorConnect = (await import("@trezor/connect-web")).default;
-        const { success, payload } = await TrezorConnect.getPublicKey({ coin, path: accountPath });
+        const resolvedAccountPath = getUTXOAccountPath({ accountIndex, chain: utxoChain, derivationPath });
+        const path = derivationPathToString(resolvedAccountPath);
+        const { success, payload } = await TrezorConnect.getPublicKey({ coin, path });
 
         if (!success) {
           throw new SwapKitError({
@@ -639,6 +643,7 @@ async function getTrezorWallet<T extends Chain>({
         }
 
         return {
+          accountIndex: getUTXOAccountIndexFromPath(resolvedAccountPath),
           chainCode: payload.chainCode,
           depth: payload.depth,
           fingerprint: payload.fingerprint,
@@ -649,9 +654,24 @@ async function getTrezorWallet<T extends Chain>({
         };
       }
 
-      async function deriveAddressAtIndex({ index, change = false }: { index: number; change?: boolean }) {
+      async function getExtendedPublicKey() {
+        return getExtendedPublicKeyInfo();
+      }
+
+      async function deriveAddressAtIndex({
+        accountIndex,
+        index,
+        change = false,
+      }: {
+        accountIndex?: number;
+        index: number;
+        change?: boolean;
+      }) {
+        assertDerivationIndex("index", index);
+
         const TrezorConnect = (await import("@trezor/connect-web")).default;
-        const fullPath = `${accountPath}/${Number(change)}/${index}`;
+        const resolvedAccountPath = getUTXOAccountPath({ accountIndex, chain: utxoChain, derivationPath });
+        const fullPath = `${derivationPathToString(resolvedAccountPath)}/${Number(change)}/${index}`;
 
         const { success, payload } = await TrezorConnect.getAddress({ coin, path: fullPath, showOnTrezor: false });
 
@@ -668,19 +688,33 @@ async function getTrezorWallet<T extends Chain>({
         const pubKeyResult = await TrezorConnect.getPublicKey({ coin, path: fullPath });
         const pubkey = pubKeyResult.success ? pubKeyResult.payload.publicKey : "";
 
-        return { address: finalAddress, change, index, pubkey };
+        return {
+          accountIndex: getUTXOAccountIndexFromPath(resolvedAccountPath),
+          address: finalAddress,
+          change,
+          index,
+          path: fullPath,
+          pubkey,
+        };
       }
 
       async function deriveAddressesBatch({
+        accountIndex,
         count,
         startIndex = 0,
         change = false,
       }: {
+        accountIndex?: number;
         count: number;
         startIndex?: number;
         change?: boolean;
       }) {
+        assertDerivationIndex("count", count);
+        assertDerivationIndex("startIndex", startIndex);
+
         const TrezorConnect = (await import("@trezor/connect-web")).default;
+        const resolvedAccountPath = getUTXOAccountPath({ accountIndex, chain: utxoChain, derivationPath });
+        const accountPath = derivationPathToString(resolvedAccountPath);
 
         const paths = Array.from({ length: count }, (_, i) => ({
           coin,
@@ -702,7 +736,14 @@ async function getTrezorWallet<T extends Chain>({
               finalAddress = bchToolbox.stripPrefix(result.address);
             }
 
-            return { address: finalAddress, change, index: startIndex + i, pubkey: "" };
+            return {
+              accountIndex: getUTXOAccountIndexFromPath(resolvedAccountPath),
+              address: finalAddress,
+              change,
+              index: startIndex + i,
+              path: `${accountPath}/${Number(change)}/${startIndex + i}`,
+              pubkey: "",
+            };
           }),
         );
 
@@ -721,8 +762,9 @@ async function getTrezorWallet<T extends Chain>({
         ...hdHelpers,
         address,
         deriveAddressAtIndex,
-        deriveAddresses: deriveAddressesBatch, // Keep Trezor's optimized batch version
+        deriveAddresses: deriveAddressesBatch,
         getExtendedPublicKey,
+        getExtendedPublicKeyInfo,
         signTransaction,
         signTransactionWithMultipleInputs,
         transfer,
