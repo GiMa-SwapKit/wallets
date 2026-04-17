@@ -73,8 +73,8 @@ export {
   talismanWallet,
   trezorWallet,
   tronlinkWallet,
-  walletSelectorWallet,
   walletconnectWallet,
+  walletSelectorWallet,
   xamanWallet,
 };
 

@@ -13,9 +13,9 @@ import {
 import {
   assertDerivationIndex,
   createHDWalletHelpers,
+  getNetworkForChain,
   getUTXOAccountIndexFromPath,
   getUTXOAccountPath,
-  getNetworkForChain,
   getUtxoApi,
   type UTXOToolboxes,
   type UTXOType,
@@ -654,7 +654,7 @@ async function getTrezorWallet<T extends Chain>({
         };
       }
 
-      async function getExtendedPublicKey() {
+      function getExtendedPublicKey() {
         return getExtendedPublicKeyInfo();
       }
 

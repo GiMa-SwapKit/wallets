@@ -12,10 +12,10 @@ import {
 import {
   assertDerivationIndex,
   createHDWalletHelpers,
+  getNetworkForChain,
   getUTXOAccountIndexFromPath,
   getUTXOAccountPath,
   getUTXOAddressPath,
-  getNetworkForChain,
   getUtxoApi,
   stripToCashAddress,
   type UTXOToolboxes,
@@ -276,7 +276,7 @@ export async function utxoWalletMethods({
     }
   }
 
-  async function getExtendedPublicKey() {
+  function getExtendedPublicKey() {
     return getExtendedPublicKeyInfo();
   }
 
@@ -291,7 +291,7 @@ export async function utxoWalletMethods({
   }) {
     try {
       assertDerivationIndex("index", index);
-      const fullPath = getUTXOAddressPath({ accountIndex, change, chain, derivationPath, index });
+      const fullPath = getUTXOAddressPath({ accountIndex, chain, change, derivationPath, index });
       const fullPathString = derivationPathToString(fullPath);
 
       const result = await sdk.address.utxoGetAddress({

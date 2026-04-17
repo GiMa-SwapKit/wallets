@@ -25,9 +25,7 @@ export async function extractInputsFromPsbt(tx: Transaction): Promise<UTXOType[]
       throw new Error(`PSBT input ${i} is missing txid/index`);
     }
 
-    const txHex = input.nonWitnessUtxo
-      ? hex.encode(RawTx.encode(input.nonWitnessUtxo))
-      : "";
+    const txHex = input.nonWitnessUtxo ? hex.encode(RawTx.encode(input.nonWitnessUtxo)) : "";
     const witnessUtxo = input.witnessUtxo
       ? { script: input.witnessUtxo.script, value: Number(input.witnessUtxo.amount) }
       : undefined;
@@ -54,9 +52,7 @@ export function createLegacyPsbtSigner({
   chain: _chain,
   address,
 }: {
-  legacyClient: {
-    signTransaction: (tx: Transaction, inputUtxos: UTXOType[]) => Promise<string>;
-  };
+  legacyClient: { signTransaction: (tx: Transaction, inputUtxos: UTXOType[]) => Promise<string> };
   chain: UTXOChain;
   address: string;
 }) {

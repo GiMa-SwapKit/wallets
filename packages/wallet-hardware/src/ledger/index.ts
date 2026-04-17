@@ -205,7 +205,7 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
         return { accountIndex: getUTXOAccountIndexFromPath(accountPath), path, xpub };
       }
 
-      async function getExtendedPublicKey() {
+      function getExtendedPublicKey() {
         return getExtendedPublicKeyInfo();
       }
 
@@ -219,7 +219,7 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
         change?: boolean;
       }) {
         try {
-          const fullPath = getUTXOAddressPath({ accountIndex, change, chain: utxoChain, derivationPath, index });
+          const fullPath = getUTXOAddressPath({ accountIndex, chain: utxoChain, change, derivationPath, index });
 
           const indexedSigner = await getLedgerClient({ chain: utxoChain, derivationPath: fullPath });
           const derivedAddress = await getLedgerAddress({ chain: utxoChain, ledgerClient: indexedSigner });
