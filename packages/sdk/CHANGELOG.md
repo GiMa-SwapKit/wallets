@@ -1,5 +1,11 @@
 # @swapkit/sdk
 
+## 4.6.6
+
+### Patch Changes
+
+- [`f33231b`](https://github.com/swapkit/wallets/commit/f33231b0e3e812475a8bc9ca5bc9b1c9347ae8ed) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Normalize workspace dependencies before publishing so SDK releases contain npm semver ranges and generated types.
+
 ## 4.6.5
 
 ### Patch Changes
