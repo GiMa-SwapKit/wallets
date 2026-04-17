@@ -1,8 +1,8 @@
 import { base64 } from "@scure/base";
 import { Chain, filterSupportedChains, prepareNetworkSwitch, SwapKitError, WalletOption } from "@swapkit/helpers";
 import { Transaction } from "@swapkit/utxo-signer";
-import type { BitcoinProvider, GetAddressOptions, GetAddressResponse, SignTransactionOptions } from "sats-connect";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+import type { BitcoinProvider, GetAddressOptions, GetAddressResponse, SignTransactionOptions } from "sats-connect";
 
 async function getWalletMethodsForExtension(chain: Chain) {
   switch (chain) {

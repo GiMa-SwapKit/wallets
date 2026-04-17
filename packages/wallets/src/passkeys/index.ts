@@ -11,6 +11,7 @@ import {
 } from "@swapkit/helpers";
 import type { SolanaProvider } from "@swapkit/toolboxes/solana";
 import { Transaction } from "@swapkit/utxo-signer";
+import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import {
   AddressPurpose,
   BitcoinNetworkType,
@@ -21,7 +22,6 @@ import {
   signTransaction as satsSignTransaction,
 } from "sats-connect";
 import { match } from "ts-pattern";
-import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 
 async function getPasskeyWallet() {
   const appId = SKConfig.get("apiKeys").passkeys;

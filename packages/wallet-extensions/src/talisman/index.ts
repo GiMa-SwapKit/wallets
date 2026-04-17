@@ -6,8 +6,8 @@ import {
   SwapKitError,
   WalletOption,
 } from "@swapkit/helpers";
-import type { Eip1193Provider } from "ethers";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+import type { Eip1193Provider } from "ethers";
 
 export const talismanWallet = createWallet({
   connect: ({ addChain, supportedChains, walletType }) =>

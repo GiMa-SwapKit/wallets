@@ -37,8 +37,8 @@ export default function App() {
       <SwapKitWidget
         apiBaseUrl={import.meta.env.VITE_SWAPKIT_API_BASE_URL}
         apiKey={import.meta.env.VITE_SWAPKIT_API_KEY || undefined}
-        widgetKey={import.meta.env.VITE_SWAPKIT_WIDGET_KEY || undefined}
         wallets="all"
+        widgetKey={import.meta.env.VITE_SWAPKIT_WIDGET_KEY || undefined}
       />
     </div>
   );

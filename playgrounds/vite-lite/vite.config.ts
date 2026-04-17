@@ -71,6 +71,12 @@ export default defineConfig({
   },
   plugins: [nodePolyfills({ globals: { Buffer: true, global: true, process: true } }), react()],
   resolve: {
+    alias: {
+      "@swapkit/ui/swapkit.css": swapkitUiCss,
+      "vite-plugin-node-polyfills/shims/buffer": resolve(polyfillsPkg, "shims/buffer/dist/index.js"),
+      "vite-plugin-node-polyfills/shims/global": resolve(polyfillsPkg, "shims/global/dist/index.js"),
+      "vite-plugin-node-polyfills/shims/process": resolve(polyfillsPkg, "shims/process/dist/index.js"),
+    },
     // Prefer the "bun" condition so vite resolves workspace packages to their
     // src/ entrypoints instead of the (potentially stale) dist/ build.
     conditions: ["bun", "module", "browser", "import", "default"],
@@ -78,11 +84,5 @@ export default defineConfig({
     // bun's content-addressed store can otherwise produce two physical copies
     // even at the same version, breaking provider/context lookup.
     dedupe: ["react", "react-dom", "nuqs"],
-    alias: {
-      "@swapkit/ui/swapkit.css": swapkitUiCss,
-      "vite-plugin-node-polyfills/shims/buffer": resolve(polyfillsPkg, "shims/buffer/dist/index.js"),
-      "vite-plugin-node-polyfills/shims/global": resolve(polyfillsPkg, "shims/global/dist/index.js"),
-      "vite-plugin-node-polyfills/shims/process": resolve(polyfillsPkg, "shims/process/dist/index.js"),
-    },
   },
 });
