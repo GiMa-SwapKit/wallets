@@ -43,12 +43,7 @@ export const keplrWallet = createWallet({
 
       return true;
     },
-  directSigningSupport: {
-    [Chain.Cosmos]: true,
-    [Chain.Kujira]: true,
-    [Chain.Noble]: true,
-    [Chain.THORChain]: true,
-  },
+  directSigningSupport: { [Chain.Cosmos]: true, [Chain.Kujira]: true, [Chain.Noble]: true, [Chain.THORChain]: true },
   name: "connectKeplr",
   supportedChains: [Chain.Cosmos, Chain.Kujira, Chain.Noble, Chain.THORChain],
 });

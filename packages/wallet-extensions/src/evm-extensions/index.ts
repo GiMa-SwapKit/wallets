@@ -7,8 +7,8 @@ import {
   SwapKitError,
   WalletOption,
 } from "@swapkit/helpers";
-import type { BrowserProvider, Eip1193Provider } from "ethers";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+import type { BrowserProvider, Eip1193Provider } from "ethers";
 
 export type EVMWalletOptions =
   | WalletOption.BRAVE

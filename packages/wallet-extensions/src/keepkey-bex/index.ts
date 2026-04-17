@@ -1,6 +1,6 @@
 import { AssetValue, Chain, ChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
-import type { Eip1193Provider } from "ethers";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+import type { Eip1193Provider } from "ethers";
 import {
   getKEEPKEYAddress,
   getKEEPKEYMethods,
