@@ -1,5 +1,11 @@
 # @swapkit-dev/wallet-hardware
 
+## 4.8.1
+
+### Patch Changes
+
+- [`380809d`](https://github.com/swapkit/wallets/commit/380809d50647cd03c472a1caf105ebfa82a57d34) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Declare ledger-bitcoin as a direct hardware wallet dependency for Ledger UTXO PSBT signing.
+
 ## 4.8.0
 
 ### Minor Changes
