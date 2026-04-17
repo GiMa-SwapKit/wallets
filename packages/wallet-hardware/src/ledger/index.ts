@@ -16,8 +16,12 @@ import {
 import type { ThorchainDepositParams } from "@swapkit/toolboxes/cosmos";
 import {
   addInputsAndOutputs,
+  assertDerivationIndex,
   compileMemo,
   createHDWalletHelpers,
+  getUTXOAccountIndexFromPath,
+  getUTXOAccountPath,
+  getUTXOAddressPath,
   getUtxoApi,
   type UTXOBuildTxParams,
   type UTXOForMultiAddressTransfer,
@@ -33,7 +37,8 @@ export const ledgerWallet = createWallet({
 
       if (!chain) return false;
 
-      const walletMethods = await getWalletMethods({ chain, derivationPath });
+      const resolvedPath = derivationPath ?? (NetworkDerivationPath[chain] as DerivationPathArray | undefined);
+      const walletMethods = await getWalletMethods({ chain, derivationPath: resolvedPath });
 
       addChain({ ...walletMethods, chain, walletType: WalletOption.LEDGER });
 
@@ -144,6 +149,7 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
       const utxoChain = chain as UTXOChain;
 
       const signer = await getLedgerClient({ chain, derivationPath });
+
       const address = await getLedgerAddress({ chain, ledgerClient: signer });
 
       // V3 toolbox signer:
@@ -151,10 +157,13 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
       //  - BCH/DOGE/DASH use the legacy `hw-app-btc` adapter that pulls
       //    `nonWitnessUtxo` (full prev-tx hex) out of the API PSBT.
       //  - ZEC stays on the bespoke `signPCZT` flow for now.
-      let toolboxSigner: { getAddress: () => Promise<string>; signTransaction: (tx: Transaction) => Promise<Transaction> } | undefined;
+      let toolboxSigner:
+        | { getAddress: () => Promise<string>; signTransaction: (tx: Transaction) => Promise<Transaction> }
+        | undefined;
       if (chain === Chain.Bitcoin || chain === Chain.Litecoin) {
         const { BitcoinPsbtLedger, LitecoinPsbtLedger } = await import("./clients/utxo-psbt");
-        const psbtClient = chain === Chain.Bitcoin ? BitcoinPsbtLedger(derivationPath) : LitecoinPsbtLedger(derivationPath);
+        const psbtClient =
+          chain === Chain.Bitcoin ? BitcoinPsbtLedger(derivationPath) : LitecoinPsbtLedger(derivationPath);
         toolboxSigner = { getAddress: psbtClient.getAddress, signTransaction: psbtClient.signTransaction };
       } else if (chain === Chain.BitcoinCash || chain === Chain.Dogecoin || chain === Chain.Dash) {
         const { createLegacyPsbtSigner } = await import("./clients/utxo-legacy-adapter");
@@ -185,26 +194,70 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
         return txHash;
       };
 
-      async function getExtendedPublicKey() {
+      async function getExtendedPublicKeyInfo({ accountIndex }: { accountIndex?: number } = {}) {
         if (!signer.getExtendedPublicKey) return undefined;
 
-        const xpub = await signer.getExtendedPublicKey();
-        const accountPath = derivationPath?.slice(0, 3) ?? NetworkDerivationPath[chain].slice(0, 3);
-        return { path: derivationPathToString(accountPath as DerivationPathArray), xpub };
+        const accountPath = getUTXOAccountPath({ accountIndex, chain: utxoChain, derivationPath });
+        const path = derivationPathToString(accountPath);
+        const ledgerPath = chain === Chain.Bitcoin || chain === Chain.Litecoin ? path : path.replace(/^m\//, "");
+        const xpub = await signer.getExtendedPublicKey(ledgerPath);
+
+        return { accountIndex: getUTXOAccountIndexFromPath(accountPath), path, xpub };
       }
 
-      async function deriveAddressAtIndex({ index, change = false }: { index: number; change?: boolean }) {
+      async function getExtendedPublicKey() {
+        return getExtendedPublicKeyInfo();
+      }
+
+      async function deriveAddressAtIndex({
+        accountIndex,
+        index,
+        change = false,
+      }: {
+        accountIndex?: number;
+        index: number;
+        change?: boolean;
+      }) {
         try {
-          const basePath = derivationPath?.slice(0, 3) ?? NetworkDerivationPath[chain].slice(0, 3);
-          const fullPath = [...basePath, Number(change), index] as DerivationPathArray;
+          const fullPath = getUTXOAddressPath({ accountIndex, change, chain: utxoChain, derivationPath, index });
 
           const indexedSigner = await getLedgerClient({ chain: utxoChain, derivationPath: fullPath });
           const derivedAddress = await getLedgerAddress({ chain: utxoChain, ledgerClient: indexedSigner });
 
-          return { address: derivedAddress, change, index, pubkey: "" };
+          return {
+            accountIndex: getUTXOAccountIndexFromPath(fullPath),
+            address: derivedAddress,
+            change,
+            index,
+            path: derivationPathToString(fullPath),
+            pubkey: "",
+          };
         } catch {
           return undefined;
         }
+      }
+
+      async function deriveAddresses({
+        accountIndex,
+        count,
+        startIndex = 0,
+        change = false,
+      }: {
+        accountIndex?: number;
+        count: number;
+        startIndex?: number;
+        change?: boolean;
+      }) {
+        assertDerivationIndex("count", count);
+        assertDerivationIndex("startIndex", startIndex);
+
+        const addresses = await Promise.all(
+          Array.from({ length: count }, (_, i) =>
+            deriveAddressAtIndex({ accountIndex, change, index: startIndex + i }),
+          ),
+        );
+
+        return addresses.filter((address) => !!address);
       }
 
       const hdHelpers = createHDWalletHelpers({
@@ -281,12 +334,12 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
           tx,
         });
 
-        const basePath = derivationPath?.slice(0, 3) ?? NetworkDerivationPath[chain].slice(0, 3);
+        const basePath = getUTXOAccountPath({ chain: utxoChain, derivationPath });
         const inputDerivationPaths = selectedInputs.map((input: { hash: string; index: number }) => {
           const utxoInfo = utxos.find((u) => u.hash === input.hash && u.index === input.index);
           const derivationIndex = utxoInfo?.derivationIndex ?? 0;
           const isChange = utxoInfo?.isChange ?? false;
-          const fullPath = [...basePath, Number(isChange), derivationIndex] as DerivationPathArray;
+          const fullPath = [...basePath, Number(isChange), derivationIndex] as unknown as DerivationPathArray;
           return derivationPathToString(fullPath);
         });
 
@@ -303,7 +356,9 @@ async function getWalletMethods({ chain, derivationPath }: { chain: Chain; deriv
         ...hdHelpers,
         address,
         deriveAddressAtIndex,
+        deriveAddresses,
         getExtendedPublicKey,
+        getExtendedPublicKeyInfo,
         transfer,
         transferFromMultipleAddresses,
       };

@@ -10,7 +10,11 @@ import {
   type UTXOChain,
 } from "@swapkit/helpers";
 import {
+  assertDerivationIndex,
   createHDWalletHelpers,
+  getUTXOAccountIndexFromPath,
+  getUTXOAccountPath,
+  getUTXOAddressPath,
   getNetworkForChain,
   getUtxoApi,
   stripToCashAddress,
@@ -245,14 +249,12 @@ export async function utxoWalletMethods({
     return toolbox.broadcastTx(signedTxHex);
   };
 
-  const accountPathString = derivationPath
-    ? derivationPathToString(derivationPath.slice(0, 3) as DerivationPathArray)
-    : DerivationPath[chain].split("/").slice(0, 4).join("/");
-
-  async function getExtendedPublicKey() {
+  async function getExtendedPublicKeyInfo({ accountIndex }: { accountIndex?: number } = {}) {
     try {
+      const resolvedAccountPath = getUTXOAccountPath({ accountIndex, chain, derivationPath });
+      const resolvedAccountPathString = derivationPathToString(resolvedAccountPath);
       const path = {
-        address_n: bip32ToAddressNList(accountPathString),
+        address_n: bip32ToAddressNList(resolvedAccountPathString),
         coin: ChainToKeepKeyName[chain],
         script_type: scriptType,
         showDisplay: false,
@@ -261,7 +263,11 @@ export async function utxoWalletMethods({
 
       const responsePubkey = await sdk.system.info.getPublicKey(path);
 
-      return { path: accountPathString, xpub: responsePubkey.xpub };
+      return {
+        accountIndex: getUTXOAccountIndexFromPath(resolvedAccountPath),
+        path: resolvedAccountPathString,
+        xpub: responsePubkey.xpub,
+      };
     } catch (error) {
       throw new SwapKitError("wallet_keepkey_failed_to_get_public_key", {
         chain,
@@ -270,9 +276,23 @@ export async function utxoWalletMethods({
     }
   }
 
-  async function deriveAddressAtIndex({ index, change = false }: { index: number; change?: boolean }) {
+  async function getExtendedPublicKey() {
+    return getExtendedPublicKeyInfo();
+  }
+
+  async function deriveAddressAtIndex({
+    accountIndex,
+    index,
+    change = false,
+  }: {
+    accountIndex?: number;
+    index: number;
+    change?: boolean;
+  }) {
     try {
-      const fullPathString = `${accountPathString}/${Number(change)}/${index}`;
+      assertDerivationIndex("index", index);
+      const fullPath = getUTXOAddressPath({ accountIndex, change, chain, derivationPath, index });
+      const fullPathString = derivationPathToString(fullPath);
 
       const result = await sdk.address.utxoGetAddress({
         address_n: bip32ToAddressNList(fullPathString),
@@ -285,10 +305,38 @@ export async function utxoWalletMethods({
         finalAddress = stripToCashAddress(result.address);
       }
 
-      return { address: finalAddress, change, index, pubkey: "" };
+      return {
+        accountIndex: getUTXOAccountIndexFromPath(fullPath),
+        address: finalAddress,
+        change,
+        index,
+        path: fullPathString,
+        pubkey: "",
+      };
     } catch {
       return undefined;
     }
+  }
+
+  async function deriveAddresses({
+    accountIndex,
+    count,
+    startIndex = 0,
+    change = false,
+  }: {
+    accountIndex?: number;
+    count: number;
+    startIndex?: number;
+    change?: boolean;
+  }) {
+    assertDerivationIndex("count", count);
+    assertDerivationIndex("startIndex", startIndex);
+
+    const addresses = await Promise.all(
+      Array.from({ length: count }, (_, i) => deriveAddressAtIndex({ accountIndex, change, index: startIndex + i })),
+    );
+
+    return addresses.filter((address) => !!address);
   }
 
   const hdHelpers = createHDWalletHelpers({
@@ -303,7 +351,9 @@ export async function utxoWalletMethods({
     ...hdHelpers,
     address: walletAddress,
     deriveAddressAtIndex,
+    deriveAddresses,
     getExtendedPublicKey,
+    getExtendedPublicKeyInfo,
     signTransaction,
     signTransactionWithMultipleInputs,
     transfer,

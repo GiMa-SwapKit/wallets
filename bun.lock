@@ -11,7 +11,7 @@
         "@swapkit/server": "4.2.37",
         "@swapkit/toolboxes": "4.15.0",
         "@swapkit/wallet-core": "4.2.0",
-        "@swapkit/wallet-keystore": "4.3.18",
+        "@swapkit/wallet-keystore": "4.3.19",
         "ledger-bitcoin": "0.3.0",
       },
       "devDependencies": {
@@ -37,7 +37,7 @@
         "@swapkit/server": "^4.2.37",
         "@swapkit/toolboxes": "^4.15.0",
         "@swapkit/wallet-core": "^4.2.0",
-        "@swapkit/wallet-keystore": "^4.3.18",
+        "@swapkit/wallet-keystore": "^4.3.19",
         "@swapkit/wallets": "workspace:*",
         "cosmjs-types": "0.10.1",
       },
@@ -258,7 +258,7 @@
     "@swapkit/wallet-core": "4.2.0",
     "@swapkit/wallet-extensions": "workspace:*",
     "@swapkit/wallet-hardware": "workspace:*",
-    "@swapkit/wallet-keystore": "4.3.18",
+    "@swapkit/wallet-keystore": "4.3.19",
     "@swapkit/wallet-mobile": "workspace:*",
     "@swapkit/wallets": "workspace:*",
     "nuqs": "2.8.9",
@@ -1114,7 +1114,7 @@
 
     "@swapkit/wallet-hardware": ["@swapkit/wallet-hardware@workspace:packages/wallet-hardware"],
 
-    "@swapkit/wallet-keystore": ["@swapkit/wallet-keystore@4.3.18", "", { "dependencies": { "@noble/hashes": "2.0.1", "@scure/bip39": "2.0.1", "@swapkit/helpers": "4.13.0", "@swapkit/toolboxes": "4.14.5", "@swapkit/wallet-core": "4.2.0" } }, "sha512-tMulewvleo5wZ95YBj8RMqJfXtkd2QoqqzOPJ83Cx0QKGOrlQBADoKy7Hl+aY61dXjt5TiL3/cV9I7YgrElOSQ=="],
+    "@swapkit/wallet-keystore": ["@swapkit/wallet-keystore@4.3.19", "", { "dependencies": { "@noble/hashes": "2.0.1", "@scure/bip39": "2.0.1", "@swapkit/helpers": "4.13.0", "@swapkit/toolboxes": "4.15.0", "@swapkit/wallet-core": "4.2.0" } }, "sha512-44+auEcMc9AkDj6aNCc1sYFBGynRRgjnjSHYci/iISwrSzFmIQw2QMeO4MtMfFUveGsc6y93r4/zmWF12RMirQ=="],
 
     "@swapkit/wallet-mobile": ["@swapkit/wallet-mobile@workspace:packages/wallet-mobile"],
 
