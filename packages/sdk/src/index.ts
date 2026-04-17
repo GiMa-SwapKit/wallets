@@ -44,6 +44,7 @@ export * from "@swapkit/plugins/radix";
 export * from "@swapkit/plugins/solana";
 export * from "@swapkit/plugins/swapkit";
 export * from "@swapkit/plugins/thorchain";
+export type { HDWalletAccountParams } from "@swapkit/toolboxes";
 export * from "@swapkit/toolboxes";
 export * from "@swapkit/toolboxes/cosmos";
 export * from "@swapkit/toolboxes/evm";
