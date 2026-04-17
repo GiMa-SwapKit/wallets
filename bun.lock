@@ -29,7 +29,7 @@
     },
     "packages/sdk": {
       "name": "@swapkit/sdk",
-      "version": "4.6.4",
+      "version": "4.6.6",
       "dependencies": {
         "@stricahq/typhonjs": "~3.0.1",
         "@swapkit/core": "^4.4.13",
@@ -45,7 +45,7 @@
     },
     "packages/wallet-extensions": {
       "name": "@swapkit/wallet-extensions",
-      "version": "4.5.0",
+      "version": "4.5.1",
       "dependencies": {
         "@aptos-labs/ts-sdk": "~1.34.0",
         "@cosmjs/amino": "~0.37.0",
@@ -85,7 +85,7 @@
     },
     "packages/wallet-hardware": {
       "name": "@swapkit/wallet-hardware",
-      "version": "4.7.0",
+      "version": "4.8.0",
       "dependencies": {
         "@cosmjs/amino": "~0.37.0",
         "@cosmjs/crypto": "0.37.0",
@@ -114,6 +114,7 @@
         "@trezor/connect-web": "~9.6.4",
         "cosmjs-types": "~0.10.1",
         "ethers": "^6.14.0",
+        "ledger-bitcoin": "~0.3.0",
         "ripple-binary-codec": "2.5.1",
         "ts-pattern": "^5.9.0",
         "xrpl": "~4.4.2",
@@ -142,6 +143,7 @@
         "@trezor/connect-web": "9.6.4",
         "cosmjs-types": "0.10.1",
         "ethers": "6.16.0",
+        "ledger-bitcoin": "0.3.0",
         "ripple-binary-codec": "2.5.1",
         "ts-pattern": "^5.9.0",
         "xrpl": "4.4.2",
@@ -149,7 +151,7 @@
     },
     "packages/wallet-mobile": {
       "name": "@swapkit/wallet-mobile",
-      "version": "4.3.0",
+      "version": "4.3.1",
       "dependencies": {
         "@swapkit/helpers": "^4.13.0",
         "@swapkit/toolboxes": "^4.15.0",
@@ -158,7 +160,7 @@
     },
     "packages/wallets": {
       "name": "@swapkit/wallets",
-      "version": "4.7.0",
+      "version": "4.8.0",
       "dependencies": {
         "@coinbase/wallet-sdk": "~4.3.7",
         "@cosmjs/amino": "~0.37.0",
@@ -215,7 +217,7 @@
     },
     "playgrounds/vite-lite": {
       "name": "@internal/playground-vite-lite",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "dependencies": {
         "@swapkit/sdk": "^4.6.4",
         "@swapkit/ui": "^0.11.0",
