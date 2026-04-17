@@ -1,5 +1,12 @@
 # @internal/playground-vite-lite
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`380809d`](https://github.com/swapkit/wallets/commit/380809d50647cd03c472a1caf105ebfa82a57d34)]:
+  - @swapkit/wallet-hardware@4.8.1
+
 ## 0.0.2
 
 ### Patch Changes
