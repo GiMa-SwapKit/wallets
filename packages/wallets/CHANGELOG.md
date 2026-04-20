@@ -1,5 +1,15 @@
 # @swapkit-dev/wallets
 
+## 4.8.1
+
+### Patch Changes
+
+- [`851cbdc`](https://github.com/swapkit/wallets/commit/851cbdcb15500e673c56fedacd7f473f7887b9db) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Publish TypeScript sources alongside dist output so Bun source export conditions resolve in published packages.
+
+- Updated dependencies [[`851cbdc`](https://github.com/swapkit/wallets/commit/851cbdcb15500e673c56fedacd7f473f7887b9db)]:
+  - @swapkit/wallet-extensions@4.5.2
+  - @swapkit/wallet-hardware@4.8.2
+
 ## 4.8.0
 
 ### Minor Changes

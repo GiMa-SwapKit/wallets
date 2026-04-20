@@ -1,5 +1,11 @@
 # @swapkit-dev/wallet-mobile
 
+## 4.3.2
+
+### Patch Changes
+
+- [`851cbdc`](https://github.com/swapkit/wallets/commit/851cbdcb15500e673c56fedacd7f473f7887b9db) Thanks [@github-actions[bot]](https://github.com/github-actions%5Bbot%5D)! - Publish TypeScript sources alongside dist output so Bun source export conditions resolve in published packages.
+
 ## 4.3.1
 
 ### Patch Changes
