@@ -135,7 +135,7 @@
       "types": "./dist/types/vultisig/index.d.ts"
     }
   },
-  "files": ["dist/"],
+  "files": ["dist/", "src/"],
   "homepage": "https://github.com/swapkit/wallets",
   "license": "SEE LICENSE IN LICENSE",
   "name": "@swapkit/wallet-extensions",

@@ -46,7 +46,8 @@
     }
   },
   "files": [
-    "dist/"
+    "dist/",
+    "src/"
   ],
   "homepage": "https://github.com/swapkit/wallets",
   "license": "SEE LICENSE IN LICENSE",

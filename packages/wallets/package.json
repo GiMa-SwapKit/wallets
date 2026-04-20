@@ -205,7 +205,7 @@
       "types": "./dist/types/xaman/index.d.ts"
     }
   },
-  "files": ["dist/"],
+  "files": ["dist/", "src/"],
   "homepage": "https://github.com/swapkit/wallets",
   "license": "SEE LICENSE IN LICENSE",
   "name": "@swapkit/wallets",
