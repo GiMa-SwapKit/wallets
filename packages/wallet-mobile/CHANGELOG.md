@@ -1,5 +1,11 @@
 # @swapkit-dev/wallet-mobile
 
+## 4.3.3
+
+### Patch Changes
+
+- [#25](https://github.com/swapkit/wallets/pull/25) [`81053d0`](https://github.com/swapkit/wallets/commit/81053d0a35fb9170e87bd38128f23d6a666621f6) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update core dependencies: @swapkit/core@4.4.18,@swapkit/toolboxes@4.15.5
+
 ## 4.3.2
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @swapkit/sdk
 
+## 4.6.8
+
+### Patch Changes
+
+- [#25](https://github.com/swapkit/wallets/pull/25) [`81053d0`](https://github.com/swapkit/wallets/commit/81053d0a35fb9170e87bd38128f23d6a666621f6) Thanks [@github-actions](https://github.com/apps/github-actions)! - Update core dependencies: @swapkit/core@4.4.18,@swapkit/toolboxes@4.15.5
+
+- Updated dependencies [[`81053d0`](https://github.com/swapkit/wallets/commit/81053d0a35fb9170e87bd38128f23d6a666621f6)]:
+  - @swapkit/wallets@4.8.2
+
 ## 4.6.7
 
 ### Patch Changes
