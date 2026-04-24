@@ -9,7 +9,7 @@
     "@ledgerhq/errors": "~6.29.0",
     "@ledgerhq/hw-app-btc": "~10.17.0",
     "@ledgerhq/hw-app-cosmos": "~6.33.0",
-    "@ledgerhq/hw-app-eth": "~7.4.1",
+    "@ledgerhq/hw-app-eth": "~7.4.2",
     "@ledgerhq/hw-app-near": "~6.32.0",
     "@ledgerhq/hw-app-sui": "~1.5.0",
     "@ledgerhq/hw-app-trx": "~6.32.0",
@@ -31,7 +31,7 @@
     "ledger-bitcoin": "~0.3.0",
     "ripple-binary-codec": "2.5.1",
     "ts-pattern": "^5.9.0",
-    "xrpl": "~4.4.2"
+    "xrpl": "~4.4.3"
   },
   "description": "SwapKit - Wallet Hardware",
   "devDependencies": {
@@ -43,7 +43,7 @@
     "@ledgerhq/errors": "6.29.0",
     "@ledgerhq/hw-app-btc": "10.17.0",
     "@ledgerhq/hw-app-cosmos": "6.33.0",
-    "@ledgerhq/hw-app-eth": "7.4.1",
+    "@ledgerhq/hw-app-eth": "7.4.2",
     "@ledgerhq/hw-app-near": "6.32.0",
     "@ledgerhq/hw-app-sui": "1.5.0",
     "@ledgerhq/hw-app-trx": "6.32.0",
@@ -89,16 +89,11 @@
       "types": "./dist/types/trezor/index.d.ts"
     }
   },
-  "files": [
-    "dist/",
-    "src/"
-  ],
+  "files": ["dist/", "src/"],
   "homepage": "https://github.com/swapkit/wallets",
   "license": "SEE LICENSE IN LICENSE",
   "name": "@swapkit/wallet-hardware",
-  "publishConfig": {
-    "access": "public"
-  },
+  "publishConfig": { "access": "public" },
   "repository": {
     "directory": "packages/wallet-hardware",
     "type": "git",

@@ -1,3 +1,4 @@
+import type Transport from "@ledgerhq/hw-transport";
 import { base64 } from "@scure/base";
 import { HDKey } from "@scure/bip32";
 import { type DerivationPathArray, derivationPathToString, getWalletFormatFor, SwapKitError } from "@swapkit/helpers";
@@ -39,27 +40,30 @@ function pathToNumberArray(path: string): number[] {
 }
 
 const BaseLedgerPsbtUTXO = ({ chain }: { chain: SupportedCoin }) => {
-  let appClient: import("ledger-bitcoin").AppClient | undefined;
-  let masterFingerprint: string | undefined;
+  return (derivationPathArray?: DerivationPathArray | string, injectedTransport?: Transport) => {
+    // Per-call state — each BitcoinPsbtLedger/LitecoinPsbtLedger invocation has its own
+    // AppClient and master fingerprint so different consumers (e.g. concurrent MCP
+    // sessions on different devices) cannot inherit each other's ledger bindings or xpub.
+    let appClient: import("ledger-bitcoin").AppClient | undefined;
+    let masterFingerprint: string | undefined;
 
-  async function getAppClient() {
-    if (!appClient) {
-      const transport = await getLedgerTransport();
-      const { AppClient } = await import("ledger-bitcoin");
-      appClient = new AppClient(transport);
+    async function getAppClient() {
+      if (!appClient) {
+        const transport = injectedTransport ?? (await getLedgerTransport());
+        const { AppClient } = await import("ledger-bitcoin");
+        appClient = new AppClient(transport);
+      }
+      return appClient;
     }
-    return appClient;
-  }
 
-  async function getFingerprint() {
-    if (!masterFingerprint) {
-      const app = await getAppClient();
-      masterFingerprint = await app.getMasterFingerprint();
+    async function getFingerprint() {
+      if (!masterFingerprint) {
+        const app = await getAppClient();
+        masterFingerprint = await app.getMasterFingerprint();
+      }
+      return masterFingerprint;
     }
-    return masterFingerprint;
-  }
 
-  return (derivationPathArray?: DerivationPathArray | string) => {
     // Single-address account: change == index == 0 by default.
     const derivationPath = derivationPathArray ? pathToString(derivationPathArray) : "84'/0'/0'/0/0";
     const accountPath = derivationPath.split("/").slice(0, 3).join("/");
