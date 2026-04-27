@@ -65,7 +65,6 @@ export const ctrlWallet: ExtensionWallet<"connectCtrl"> = createWallet({
     Chain.Litecoin,
     Chain.Maya,
     Chain.Monad,
-    Chain.Near,
     Chain.Noble,
     Chain.Optimism,
     Chain.Polygon,
@@ -212,36 +211,6 @@ async function getWalletMethods(chain: (typeof CTRL_SUPPORTED_CHAINS)[number]) {
       const toolbox = await getEvmToolboxAsync(chain, { provider, signer });
 
       return prepareNetworkSwitch({ chain, provider, toolbox });
-    }
-
-    case Chain.Near: {
-      const provider = getCtrlProvider(chain);
-
-      if (!provider) {
-        throw new SwapKitError("wallet_ctrl_not_found", { chain: Chain.Near });
-      }
-
-      const { createNearSignerFromProvider } = await import("../helpers/near");
-      const { getNearToolbox } = await import("@swapkit/toolboxes/near");
-
-      const signer = await createNearSignerFromProvider(provider, "CTRL");
-      const accountId = await signer.getAddress();
-      const toolbox = await getNearToolbox({ signer });
-
-      const transfer = async (params: GenericTransferParams) => {
-        const { actionCreators } = await import("@near-js/transactions");
-
-        const amountInYocto = params.assetValue.getBaseValue("string");
-        const action = actionCreators.transfer(BigInt(amountInYocto));
-
-        const transaction = { actions: [action], receiverId: params.recipient, signerId: accountId };
-
-        const txHash: string = await provider.request({ method: "signAndSendTransaction", params: { transaction } });
-
-        return txHash;
-      };
-
-      return { ...toolbox, transfer };
     }
 
     default:

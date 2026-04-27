@@ -51,7 +51,6 @@ const dtsPlugin = {
     const tempConfig = {
       compilerOptions: {
         allowImportingTsExtensions: false,
-        baseUrl: ".",
         declaration: true,
         declarationMap: true,
         emitDeclarationOnly: true,
