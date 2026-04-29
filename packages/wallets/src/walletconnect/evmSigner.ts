@@ -47,11 +47,16 @@ class WalletconnectSigner extends AbstractSigner {
   };
 
   signMessage = async (message: string) => {
+    const session = this.walletconnect?.session;
+    if (!session) {
+      throw new SwapKitError("wallet_walletconnect_connection_not_established");
+    }
+
     // this is probably broken
     const txHash = (await this.walletconnect?.client.request({
       chainId: chainToChainId(this.chain),
       request: { method: DEFAULT_EIP155_METHODS.ETH_SIGN, params: [message] },
-      topic: this.walletconnect.session.topic || "",
+      topic: session.topic,
     })) as string;
 
     return txHash.startsWith("0x") ? txHash : `0x${txHash}`;
@@ -89,13 +94,18 @@ class WalletconnectSigner extends AbstractSigner {
   };
 
   sendTransaction = async ({ from, to, value, data }: TransactionRequest) => {
+    const session = this.walletconnect?.session;
+    if (!session) {
+      throw new SwapKitError("wallet_walletconnect_connection_not_established");
+    }
+
     const { toHexString } = await import("@swapkit/toolboxes/evm");
 
     const baseTx = { data, from, to, value: toHexString(BigInt(value || 0)) };
     const response = await this.walletconnect?.client.request({
       chainId: chainToChainId(this.chain),
       request: { method: DEFAULT_EIP155_METHODS.ETH_SEND_TRANSACTION, params: [baseTx] },
-      topic: this.walletconnect.session.topic,
+      topic: session.topic,
     });
 
     return response as TransactionResponse;
