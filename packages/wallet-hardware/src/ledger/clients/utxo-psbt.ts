@@ -75,7 +75,9 @@ const BaseLedgerPsbtUTXO = ({ chain }: { chain: SupportedCoin }) => {
     }
 
     // Single-address account: change == index == 0 by default.
-    const derivationPath = normalizeLedgerPath(derivationPathArray ? pathToString(derivationPathArray) : "84'/0'/0'/0/0");
+    const derivationPath = normalizeLedgerPath(
+      derivationPathArray ? pathToString(derivationPathArray) : "84'/0'/0'/0/0",
+    );
     const pathSegments = derivationPath.split("/").filter(Boolean);
     const accountPath = pathSegments.slice(0, 3).join("/");
     const leafSegments = pathSegments.slice(3);

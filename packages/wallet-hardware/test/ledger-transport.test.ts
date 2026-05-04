@@ -23,11 +23,11 @@ mock.module("ledger-bitcoin", () => ({
       psbtAppClientInvocations.push(transport);
     }
     getMasterFingerprint = async () => "deadbeef";
-    getExtendedPubkey = async (path: string) => {
+    getExtendedPubkey = (path: string) => {
       psbtExtendedPubkeyInvocations.push(path);
       return "xpub661MyMwAqRbcF8SxkT6wT9y6rL4n9wBEmc6kAMPxQ4vYXvyfZ87Z84qxdjQbaAWkj2rW6zGyFNR7fsRG3Gzdhvj1io8GZF1dgNpTiFqouBZ";
     };
-    getWalletAddress = async (_policy: unknown, _hmac: unknown, change: number, addressIndex: number) => {
+    getWalletAddress = (_policy: unknown, _hmac: unknown, change: number, addressIndex: number) => {
       psbtWalletAddressInvocations.push({ addressIndex, change });
       return "bc1qtestaddress";
     };
