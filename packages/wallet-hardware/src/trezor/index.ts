@@ -1,3 +1,4 @@
+import { HDKey } from "@scure/bip32";
 import {
   Chain,
   type DerivationPathArray,
@@ -13,6 +14,7 @@ import {
 import {
   assertDerivationIndex,
   createHDWalletHelpers,
+  deriveAddressesFromXpub,
   getNetworkForChain,
   getUTXOAccountIndexFromPath,
   getUTXOAccountPath,
@@ -23,6 +25,62 @@ import {
 import type { BTCNetwork, PCZT, Transaction, ZcashTransaction } from "@swapkit/utxo-signer";
 import { NETWORKS, ZcashConsensusBranchId, ZcashVersionGroupId } from "@swapkit/utxo-signer";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+
+type TrezorBip32Derivation = [Uint8Array, { fingerprint: number; path: number[] }];
+type TrezorCoreMode = "auto" | "iframe" | "popup" | "suite-desktop" | "suite-web";
+type TrezorTransport = "BridgeTransport" | "WebUsbTransport" | "NodeUsbTransport";
+type TrezorExtendedPublicKeyInfo = {
+  accountIndex: number;
+  chainCode?: string;
+  depth?: number;
+  fingerprint?: number;
+  path: string;
+  publicKey?: string;
+  xpub: string;
+  xpubSegwit?: string;
+};
+
+const TREZOR_CORE_MODES = new Set<TrezorCoreMode>(["auto", "iframe", "popup", "suite-desktop", "suite-web"]);
+const TREZOR_TRANSPORTS = new Set<TrezorTransport>(["BridgeTransport", "WebUsbTransport", "NodeUsbTransport"]);
+const trezorXpubCache = new Map<string, TrezorExtendedPublicKeyInfo>();
+let trezorSessionDispose: Promise<void> | undefined;
+
+async function disconnectTrezorSession() {
+  trezorXpubCache.clear();
+
+  const dispose = (async () => {
+    try {
+      const TrezorConnect = (await import("@trezor/connect-web")).default;
+      await TrezorConnect.dispose();
+    } catch {
+      // Ignore stale or already-disposed sessions.
+    }
+  })();
+
+  trezorSessionDispose = dispose;
+  await dispose;
+
+  if (trezorSessionDispose === dispose) {
+    trezorSessionDispose = undefined;
+  }
+}
+
+function normalizeTrezorCoreMode(coreMode: unknown): TrezorCoreMode | undefined {
+  return typeof coreMode === "string" && TREZOR_CORE_MODES.has(coreMode as TrezorCoreMode)
+    ? (coreMode as TrezorCoreMode)
+    : undefined;
+}
+
+function normalizeTrezorTransports(transports: unknown): TrezorTransport[] | undefined {
+  if (!Array.isArray(transports)) return undefined;
+
+  const normalized = transports.filter(
+    (transport): transport is TrezorTransport =>
+      typeof transport === "string" && TREZOR_TRANSPORTS.has(transport as TrezorTransport),
+  );
+
+  return normalized.length > 0 ? normalized : undefined;
+}
 
 function decodeOpReturnData(script: Uint8Array): string | null {
   if (script.length < 2 || script[0] !== 0x6a) return null;
@@ -48,6 +106,48 @@ function hardenDerivationPath(derivationPath: DerivationPathArray): number[] {
   return derivationPath.map((pathElement, index) =>
     index < 3 ? ((pathElement as number) | 0x80000000) >>> 0 : (pathElement as number),
   );
+}
+
+function isTrezorBip32Derivation(value: unknown): value is TrezorBip32Derivation {
+  return (
+    Array.isArray(value) &&
+    value[0] instanceof Uint8Array &&
+    typeof value[1] === "object" &&
+    value[1] !== null &&
+    typeof (value[1] as { fingerprint?: unknown }).fingerprint === "number" &&
+    Array.isArray((value[1] as { path?: unknown }).path)
+  );
+}
+
+function getFirstBip32Derivation(input: { bip32Derivation?: unknown }): TrezorBip32Derivation | undefined {
+  if (!Array.isArray(input.bip32Derivation)) return undefined;
+  const [firstDerivation] = input.bip32Derivation;
+
+  return isTrezorBip32Derivation(firstDerivation) ? firstDerivation : undefined;
+}
+
+function getPrevoutAmount(input: {
+  index?: number;
+  nonWitnessUtxo?: { outputs?: Array<{ amount?: bigint | number }> };
+  witnessUtxo?: { amount?: bigint | number };
+}) {
+  if (input.witnessUtxo?.amount !== undefined) return input.witnessUtxo.amount.toString();
+
+  const prevout = input.index !== undefined ? input.nonWitnessUtxo?.outputs?.[input.index] : undefined;
+  if (prevout?.amount !== undefined) return prevout.amount.toString();
+
+  return undefined;
+}
+
+function normalizeTrezorSignature(signatureHex: string) {
+  const signature = Buffer.from(signatureHex, "hex");
+  const derLength = signature[1] !== undefined ? signature[1] + 2 : undefined;
+
+  if (derLength !== undefined && signature.length === derLength) {
+    return new Uint8Array([...signature, 0x01]);
+  }
+
+  return new Uint8Array(signature);
 }
 
 function buildPCZTInputsForTrezor(
@@ -206,8 +306,27 @@ function buildUtxoOutputsForTrezor(
     const outputAddress = tx.getOutputAddress(i, network);
 
     if (!outputAddress) {
-      outputs.push({ amount: "0", op_return_data: Buffer.from(memo).toString("hex"), script_type: "PAYTOOPRETURN" });
-      continue;
+      const opReturnData = output.script ? decodeOpReturnData(output.script) : null;
+      if (opReturnData !== null || memo) {
+        outputs.push({
+          amount: "0",
+          op_return_data: opReturnData ?? Buffer.from(memo).toString("hex"),
+          script_type: "PAYTOOPRETURN",
+        });
+        continue;
+      }
+
+      throw new SwapKitError({
+        errorKey: "wallet_trezor_failed_to_sign_transaction",
+        info: { chain, error: "Unable to decode output address from scriptPubkey" },
+      });
+    }
+
+    if (output.amount === undefined) {
+      throw new SwapKitError({
+        errorKey: "wallet_trezor_failed_to_sign_transaction",
+        info: { chain, error: "Output amount is missing" },
+      });
     }
 
     const isBch = chain === Chain.BitcoinCash;
@@ -218,8 +337,8 @@ function buildUtxoOutputsForTrezor(
 
     outputs.push(
       isChangeAddress
-        ? { address_n, amount: Number(output.amount), script_type: scriptType.output }
-        : { address: cashAddrWithPrefix, amount: Number(output.amount), script_type: "PAYTOADDRESS" },
+        ? { address_n, amount: output.amount.toString(), script_type: scriptType.output }
+        : { address: cashAddrWithPrefix, amount: output.amount.toString(), script_type: "PAYTOADDRESS" },
     );
   }
   return outputs;
@@ -434,7 +553,7 @@ async function getTrezorWallet<T extends Chain>({
     case Chain.Dash:
     case Chain.Dogecoin:
     case Chain.Litecoin: {
-      const { toCashAddress, getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
+      const { toCashAddress, getUtxoToolbox, stripPrefix } = await import("@swapkit/toolboxes/utxo");
       const utxoChain = chain as UTXOChain;
       const scriptType = getScriptType(derivationPath);
 
@@ -446,7 +565,11 @@ async function getTrezorWallet<T extends Chain>({
 
       const getAddress = async (path: DerivationPathArray = derivationPath) => {
         const TrezorConnect = (await import("@trezor/connect-web")).default;
-        const { success, payload } = await TrezorConnect.getAddress({ coin, path: derivationPathToString(path) });
+        const { success, payload } = await TrezorConnect.getAddress({
+          coin,
+          path: derivationPathToString(path),
+          showOnTrezor: false,
+        });
 
         if (!success) {
           throw new SwapKitError({
@@ -456,19 +579,57 @@ async function getTrezorWallet<T extends Chain>({
         }
 
         if (chain === Chain.BitcoinCash) {
-          const toolbox = await getUtxoToolbox(chain as typeof Chain.BitcoinCash);
-          return toolbox.stripPrefix(payload.address);
+          return stripPrefix(payload.address);
         }
 
         return payload.address;
       };
 
-      const address = await getAddress();
+      async function getAddressFromExtendedPublicKey() {
+        const accountInfo = await getExtendedPublicKeyInfo();
+        const addressIndex = Number(derivationPath[4] ?? 0);
+        const change = Boolean(derivationPath[3] ?? 0);
+
+        try {
+          // deriveAddressesFromXpub returns both external and change branches for each index.
+          const derivedAddress = deriveAddressesFromXpub({
+            accountIndex: accountInfo.accountIndex,
+            chain: utxoChain,
+            count: 1,
+            startIndex: addressIndex,
+            xpub: accountInfo.xpub,
+          }).find((derived) => derived.change === change && derived.index === addressIndex);
+
+          if (!derivedAddress) {
+            throw new SwapKitError({
+              errorKey: "wallet_trezor_failed_to_get_address",
+              info: { chain, error: "Unable to derive address from Trezor account public key" },
+            });
+          }
+
+          return derivedAddress.address;
+        } catch (error) {
+          if (error instanceof SwapKitError) throw error;
+
+          throw new SwapKitError({
+            errorKey: "wallet_trezor_failed_to_get_address",
+            info: {
+              chain,
+              error: error instanceof Error ? error.message : "Unable to derive address from Trezor xpub",
+            },
+          });
+        }
+      }
+
+      const address =
+        chain === Chain.Bitcoin || chain === Chain.Litecoin
+          ? await getAddressFromExtendedPublicKey()
+          : await getAddress();
+      const baseToolbox = getUtxoToolbox(chain);
 
       const signTransaction = async (tx: Transaction, inputs: UTXOType[], memo = "") => {
         const TrezorConnect = (await import("@trezor/connect-web")).default;
         const address_n = hardenDerivationPath(derivationPath);
-        const toolbox = getUtxoToolbox(chain as typeof Chain.BitcoinCash);
         const network = getNetworkForChain(chain as UTXOChain);
 
         const outputs = buildUtxoOutputsForTrezor(
@@ -480,7 +641,7 @@ async function getTrezorWallet<T extends Chain>({
           chain,
           scriptType,
           toCashAddress,
-          toolbox.stripPrefix,
+          stripPrefix,
         );
 
         const trezorInputs = inputs.map(({ hash, index, value }) => ({
@@ -504,13 +665,108 @@ async function getTrezorWallet<T extends Chain>({
         });
       };
 
+      const signPsbtTransaction = async (tx: Transaction): Promise<Transaction> => {
+        const TrezorConnect = (await import("@trezor/connect-web")).default;
+        const { hex: hexEncode } = await import("@scure/base");
+        const address_n = hardenDerivationPath(derivationPath);
+        const network = getNetworkForChain(chain as UTXOChain);
+        let fallbackPublicKey: Uint8Array | undefined;
+
+        async function getFallbackDerivation(): Promise<TrezorBip32Derivation> {
+          if (!fallbackPublicKey) {
+            const accountInfo = await getExtendedPublicKeyInfo();
+            const accountKey = HDKey.fromExtendedKey(accountInfo.xpub);
+            const leaf = accountKey.derive(`m/${Number(derivationPath[3] ?? 0)}/${Number(derivationPath[4] ?? 0)}`);
+
+            if (!leaf.publicKey) {
+              throw new SwapKitError({
+                errorKey: "wallet_trezor_failed_to_get_public_key",
+                info: { chain, error: "Unable to derive Trezor leaf public key from account xpub" },
+              });
+            }
+
+            fallbackPublicKey = leaf.publicKey;
+          }
+
+          return [fallbackPublicKey, { fingerprint: 0, path: address_n }];
+        }
+
+        const signerPubkeys: Uint8Array[] = [];
+        const trezorInputs = [];
+
+        for (let inputIndex = 0; inputIndex < tx.inputsLength; inputIndex++) {
+          const input = tx.getInput(inputIndex);
+          const existingDerivation = getFirstBip32Derivation(input);
+          const derivation = existingDerivation ?? (await getFallbackDerivation());
+          const amount = getPrevoutAmount(input);
+
+          if (!input.txid || input.index === undefined || !amount) {
+            throw new SwapKitError({
+              errorKey: "wallet_trezor_failed_to_sign_transaction",
+              info: { chain, error: `Input ${inputIndex} is missing prevout data required by Trezor` },
+            });
+          }
+
+          signerPubkeys[inputIndex] = derivation[0];
+
+          if (!existingDerivation) {
+            tx.updateInput(inputIndex, { bip32Derivation: [derivation] });
+          }
+
+          trezorInputs.push({
+            address_n: derivation[1].path,
+            amount,
+            prev_hash: hexEncode.encode(input.txid),
+            prev_index: input.index,
+            script_type: scriptType.input,
+            ...(input.sequence !== undefined ? { sequence: input.sequence } : {}),
+          });
+        }
+
+        const outputs = buildUtxoOutputsForTrezor(
+          tx,
+          network,
+          address_n,
+          address,
+          "",
+          chain,
+          scriptType,
+          toCashAddress,
+          stripPrefix,
+        );
+
+        const result = await TrezorConnect.signTransaction({
+          coin,
+          inputs: trezorInputs,
+          locktime: tx.lockTime,
+          outputs,
+          version: tx.version,
+        });
+
+        if (!result.success) {
+          const payload = result.payload as { error?: string; code?: string };
+          throw new SwapKitError({
+            errorKey: "wallet_trezor_failed_to_sign_transaction",
+            info: { chain, code: payload?.code ?? "unknown", error: payload?.error ?? "unknown", payload },
+          });
+        }
+
+        result.payload.signatures.forEach((signatureHex, inputIndex) => {
+          const pubkey = signerPubkeys[inputIndex];
+          if (!(signatureHex && pubkey)) return;
+
+          tx.updateInput(inputIndex, { partialSig: [[pubkey, normalizeTrezorSignature(signatureHex)]] });
+        });
+
+        return tx;
+      };
+
       const signTransactionWithMultipleInputs = async (
         tx: Transaction,
         inputs: Array<{ hash: string; index: number; value: number; derivationIndex: number; isChange: boolean }>,
         memo = "",
       ) => {
         const TrezorConnect = (await import("@trezor/connect-web")).default;
-        const toolbox = await getUtxoToolbox(chain as typeof Chain.BitcoinCash);
         const network = getNetworkForChain(chain as UTXOChain);
         const baseAddressN = hardenDerivationPath(derivationPath.slice(0, 3) as DerivationPathArray);
 
@@ -523,7 +779,7 @@ async function getTrezorWallet<T extends Chain>({
           chain,
           scriptType,
           toCashAddress,
-          toolbox.stripPrefix,
+          stripPrefix,
         );
 
         const trezorInputs = inputs.map(({ hash, index: inputIndex, value, derivationIndex, isChange }) => {
@@ -629,12 +885,21 @@ async function getTrezorWallet<T extends Chain>({
         return txHash;
       };
 
-      const toolbox = await getUtxoToolbox(chain);
+      const toolbox =
+        chain === Chain.Bitcoin || chain === Chain.Litecoin
+          ? await getUtxoToolbox(utxoChain, {
+              signer: { getAddress: async () => address, signTransaction: signPsbtTransaction },
+            })
+          : baseToolbox;
 
       async function getExtendedPublicKeyInfo({ accountIndex }: { accountIndex?: number } = {}) {
         const TrezorConnect = (await import("@trezor/connect-web")).default;
         const resolvedAccountPath = getUTXOAccountPath({ accountIndex, chain: utxoChain, derivationPath });
         const path = derivationPathToString(resolvedAccountPath);
+        const cacheKey = `${chain}:${path}`;
+        const cached = trezorXpubCache.get(cacheKey);
+        if (cached) return cached;
+
         const { success, payload } = await TrezorConnect.getPublicKey({ coin, path });
 
         if (!success) {
@@ -644,7 +909,7 @@ async function getTrezorWallet<T extends Chain>({
           });
         }
 
-        return {
+        const info = {
           accountIndex: getUTXOAccountIndexFromPath(resolvedAccountPath),
           chainCode: payload.chainCode,
           depth: payload.depth,
@@ -654,10 +919,13 @@ async function getTrezorWallet<T extends Chain>({
           xpub: payload.xpub,
           xpubSegwit: payload.xpubSegwit,
         };
+
+        trezorXpubCache.set(cacheKey, info);
+        return info;
       }
 
-      function getExtendedPublicKey() {
-        return getExtendedPublicKeyInfo();
+      function getExtendedPublicKey(params: { accountIndex?: number } = {}) {
+        return getExtendedPublicKeyInfo(params);
       }
 
       async function deriveAddressAtIndex({
@@ -791,19 +1059,55 @@ export const trezorWallet = createWallet({
       }
 
       const TrezorConnect = (await import("@trezor/connect-web")).default;
-      const { success } = await TrezorConnect.getDeviceState();
 
-      if (!success) {
-        const trezorConfig = SKConfig.get("integrations").trezor;
-        const manifest = trezorConfig
-          ? { ...trezorConfig, appName: (trezorConfig as any).appName || "SwapKit" }
-          : { appName: "SwapKit", appUrl: "", email: "" };
-        TrezorConnect.init({ lazyLoad: true, manifest });
+      const trezorConfig = SKConfig.get("integrations").trezor as Record<string, unknown> | undefined;
+      const {
+        connectSrc,
+        coreMode,
+        debug,
+        interactionTimeout,
+        lazyLoad,
+        pendingTransportEvent,
+        popup,
+        transportReconnect,
+        transports,
+        ...manifestConfig
+      } = trezorConfig ?? {};
+      const manifest = {
+        ...manifestConfig,
+        appName: String(trezorConfig?.appName || "SwapKit"),
+        appUrl: String(trezorConfig?.appUrl || ""),
+        email: String(trezorConfig?.email || ""),
+      };
+      const isLocalhost =
+        typeof globalThis.location !== "undefined" && ["localhost", "127.0.0.1"].includes(globalThis.location.hostname);
+      const resolvedCoreMode = isLocalhost ? "popup" : normalizeTrezorCoreMode(coreMode);
+      const resolvedTransports = isLocalhost ? ["WebUsbTransport" as const] : normalizeTrezorTransports(transports);
+
+      if (trezorSessionDispose) {
+        await trezorSessionDispose;
       }
+
+      if (isLocalhost) {
+        await TrezorConnect.dispose();
+      }
+
+      await TrezorConnect.init({
+        connectSrc: connectSrc as string | undefined,
+        coreMode: resolvedCoreMode,
+        debug: debug as boolean | undefined,
+        interactionTimeout: interactionTimeout as number | undefined,
+        lazyLoad: isLocalhost ? false : ((lazyLoad as boolean | undefined) ?? true),
+        manifest,
+        pendingTransportEvent: pendingTransportEvent as boolean | undefined,
+        popup: isLocalhost ? true : (popup as boolean | undefined),
+        transportReconnect: transportReconnect as boolean | undefined,
+        transports: resolvedTransports,
+      });
 
       const wallet = await getTrezorWallet({ chain, derivationPath });
 
-      addChain({ ...wallet, chain, walletType });
+      addChain({ ...wallet, chain, disconnect: disconnectTrezorSession, walletType });
 
       return true;
     },
@@ -814,13 +1118,15 @@ export const trezorWallet = createWallet({
     [Chain.Base]: true,
     [Chain.Berachain]: true,
     [Chain.BinanceSmartChain]: true,
+    [Chain.Bitcoin]: true,
     [Chain.Ethereum]: true,
     [Chain.Gnosis]: true,
+    [Chain.Litecoin]: true,
     [Chain.Monad]: true,
     [Chain.Optimism]: true,
     [Chain.Polygon]: true,
     [Chain.XLayer]: true,
-    // BTC/BCH/DASH/DOGE/LTC/ZEC: pending PSBT→TrezorConnect converter (V3 plan PR)
+    // BCH/DASH/DOGE/ZEC: pending PSBT→TrezorConnect converter (V3 plan PR)
   },
   name: "connectTrezor",
   supportedChains: [
