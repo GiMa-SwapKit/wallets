@@ -1,11 +1,13 @@
-import { dirname, resolve } from "node:path";
+import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 
-const polyfillsPkg = resolve(dirname(fileURLToPath(import.meta.resolve("vite-plugin-node-polyfills"))), "..");
+const workspaceRoot = resolve(__dirname, "../..");
 const swapkitUiCss = fileURLToPath(import.meta.resolve("@swapkit/ui/swapkit.css"));
+const swapkitHelpers = fileURLToPath(import.meta.resolve("@swapkit/helpers"));
+const swapkitHelpersApi = fileURLToPath(import.meta.resolve("@swapkit/helpers/api"));
 
 export default defineConfig({
   build: {
@@ -26,6 +28,8 @@ export default defineConfig({
     ],
     esbuildOptions: { define: { global: "globalThis" } },
     exclude: [
+      "@swapkit/helpers",
+      "@swapkit/helpers/api",
       "@swapkit/wallets",
       "@swapkit/wallet-extensions",
       "@swapkit/wallet-hardware",
@@ -49,10 +53,10 @@ export default defineConfig({
       "@near-js/types",
       "@near-js/utils",
       "@solana/web3.js",
-      "@swapkit/helpers",
       "@swapkit/toolboxes/utxo",
       "@swapkit/utxo-signer",
       "@swapkit/wallet-core",
+      "@trezor/connect-web",
       "bn.js",
       "depd",
       "eventemitter3",
@@ -71,12 +75,30 @@ export default defineConfig({
   },
   plugins: [nodePolyfills({ globals: { Buffer: true, global: true, process: true } }), react()],
   resolve: {
-    alias: {
-      "@swapkit/ui/swapkit.css": swapkitUiCss,
-      "vite-plugin-node-polyfills/shims/buffer": resolve(polyfillsPkg, "shims/buffer/dist/index.js"),
-      "vite-plugin-node-polyfills/shims/global": resolve(polyfillsPkg, "shims/global/dist/index.js"),
-      "vite-plugin-node-polyfills/shims/process": resolve(polyfillsPkg, "shims/process/dist/index.js"),
-    },
+    alias: [
+      { find: "@swapkit/ui/swapkit.css", replacement: swapkitUiCss },
+      { find: /^@swapkit\/helpers\/api$/, replacement: swapkitHelpersApi },
+      { find: /^@swapkit\/helpers$/, replacement: swapkitHelpers },
+      { find: "@swapkit/sdk", replacement: resolve(workspaceRoot, "packages/sdk/src/index.ts") },
+      { find: "@swapkit/wallets", replacement: resolve(workspaceRoot, "packages/wallets/src/index.ts") },
+      { find: "@swapkit/wallet-mobile", replacement: resolve(workspaceRoot, "packages/wallet-mobile/src/index.ts") },
+      {
+        find: /^@swapkit\/wallet-extensions\/(.+)$/,
+        replacement: `${resolve(workspaceRoot, "packages/wallet-extensions/src")}/$1/index.ts`,
+      },
+      {
+        find: "@swapkit/wallet-extensions",
+        replacement: resolve(workspaceRoot, "packages/wallet-extensions/src/index.ts"),
+      },
+      {
+        find: /^@swapkit\/wallet-hardware\/(.+)$/,
+        replacement: `${resolve(workspaceRoot, "packages/wallet-hardware/src")}/$1/index.ts`,
+      },
+      {
+        find: "@swapkit/wallet-hardware",
+        replacement: resolve(workspaceRoot, "packages/wallet-hardware/src/index.ts"),
+      },
+    ],
     // Prefer the "bun" condition so vite resolves workspace packages to their
     // src/ entrypoints instead of the (potentially stale) dist/ build.
     conditions: ["bun", "module", "browser", "import", "default"],

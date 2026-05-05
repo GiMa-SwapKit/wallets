@@ -92,11 +92,9 @@ export type HDWalletExtendedPublicKey = {
 };
 
 export type HDWalletDiscoveryMethods = {
-  getExtendedPublicKey?: () =>
-    | Promise<string | HDWalletExtendedPublicKey | undefined>
-    | string
-    | HDWalletExtendedPublicKey
-    | undefined;
+  getExtendedPublicKey?: (
+    params?: HDWalletAccountParams,
+  ) => Promise<string | HDWalletExtendedPublicKey | undefined> | string | HDWalletExtendedPublicKey | undefined;
   getExtendedPublicKeyInfo: (params?: HDWalletAccountParams) => Promise<HDWalletExtendedPublicKey | undefined>;
   deriveAddressAtIndex: (params: HDWalletDeriveAddressParams) => Promise<HDWalletDerivedAddress | undefined>;
   deriveAddresses: (params: HDWalletDeriveAddressesParams) => Promise<HDWalletDerivedAddress[]>;

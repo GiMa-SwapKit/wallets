@@ -278,8 +278,8 @@ export async function utxoWalletMethods({
     }
   }
 
-  function getExtendedPublicKey() {
-    return getExtendedPublicKeyInfo();
+  function getExtendedPublicKey(params: { accountIndex?: number } = {}) {
+    return getExtendedPublicKeyInfo(params);
   }
 
   async function deriveAddressAtIndex({

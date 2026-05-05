@@ -226,8 +226,8 @@ async function getWalletMethods({
         return { accountIndex: getUTXOAccountIndexFromPath(accountPath), path, xpub };
       }
 
-      function getExtendedPublicKey() {
-        return getExtendedPublicKeyInfo();
+      function getExtendedPublicKey(params: { accountIndex?: number } = {}) {
+        return getExtendedPublicKeyInfo(params);
       }
 
       async function deriveAddressAtIndex({

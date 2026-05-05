@@ -12,13 +12,13 @@
         "@cosmjs/proto-signing": "0.37.0",
         "@cosmjs/stargate": "0.37.0",
         "@scure/bip32": "2.2.0",
-        "@swapkit/core": "^4.4.22",
-        "@swapkit/helpers": "^4.13.6",
-        "@swapkit/plugins": "^4.6.36",
-        "@swapkit/server": "^4.2.47",
-        "@swapkit/toolboxes": "^4.15.9",
-        "@swapkit/wallet-core": "^4.2.6",
-        "@swapkit/wallet-keystore": "^4.3.28",
+        "@swapkit/core": "^4.4.24",
+        "@swapkit/helpers": "^4.13.8",
+        "@swapkit/plugins": "^4.6.38",
+        "@swapkit/server": "^4.2.49",
+        "@swapkit/toolboxes": "^4.15.11",
+        "@swapkit/wallet-core": "^4.2.8",
+        "@swapkit/wallet-keystore": "^4.3.30",
         "@types/bun": "1.3.13",
         "@types/node": "25.6.0",
         "ledger-bitcoin": "0.3.0",
@@ -27,23 +27,23 @@
     },
     "packages/sdk": {
       "name": "@swapkit/sdk",
-      "version": "4.6.12",
+      "version": "4.6.14",
       "dependencies": {
         "@stricahq/typhonjs": "~3.0.1",
-        "@swapkit/core": "^4.4.22",
-        "@swapkit/helpers": "^4.13.6",
-        "@swapkit/plugins": "^4.6.36",
-        "@swapkit/server": "^4.2.47",
-        "@swapkit/toolboxes": "^4.15.9",
-        "@swapkit/wallet-core": "^4.2.6",
-        "@swapkit/wallet-keystore": "^4.3.28",
+        "@swapkit/core": "^4.4.24",
+        "@swapkit/helpers": "^4.13.8",
+        "@swapkit/plugins": "^4.6.38",
+        "@swapkit/server": "^4.2.49",
+        "@swapkit/toolboxes": "^4.15.11",
+        "@swapkit/wallet-core": "^4.2.8",
+        "@swapkit/wallet-keystore": "^4.3.30",
         "@swapkit/wallets": "workspace:*",
         "cosmjs-types": "0.10.1",
       },
     },
     "packages/wallet-extensions": {
       "name": "@swapkit/wallet-extensions",
-      "version": "4.5.7",
+      "version": "4.5.9",
       "dependencies": {
         "@aptos-labs/ts-sdk": "~1.34.0",
         "@cosmjs/amino": "~0.37.0",
@@ -55,10 +55,10 @@
         "@near-js/transactions": "~2.5.0",
         "@scure/base": "~2.2.0",
         "@solana/web3.js": "~1.98.4",
-        "@swapkit/helpers": "^4.13.6",
-        "@swapkit/toolboxes": "^4.15.9",
-        "@swapkit/utxo-signer": "^2.1.2",
-        "@swapkit/wallet-core": "^4.2.6",
+        "@swapkit/helpers": "^4.13.8",
+        "@swapkit/toolboxes": "^4.15.11",
+        "@swapkit/utxo-signer": "^2.1.3",
+        "@swapkit/wallet-core": "^4.2.8",
         "cosmjs-types": "0.10.1",
         "ethers": "^6.14.0",
         "sats-connect": "~1.0.0",
@@ -83,7 +83,7 @@
     },
     "packages/wallet-hardware": {
       "name": "@swapkit/wallet-hardware",
-      "version": "4.9.3",
+      "version": "4.9.5",
       "dependencies": {
         "@cosmjs/amino": "~0.37.0",
         "@cosmjs/crypto": "0.37.0",
@@ -105,10 +105,11 @@
         "@near-js/crypto": "~2.5.0",
         "@near-js/transactions": "~2.5.0",
         "@scure/base": "2.2.0",
-        "@swapkit/helpers": "^4.13.6",
-        "@swapkit/toolboxes": "^4.15.9",
-        "@swapkit/utxo-signer": "^2.1.2",
-        "@swapkit/wallet-core": "^4.2.6",
+        "@scure/bip32": "2.2.0",
+        "@swapkit/helpers": "^4.13.8",
+        "@swapkit/toolboxes": "^4.15.11",
+        "@swapkit/utxo-signer": "^2.1.3",
+        "@swapkit/wallet-core": "^4.2.8",
         "@trezor/connect-web": "~9.7.3",
         "cosmjs-types": "~0.10.1",
         "ethers": "^6.14.0",
@@ -138,6 +139,7 @@
         "@near-js/crypto": "2.5.0",
         "@near-js/transactions": "2.5.0",
         "@scure/base": "2.2.0",
+        "@scure/bip32": "2.2.0",
         "@trezor/connect-web": "9.7.3",
         "cosmjs-types": "0.10.1",
         "ethers": "6.16.0",
@@ -149,16 +151,16 @@
     },
     "packages/wallet-mobile": {
       "name": "@swapkit/wallet-mobile",
-      "version": "4.3.7",
+      "version": "4.3.8",
       "dependencies": {
-        "@swapkit/helpers": "^4.13.6",
-        "@swapkit/toolboxes": "^4.15.9",
-        "@swapkit/wallet-core": "^4.2.6",
+        "@swapkit/helpers": "^4.13.8",
+        "@swapkit/toolboxes": "^4.15.11",
+        "@swapkit/wallet-core": "^4.2.8",
       },
     },
     "packages/wallets": {
       "name": "@swapkit/wallets",
-      "version": "4.8.6",
+      "version": "4.8.8",
       "dependencies": {
         "@coinbase/wallet-sdk": "~4.3.7",
         "@cosmjs/amino": "~0.37.0",
@@ -174,12 +176,12 @@
         "@radixdlt/radix-dapp-toolkit": "~2.3.0",
         "@scure/base": "~2.2.0",
         "@scure/bip39": "~2.2.0",
-        "@swapkit/helpers": "^4.13.6",
-        "@swapkit/toolboxes": "^4.15.9",
-        "@swapkit/utxo-signer": "^2.1.2",
-        "@swapkit/wallet-core": "^4.2.6",
-        "@swapkit/wallet-extensions": "^4.5.7",
-        "@swapkit/wallet-hardware": "^4.9.3",
+        "@swapkit/helpers": "^4.13.8",
+        "@swapkit/toolboxes": "^4.15.11",
+        "@swapkit/utxo-signer": "^2.1.3",
+        "@swapkit/wallet-core": "^4.2.8",
+        "@swapkit/wallet-extensions": "workspace:*",
+        "@swapkit/wallet-hardware": "workspace:*",
         "@walletconnect/modal": "~2.7.0",
         "@walletconnect/sign-client": "~2.23.9",
         "cosmjs-types": "~0.10.1",
@@ -217,8 +219,8 @@
       "name": "@internal/playground-vite-lite",
       "version": "0.0.9",
       "dependencies": {
-        "@swapkit/sdk": "^4.6.12",
-        "@swapkit/ui": "^0.15.0",
+        "@swapkit/sdk": "^4.6.14",
+        "@swapkit/ui": "^0.16.1",
         "@swapkit/wallet-extensions": "workspace:*",
         "@swapkit/wallet-hardware": "workspace:*",
         "@swapkit/wallet-mobile": "workspace:*",
@@ -1081,35 +1083,35 @@
 
     "@substrate/ss58-registry": ["@substrate/ss58-registry@1.51.0", "", {}, "sha512-TWDurLiPxndFgKjVavCniytBIw+t4ViOi7TYp9h/D0NMmkEc9klFTo+827eyEJ0lELpqO207Ey7uGxUa+BS1jQ=="],
 
-    "@swapkit/contracts": ["@swapkit/contracts@4.1.3", "", {}, "sha512-/qZd71Y8la4VOemG0TmlogxBain4nhs8D2bPhzeb5ZNQ/9v/qC42KlS8o3RQpNtU6YvB0laLsNpNcsh1xE/F1Q=="],
+    "@swapkit/contracts": ["@swapkit/contracts@4.1.4", "", {}, "sha512-a8r4hIIehELEVgnaYs4vr1ldHwwnkUbaEXvnpsLHiyWrGIDS/KMs4NsiTKaylnjVblzXMM2CMce0jpwgzb4WRA=="],
 
-    "@swapkit/core": ["@swapkit/core@4.4.22", "", { "dependencies": { "@stricahq/typhonjs": "3.0.1", "@swapkit/helpers": "4.13.6", "@swapkit/plugins": "4.6.36", "@swapkit/toolboxes": "4.15.9", "@swapkit/wallet-core": "4.2.6", "cosmjs-types": "0.10.1", "ts-pattern": "^5.9.0" } }, "sha512-N4oRm4pwVB4BBnbwttBEl7CtkYkOIwq+QQfZ0yzC/P5CYzZCVD8m+uqPrgeIDuaGgyGuuo6rPx85IzIHJMXbPQ=="],
+    "@swapkit/core": ["@swapkit/core@4.4.24", "", { "dependencies": { "@swapkit/helpers": "4.13.8", "@swapkit/plugins": "4.6.38", "@swapkit/toolboxes": "4.15.11", "@swapkit/wallet-core": "4.2.8" }, "peerDependencies": { "@stricahq/typhonjs": "3.0.2", "cosmjs-types": "0.11.0", "ts-pattern": "5.9.0" } }, "sha512-xYCpz1DqCmTQk0OUBigqdRJKFNRl+6W+USFZT6XGofywnKYY3h9Qw9yP+C9nAU3dGdhVqKrMMrzVZEB2j5ixpg=="],
 
-    "@swapkit/helpers": ["@swapkit/helpers@4.13.6", "", { "dependencies": { "@near-js/providers": "~2.5.0", "@swapkit/contracts": "4.1.3", "@swapkit/tokens": "4.2.7", "@swapkit/types": "0.7.4", "ethers": "^6.14.0", "ts-pattern": "^5.9.0", "zod": "3.25.74", "zustand": "5.0.8" } }, "sha512-RaY19E8UuEgFlC6EvxLT+562VntODy0SM9WshIOkmBTK5dMU8j8wJ3kh6AY+bpDs/zs4Ab6EUP3uI/uxVyw13w=="],
+    "@swapkit/helpers": ["@swapkit/helpers@4.13.8", "", { "dependencies": { "@swapkit/contracts": "4.1.4", "@swapkit/tokens": "4.2.8", "@swapkit/types": "0.7.4" }, "peerDependencies": { "@near-js/providers": "2.5.1", "ethers": "6.16.0", "ts-pattern": "5.9.0", "zod": "3.25.74", "zustand": "5.0.12" } }, "sha512-be83KtMkBBVJR5YcRulffxZF61nT3FJ/5vLwnGRb50uPMrs3yzMtcwLKCSba8k3hhtZ+h10nQobC9eXW00eeew=="],
 
-    "@swapkit/plugins": ["@swapkit/plugins@4.6.36", "", { "dependencies": { "@mysten/sui": "~1.44.0", "@near-js/transactions": "2.5.0", "@near-js/utils": "~2.5.0", "@noble/hashes": "2.0.1", "@scure/base": "2.0.0", "@solana/web3.js": "~1.98.4", "@swapkit/helpers": "4.13.6", "@swapkit/toolboxes": "4.15.9", "@swapkit/utxo-signer": "2.1.2", "ethers": "^6.14.0", "ts-pattern": "^5.9.0" } }, "sha512-UlmE2yddD17bcwPaWkXqWxhz61tkfpZoxV2WLagbu3DOjnr7/hX1CT4Zj6lOoRN+lscxLdxiS6mqx8/LHV7VFA=="],
+    "@swapkit/plugins": ["@swapkit/plugins@4.6.38", "", { "dependencies": { "@swapkit/helpers": "4.13.8", "@swapkit/toolboxes": "4.15.11", "@swapkit/utxo-signer": "2.1.3" }, "peerDependencies": { "@mysten/sui": "1.44.0", "@near-js/transactions": "2.5.1", "@near-js/utils": "2.5.1", "@noble/hashes": "2.2.0", "@scure/base": "2.2.0", "@solana/web3.js": "1.98.4", "ethers": "6.16.0", "ts-pattern": "5.9.0" } }, "sha512-BWETJWuT5PuKpYfzOKxVfNU7Fv7vC6FPh6Lj8kNJZOJDgd56TK+TvpapTpdsDQnWInkjP1YE0UPEnJTlTAemKQ=="],
 
     "@swapkit/sdk": ["@swapkit/sdk@workspace:packages/sdk"],
 
-    "@swapkit/server": ["@swapkit/server@4.2.47", "", { "dependencies": { "@swapkit/helpers": "4.13.6", "@swapkit/tokens": "4.2.7", "@swapkit/toolboxes": "4.15.9", "@swapkit/wallet-keystore": "4.3.28", "ts-pattern": "^5.9.0" } }, "sha512-4Y6ry+OvHPFgcTR//HC8VDhSpi2Qn5VgXITR1aBEci4PuOYN9XlzaJcmGIkf0pnWqIQvrl2beGlUi43nl8KA0w=="],
+    "@swapkit/server": ["@swapkit/server@4.2.49", "", { "dependencies": { "@swapkit/helpers": "4.13.8", "@swapkit/tokens": "4.2.8", "@swapkit/toolboxes": "4.15.11", "@swapkit/wallet-keystore": "4.3.30" }, "peerDependencies": { "ts-pattern": "5.9.0" } }, "sha512-01DrrzvHlrjiN+rVUho+ECVLTKQ39NHVMwad9tvxZ8k5EKDL/KtP2VNq+/Bt8h7CL/MixfT6FtC57PSQaE2/9w=="],
 
-    "@swapkit/tokens": ["@swapkit/tokens@4.2.7", "", { "dependencies": { "ts-pattern": "^5.9.0" } }, "sha512-u48uFlHzTZZl92M42MXpdBFiuQ8GFld85cnNE94MdElpbuYI/CRZPqwtEBqUzLvicqHFrAlhJqy9YotmqJMTCg=="],
+    "@swapkit/tokens": ["@swapkit/tokens@4.2.8", "", { "peerDependencies": { "ts-pattern": "5.9.0" } }, "sha512-aiNStKXguUgDXU4tUx2Yj6L+xVaDNwge4ugi86uFBimZ7JvZlscOpnWL0GaO6JaSxoyHBh1EcLK1yY4JXxrELA=="],
 
-    "@swapkit/toolboxes": ["@swapkit/toolboxes@4.15.9", "", { "dependencies": { "@aptos-labs/ts-sdk": "~1.34.0", "@cosmjs/amino": "~0.37.0", "@cosmjs/crypto": "0.37.0", "@cosmjs/proto-signing": "~0.37.0", "@cosmjs/stargate": "~0.37.0", "@mysten/bcs": "~1.9.2", "@mysten/sui": "~1.44.0", "@near-js/accounts": "~2.5.0", "@near-js/crypto": "~2.5.0", "@near-js/providers": "~2.5.0", "@near-js/signers": "~2.5.0", "@near-js/transactions": "~2.5.0", "@near-js/utils": "~2.5.0", "@noble/curves": "2.0.1", "@noble/hashes": "~2.0.1", "@orbs-network/ton-access": "~2.3.3", "@polkadot/api": "15.10.2", "@polkadot/keyring": "~13.5.7", "@polkadot/rpc-provider": "~15.10.2", "@polkadot/util": "~13.5.7", "@polkadot/util-crypto": "~13.5.7", "@radixdlt/babylon-gateway-api-sdk": "~1.10.0", "@radixdlt/radix-dapp-toolkit": "~2.2.0", "@scure/base": "~2.0.0", "@scure/bip32": "~2.0.1", "@scure/bip39": "~2.0.1", "@solana/spl-memo": "~0.2.5", "@solana/spl-token": "~0.4.14", "@solana/web3.js": "~1.98.4", "@stellar/stellar-sdk": "~14.5.0", "@stricahq/bip32ed25519": "1.1.2", "@stricahq/cbors": "~1.0.2", "@stricahq/typhonjs": "~3.0.1", "@swapkit/helpers": "4.13.6", "@swapkit/utxo-signer": "2.1.2", "@ton/crypto": "~3.3.0", "@ton/ton": "~15.4.0", "bignumber.js": "~9.3.1", "cosmjs-types": "~0.10.1", "ethers": "^6.14.0", "micro-key-producer": "~0.8.2", "near-seed-phrase": "~0.2.1", "protobufjs": "~7.5.4", "starknet": "~9.2.1", "ts-pattern": "^5.9.0", "xrpl": "~4.4.2" } }, "sha512-vAw9TT69Sx63fSN+8hDWz8P3103DhBexJpHbZNxAImMCftDyozpXUC9zWC2pkM94iRFK82vc3PJZZ4sI+3aq4w=="],
+    "@swapkit/toolboxes": ["@swapkit/toolboxes@4.15.11", "", { "dependencies": { "@swapkit/helpers": "4.13.8", "@swapkit/utxo-signer": "2.1.3" }, "peerDependencies": { "@aptos-labs/ts-sdk": "1.34.0", "@cosmjs/amino": "0.38.1", "@cosmjs/crypto": "0.38.1", "@cosmjs/proto-signing": "0.38.1", "@cosmjs/stargate": "0.38.1", "@mysten/bcs": "1.9.2", "@mysten/sui": "1.44.0", "@near-js/accounts": "2.5.1", "@near-js/crypto": "2.5.1", "@near-js/providers": "2.5.1", "@near-js/signers": "2.5.1", "@near-js/transactions": "2.5.1", "@near-js/utils": "2.5.1", "@noble/curves": "2.2.0", "@noble/hashes": "2.2.0", "@orbs-network/ton-access": "2.3.3", "@polkadot/api": "15.10.2", "@polkadot/keyring": "13.5.7", "@polkadot/rpc-provider": "15.10.2", "@polkadot/util": "13.5.7", "@polkadot/util-crypto": "13.5.7", "@radixdlt/babylon-gateway-api-sdk": "1.10.1", "@radixdlt/radix-dapp-toolkit": "2.3.0", "@scure/base": "2.2.0", "@scure/bip32": "2.2.0", "@scure/bip39": "2.2.0", "@solana/spl-memo": "0.2.5", "@solana/spl-token": "0.4.14", "@solana/web3.js": "1.98.4", "@stellar/stellar-sdk": "14.5.0", "@stricahq/bip32ed25519": "1.1.2", "@stricahq/cbors": "1.0.4", "@stricahq/typhonjs": "3.0.2", "@ton/crypto": "3.3.0", "@ton/ton": "16.2.4", "bignumber.js": "9.3.1", "cosmjs-types": "0.11.0", "ethers": "6.16.0", "micro-key-producer": "0.8.6", "near-seed-phrase": "0.2.1", "protobufjs": "7.5.5", "starknet": "9.4.2", "ts-pattern": "5.9.0", "xrpl": "4.6.0" } }, "sha512-5AptwlUHdguLtlllrduG5IqOZM3HimnzyZoOBj8F0Kr/WPFwaRCDlKXNwwzKLz+Mdz+ikY6OjjVfJ1hBn2kMow=="],
 
     "@swapkit/types": ["@swapkit/types@0.7.4", "", {}, "sha512-HtM1o8KQ46nhoEZclDpHnyUp85JK7j+kJhQOQTvInJKxOORlH3NLmkSwddrXRWVSBN8NiyOVB4bF1Ld6RuIpkg=="],
 
-    "@swapkit/ui": ["@swapkit/ui@0.15.0", "", { "dependencies": { "@hookform/resolvers": "5.2.2", "@radix-ui/react-accordion": "1.2.12", "@radix-ui/react-alert-dialog": "1.1.15", "@radix-ui/react-checkbox": "1.3.3", "@radix-ui/react-collapsible": "1.1.12", "@radix-ui/react-dialog": "1.1.15", "@radix-ui/react-dropdown-menu": "2.1.16", "@radix-ui/react-hover-card": "1.1.15", "@radix-ui/react-label": "2.1.8", "@radix-ui/react-menubar": "1.1.16", "@radix-ui/react-select": "2.2.6", "@radix-ui/react-separator": "1.1.8", "@radix-ui/react-slot": "1.2.4", "@radix-ui/react-switch": "1.2.6", "@radix-ui/react-tabs": "1.1.13", "@radix-ui/react-tooltip": "1.2.8", "@sentry/react": "9.27.0", "@stricahq/typhonjs": "~3.0.1", "@swapkit/core": "^4.4.21", "@swapkit/helpers": "^4.13.5", "@swapkit/plugins": "^4.6.35", "@swapkit/toolboxes": "^4.15.8", "@swapkit/wallet-keystore": "^4.3.27", "@swapkit/wallets": "^4.8.5", "class-variance-authority": "0.7.1", "clsx": "2.1.1", "cosmjs-types": "0.10.1", "crypto-browserify": "3.12.1", "highlight.js": "^11.11.1", "lucide-react": "0.552.0", "nuqs": "2.8.9", "react": "19.1.1", "react-dom": "19.1.1", "react-hook-form": "7.65.0", "sonner": "2.0.7", "tailwind-merge": "2.6.0", "tailwindcss": "3.4.18", "tailwindcss-animate": "1.0.7", "ts-pattern": "^5.9.0", "zod": "3.25.74", "zustand": "5.0.8" } }, "sha512-2WkWjxsq6S/O4DYygseMv8gpRBNoR5fSwVGVz0xLYdvo1jpKsNWXTRnd2HRn1ICzoQsdUNY3vHUfVwZafEoHfg=="],
+    "@swapkit/ui": ["@swapkit/ui@0.16.1", "", { "dependencies": { "@hookform/resolvers": "5.2.2", "@radix-ui/react-accordion": "1.2.12", "@radix-ui/react-alert-dialog": "1.1.15", "@radix-ui/react-checkbox": "1.3.3", "@radix-ui/react-collapsible": "1.1.12", "@radix-ui/react-dialog": "1.1.15", "@radix-ui/react-dropdown-menu": "2.1.16", "@radix-ui/react-hover-card": "1.1.15", "@radix-ui/react-label": "2.1.8", "@radix-ui/react-menubar": "1.1.16", "@radix-ui/react-select": "2.2.6", "@radix-ui/react-separator": "1.1.8", "@radix-ui/react-slot": "1.2.4", "@radix-ui/react-switch": "1.2.6", "@radix-ui/react-tabs": "1.1.13", "@radix-ui/react-tooltip": "1.2.8", "@sentry/react": "9.27.0", "@stricahq/typhonjs": "~3.0.1", "@swapkit/core": "^4.4.24", "@swapkit/helpers": "^4.13.8", "@swapkit/plugins": "^4.6.38", "@swapkit/toolboxes": "^4.15.11", "@swapkit/wallet-keystore": "^4.3.30", "@swapkit/wallets": "^4.8.9", "class-variance-authority": "0.7.1", "clsx": "2.1.1", "cosmjs-types": "0.10.1", "crypto-browserify": "3.12.1", "highlight.js": "^11.11.1", "lucide-react": "0.552.0", "nuqs": "2.8.9", "react": "19.1.1", "react-dom": "19.1.1", "react-hook-form": "7.65.0", "sonner": "2.0.7", "tailwind-merge": "2.6.0", "tailwindcss": "3.4.18", "tailwindcss-animate": "1.0.7", "ts-pattern": "^5.9.0", "zod": "3.25.74", "zustand": "5.0.8" } }, "sha512-mwd156S1kjL6sVDmJZBCOD9tXL96MGA01a8lkedOuAWPcY+htAcWdFpEjvRP1S7Ct4soJi5b0v0nQ+XA0ABDzg=="],
 
-    "@swapkit/utxo-signer": ["@swapkit/utxo-signer@2.1.2", "", { "dependencies": { "@noble/curves": "2.0.1", "@noble/hashes": "2.0.1", "@scure/base": "2.0.0", "micro-packed": "0.8.0" } }, "sha512-nze2SJ0BFrNCUVkboKL6m/92cAVyqSXpbDrP3XvVVfabCIglmW5kqk+8DpT9o9JFtfvhHvEDNt2d2VfSzKTsoQ=="],
+    "@swapkit/utxo-signer": ["@swapkit/utxo-signer@2.1.3", "", { "peerDependencies": { "@noble/curves": "2.2.0", "@noble/hashes": "2.2.0", "@scure/base": "2.2.0", "micro-packed": "0.8.0" } }, "sha512-kRmUbFuEPP4GY70vYlsLeYhnYml5KxvjKFvNPm4S/oGwEkMz6o42l7OJA0oOf0g7KzNT2GpJ/wX16bACDEgh+A=="],
 
-    "@swapkit/wallet-core": ["@swapkit/wallet-core@4.2.6", "", { "dependencies": { "@swapkit/helpers": "4.13.6" } }, "sha512-lTOo9UIzWfZaow/7eHRU+XxdgF9TVAwlDzP7chWTamSRLOs4Rh2/IRKuCpuUCs8Q4RgtKvTtACDNStGrn32Ggg=="],
+    "@swapkit/wallet-core": ["@swapkit/wallet-core@4.2.8", "", { "dependencies": { "@swapkit/helpers": "4.13.8" } }, "sha512-nWKBLcH4SH6+kzO5OXUi03i6bo39NoFHmvDqCfhZgmRVzakPjFTYGjj0r9nLdiSAmqEjT3CoGpcyifP9qObb4A=="],
 
     "@swapkit/wallet-extensions": ["@swapkit/wallet-extensions@workspace:packages/wallet-extensions"],
 
     "@swapkit/wallet-hardware": ["@swapkit/wallet-hardware@workspace:packages/wallet-hardware"],
 
-    "@swapkit/wallet-keystore": ["@swapkit/wallet-keystore@4.3.28", "", { "dependencies": { "@noble/hashes": "2.0.1", "@scure/bip39": "2.0.1", "@swapkit/helpers": "4.13.6", "@swapkit/toolboxes": "4.15.9", "@swapkit/wallet-core": "4.2.6" } }, "sha512-CRFqWlToy/D4Zonm9J8uVAlghPIz5aNWa86knMKZSle7IokR/4ORz6aOij02Z41Nlk7O8DUyys3tJAvC+ssJrg=="],
+    "@swapkit/wallet-keystore": ["@swapkit/wallet-keystore@4.3.30", "", { "dependencies": { "@swapkit/helpers": "4.13.8", "@swapkit/toolboxes": "4.15.11", "@swapkit/wallet-core": "4.2.8" }, "peerDependencies": { "@noble/hashes": "2.2.0", "@scure/bip39": "2.2.0" } }, "sha512-AqXvr/XQpD38YHYJqZEEbEt+iMTDRAPtQGZoGv1hH0yGDfY/ORiTEX4ozmBy/6k1JZz8BE2G3HA1g3b6yLbzGQ=="],
 
     "@swapkit/wallet-mobile": ["@swapkit/wallet-mobile@workspace:packages/wallet-mobile"],
 
@@ -2767,43 +2769,13 @@
 
     "@stellar/stellar-sdk/axios": ["axios@1.15.0", "", { "dependencies": { "follow-redirects": "^1.15.11", "form-data": "^4.0.5", "proxy-from-env": "^2.1.0" } }, "sha512-wWyJDlAatxk30ZJer+GeCWS209sA42X+N5jU2jy6oHTp7ufw8uzUTVFBX9+wTfAlhiJXGS0Bq7X6efruWjuK9Q=="],
 
-    "@swapkit/core/@stricahq/typhonjs": ["@stricahq/typhonjs@3.0.1", "", { "dependencies": { "@stricahq/cbors": "1.0.2", "bech32": "^2.0.0", "bignumber.js": "^9.0.1", "blakejs": "^1.2.1", "bs58": "^5.0.0", "buffer": "^6.0.3", "lodash": "^4.17.21" } }, "sha512-8gXn5W52PiPZ+cyz7TkjhGPwuRGbv2xLrg6BNak8Yl5k/p659j3uFro/rhAeZjk7ScEYplnGwLgyRMOebxgWhg=="],
+    "@swapkit/toolboxes/@cosmjs/crypto": ["@cosmjs/crypto@0.37.1", "", { "dependencies": { "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "@noble/ciphers": "^1.3.0", "@noble/curves": "^1.9.2", "@noble/hashes": "^1.8.0", "@scure/bip39": "^1.6.0", "hash-wasm": "^4.12.0" } }, "sha512-CdLOKQVJM422UegKpi4T/xkdNwvLZwJwSC7NyYi7tAyty0NzP67u+vNqar7Ok22ECkKLj6N9uRcIl4g62oZThA=="],
 
-    "@swapkit/plugins/@near-js/transactions": ["@near-js/transactions@2.5.0", "", { "dependencies": { "@near-js/crypto": "2.5.0", "@near-js/types": "2.5.0", "@near-js/utils": "2.5.0", "@noble/hashes": "1.7.1", "borsh": "1.0.0" } }, "sha512-gVhWS4T5VcLjyVaW8nxWxK7kcgbGgyJ0YVS+VmaFzQbSZKuYgNnQXxynTycFc34awTNbp3a4/MqAd8RgX9VIcg=="],
-
-    "@swapkit/plugins/@noble/hashes": ["@noble/hashes@2.0.1", "", {}, "sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw=="],
-
-    "@swapkit/plugins/@scure/base": ["@scure/base@2.0.0", "", {}, "sha512-3E1kpuZginKkek01ovG8krQ0Z44E3DHPjc5S2rjJw9lZn3KSQOs8S7wqikF/AH7iRanHypj85uGyxk0XAyC37w=="],
-
-    "@swapkit/toolboxes/@cosmjs/amino": ["@cosmjs/amino@0.37.1", "", { "dependencies": { "@cosmjs/crypto": "^0.37.1", "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1" } }, "sha512-z3QSfw2S2kGbi5XBahOdAIu2Nnb7XiLgTOphZQoOJXJcTQemAG/wYHLJD9TcQ48SX+eDTJ4i7XRyJaIdg0ClcA=="],
-
-    "@swapkit/toolboxes/@cosmjs/proto-signing": ["@cosmjs/proto-signing@0.37.1", "", { "dependencies": { "@cosmjs/amino": "^0.37.1", "@cosmjs/crypto": "^0.37.1", "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "cosmjs-types": "^0.10.1" } }, "sha512-cCUfejHOfjx6L/noF9QnXIy4dKoTKl56NFIqz2cizx+kZKszdL0yOtQlu0dD9nR+uMafRHU7aok6v5HH4RZIDw=="],
-
-    "@swapkit/toolboxes/@cosmjs/stargate": ["@cosmjs/stargate@0.37.1", "", { "dependencies": { "@cosmjs/amino": "^0.37.1", "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/proto-signing": "^0.37.1", "@cosmjs/stream": "^0.37.1", "@cosmjs/tendermint-rpc": "^0.37.1", "@cosmjs/utils": "^0.37.1", "cosmjs-types": "^0.10.1" } }, "sha512-nQgaJB7A81cRYtmDrcIySq8hbd+QLXJTGFEs6R1xMdxascaABX0x86nS44ALk+EZojQQRnwupOsw1dKLlQmIFg=="],
-
-    "@swapkit/toolboxes/@noble/curves": ["@noble/curves@2.0.1", "", { "dependencies": { "@noble/hashes": "2.0.1" } }, "sha512-vs1Az2OOTBiP4q0pwjW5aF0xp9n4MxVrmkFBxc6EKZc6ddYx5gaZiAsZoq0uRRXWbi3AT/sBqn05eRPtn1JCPw=="],
-
-    "@swapkit/toolboxes/@noble/hashes": ["@noble/hashes@2.0.1", "", {}, "sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw=="],
-
-    "@swapkit/toolboxes/@radixdlt/radix-dapp-toolkit": ["@radixdlt/radix-dapp-toolkit@2.2.1", "", { "dependencies": { "@noble/curves": "^1.4.0", "base64url": "^3.0.1", "blakejs": "^1.2.1", "buffer": "^6.0.3", "immer": "^10.0.4", "lit": "^3.1.2", "lit-html": "^3.1.2", "neverthrow": "^8.0.0", "rxjs": "^7.8.1", "tslog": ">=4.8.0", "uuid": "^10.0.0", "valibot": "0.42.1" } }, "sha512-NiKZ+mP7M6TuVw00MQf4noch6SsahmBLlFovf/DwdDbPSAJD/GRycDAumlvNKujITEEKupolPseMh4XpJZZN6g=="],
-
-    "@swapkit/toolboxes/@scure/base": ["@scure/base@2.0.0", "", {}, "sha512-3E1kpuZginKkek01ovG8krQ0Z44E3DHPjc5S2rjJw9lZn3KSQOs8S7wqikF/AH7iRanHypj85uGyxk0XAyC37w=="],
-
-    "@swapkit/toolboxes/@scure/bip32": ["@scure/bip32@2.0.1", "", { "dependencies": { "@noble/curves": "2.0.1", "@noble/hashes": "2.0.1", "@scure/base": "2.0.0" } }, "sha512-4Md1NI5BzoVP+bhyJaY3K6yMesEFzNS1sE/cP+9nuvE7p/b0kx9XbpDHHFl8dHtufcbdHRUUQdRqLIPHN/s7yA=="],
-
-    "@swapkit/toolboxes/@scure/bip39": ["@scure/bip39@2.0.1", "", { "dependencies": { "@noble/hashes": "2.0.1", "@scure/base": "2.0.0" } }, "sha512-PsxdFj/d2AcJcZDX1FXN3dDgitDDTmwf78rKZq1a6c1P1Nan1X/Sxc7667zU3U+AN60g7SxxP0YCVw2H/hBycg=="],
-
-    "@swapkit/toolboxes/xrpl": ["xrpl@4.4.3", "", { "dependencies": { "@scure/bip32": "^1.3.1", "@scure/bip39": "^1.2.1", "@xrplf/isomorphic": "^1.0.1", "@xrplf/secret-numbers": "^2.0.0", "bignumber.js": "^9.0.0", "eventemitter3": "^5.0.1", "fast-json-stable-stringify": "^2.1.0", "ripple-address-codec": "^5.0.0", "ripple-binary-codec": "^2.5.0", "ripple-keypairs": "^2.0.0" } }, "sha512-vi2OjuNkiaP8nv1j+nqHp8GZwwEjO6Y8+j/OuVMg6M4LwXEwyHdIj33dlg7cyY1Lw5+jb9HqFOQvABhaywVbTQ=="],
+    "@swapkit/ui/@swapkit/wallets": ["@swapkit/wallets@4.8.9", "", { "dependencies": { "@coinbase/wallet-sdk": "~4.3.7", "@cosmjs/amino": "~0.37.0", "@cosmjs/proto-signing": "~0.37.0", "@near-js/transactions": "~2.5.0", "@near-wallet-selector/bitget-wallet": "~10.1.4", "@near-wallet-selector/core": "~10.1.4", "@near-wallet-selector/modal-ui-js": "~10.1.4", "@noble/hashes": "~2.2.0", "@passkeys/core": "~4.1.0", "@passkeys/react": "~3.0.1", "@radixdlt/babylon-gateway-api-sdk": "~1.10.0", "@radixdlt/radix-dapp-toolkit": "~2.3.0", "@scure/base": "~2.2.0", "@scure/bip39": "~2.2.0", "@swapkit/helpers": "^4.13.6", "@swapkit/toolboxes": "^4.15.9", "@swapkit/utxo-signer": "^2.1.2", "@swapkit/wallet-core": "^4.2.6", "@swapkit/wallet-extensions": "4.5.9", "@swapkit/wallet-hardware": "4.9.6", "@walletconnect/modal": "~2.7.0", "@walletconnect/sign-client": "~2.23.9", "cosmjs-types": "~0.10.1", "ethers": "^6.14.0", "sats-connect": "~1.0.0", "ts-pattern": "^5.9.0", "xumm": "1.8.0" } }, "sha512-I4mRexHHHl4NsZIUkGrohaXOx0z8/n9IZGZcoMFf2Z+rC63CO5tE1xmTEoZ7R1C9lSQdfwGpNkxj/z4m3cwxng=="],
 
     "@swapkit/ui/react": ["react@19.1.1", "", {}, "sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ=="],
 
     "@swapkit/ui/react-dom": ["react-dom@19.1.1", "", { "dependencies": { "scheduler": "^0.26.0" }, "peerDependencies": { "react": "^19.1.1" } }, "sha512-Dlq/5LAZgF0Gaz6yiqZCf6VCcZs1ghAJyrsu84Q/GT0gV+mCxbfmKNoGRKBYMJ8IEdGPqu49YWXD02GCknEDkw=="],
-
-    "@swapkit/utxo-signer/@noble/curves": ["@noble/curves@2.0.1", "", { "dependencies": { "@noble/hashes": "2.0.1" } }, "sha512-vs1Az2OOTBiP4q0pwjW5aF0xp9n4MxVrmkFBxc6EKZc6ddYx5gaZiAsZoq0uRRXWbi3AT/sBqn05eRPtn1JCPw=="],
-
-    "@swapkit/utxo-signer/@noble/hashes": ["@noble/hashes@2.0.1", "", {}, "sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw=="],
-
-    "@swapkit/utxo-signer/@scure/base": ["@scure/base@2.0.0", "", {}, "sha512-3E1kpuZginKkek01ovG8krQ0Z44E3DHPjc5S2rjJw9lZn3KSQOs8S7wqikF/AH7iRanHypj85uGyxk0XAyC37w=="],
 
     "@swapkit/wallet-extensions/@cosmjs/amino": ["@cosmjs/amino@0.37.1", "", { "dependencies": { "@cosmjs/crypto": "^0.37.1", "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1" } }, "sha512-z3QSfw2S2kGbi5XBahOdAIu2Nnb7XiLgTOphZQoOJXJcTQemAG/wYHLJD9TcQ48SX+eDTJ4i7XRyJaIdg0ClcA=="],
 
@@ -2815,9 +2787,9 @@
 
     "@swapkit/wallet-hardware/@cosmjs/proto-signing": ["@cosmjs/proto-signing@0.37.1", "", { "dependencies": { "@cosmjs/amino": "^0.37.1", "@cosmjs/crypto": "^0.37.1", "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "cosmjs-types": "^0.10.1" } }, "sha512-cCUfejHOfjx6L/noF9QnXIy4dKoTKl56NFIqz2cizx+kZKszdL0yOtQlu0dD9nR+uMafRHU7aok6v5HH4RZIDw=="],
 
-    "@swapkit/wallet-keystore/@noble/hashes": ["@noble/hashes@2.0.1", "", {}, "sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw=="],
+    "@swapkit/wallet-hardware/@near-js/crypto": ["@near-js/crypto@2.5.0", "", { "dependencies": { "@near-js/types": "2.5.0", "@near-js/utils": "2.5.0", "@noble/curves": "1.8.1", "@noble/hashes": "^1.7.1", "borsh": "1.0.0", "secp256k1": "5.0.1" } }, "sha512-bsMCasnjRne9j0u5DuKeO0/xwS49GgRrVxzmW9WRZ7yWWh0U8IidTxNHTL1QCDFJNwwzt9HDnuj8XeVhlpixww=="],
 
-    "@swapkit/wallet-keystore/@scure/bip39": ["@scure/bip39@2.0.1", "", { "dependencies": { "@noble/hashes": "2.0.1", "@scure/base": "2.0.0" } }, "sha512-PsxdFj/d2AcJcZDX1FXN3dDgitDDTmwf78rKZq1a6c1P1Nan1X/Sxc7667zU3U+AN60g7SxxP0YCVw2H/hBycg=="],
+    "@swapkit/wallet-hardware/@near-js/transactions": ["@near-js/transactions@2.5.0", "", { "dependencies": { "@near-js/crypto": "2.5.0", "@near-js/types": "2.5.0", "@near-js/utils": "2.5.0", "@noble/hashes": "1.7.1", "borsh": "1.0.0" } }, "sha512-gVhWS4T5VcLjyVaW8nxWxK7kcgbGgyJ0YVS+VmaFzQbSZKuYgNnQXxynTycFc34awTNbp3a4/MqAd8RgX9VIcg=="],
 
     "@swapkit/wallets/@cosmjs/amino": ["@cosmjs/amino@0.37.1", "", { "dependencies": { "@cosmjs/crypto": "^0.37.1", "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1" } }, "sha512-z3QSfw2S2kGbi5XBahOdAIu2Nnb7XiLgTOphZQoOJXJcTQemAG/wYHLJD9TcQ48SX+eDTJ4i7XRyJaIdg0ClcA=="],
 
@@ -3229,27 +3201,17 @@
 
     "@stellar/stellar-sdk/axios/proxy-from-env": ["proxy-from-env@2.1.0", "", {}, "sha512-cJ+oHTW1VAEa8cJslgmUZrc+sjRKgAKl3Zyse6+PV38hZe/V6Z14TbCuXcan9F9ghlz4QrFr2c92TNF82UkYHA=="],
 
-    "@swapkit/plugins/@near-js/transactions/@near-js/crypto": ["@near-js/crypto@2.5.0", "", { "dependencies": { "@near-js/types": "2.5.0", "@near-js/utils": "2.5.0", "@noble/curves": "1.8.1", "@noble/hashes": "^1.7.1", "borsh": "1.0.0", "secp256k1": "5.0.1" } }, "sha512-bsMCasnjRne9j0u5DuKeO0/xwS49GgRrVxzmW9WRZ7yWWh0U8IidTxNHTL1QCDFJNwwzt9HDnuj8XeVhlpixww=="],
+    "@swapkit/toolboxes/@cosmjs/crypto/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
 
-    "@swapkit/plugins/@near-js/transactions/@near-js/types": ["@near-js/types@2.5.0", "", {}, "sha512-U0HgAnRwN/XKJ1O4Htac+G5bvkMalBJ8i/kwAPJpoOI1MUtP9dhbCG4GBErADCpczukhrAWlDBHHdfhPnhgyzQ=="],
+    "@swapkit/toolboxes/@cosmjs/crypto/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
 
-    "@swapkit/plugins/@near-js/transactions/@near-js/utils": ["@near-js/utils@2.5.0", "", { "dependencies": { "@near-js/types": "2.5.0", "@scure/base": "^1.2.4", "depd": "2.0.0", "mustache": "4.0.0" } }, "sha512-hifdeZVzV9TFcgLNekRVVnB6q7zxdCQPmC9cybT1SjfeiIP/5jPabOZXGWNJPSloRcrTMluCTtaWinIw1HXanQ=="],
+    "@swapkit/toolboxes/@cosmjs/crypto/@scure/bip39": ["@scure/bip39@1.6.0", "", { "dependencies": { "@noble/hashes": "~1.8.0", "@scure/base": "~1.2.5" } }, "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A=="],
 
-    "@swapkit/plugins/@near-js/transactions/@noble/hashes": ["@noble/hashes@1.7.1", "", {}, "sha512-B8XBPsn4vT/KJAGqDzbwztd+6Yte3P4V7iafm24bxgDe/mlRuK6xmWPuCNrKt2vDafZ8MfJLlchDG/vYafQEjQ=="],
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/amino": ["@cosmjs/amino@0.37.1", "", { "dependencies": { "@cosmjs/crypto": "^0.37.1", "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1" } }, "sha512-z3QSfw2S2kGbi5XBahOdAIu2Nnb7XiLgTOphZQoOJXJcTQemAG/wYHLJD9TcQ48SX+eDTJ4i7XRyJaIdg0ClcA=="],
 
-    "@swapkit/toolboxes/@cosmjs/amino/@cosmjs/crypto": ["@cosmjs/crypto@0.37.1", "", { "dependencies": { "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "@noble/ciphers": "^1.3.0", "@noble/curves": "^1.9.2", "@noble/hashes": "^1.8.0", "@scure/bip39": "^1.6.0", "hash-wasm": "^4.12.0" } }, "sha512-CdLOKQVJM422UegKpi4T/xkdNwvLZwJwSC7NyYi7tAyty0NzP67u+vNqar7Ok22ECkKLj6N9uRcIl4g62oZThA=="],
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/proto-signing": ["@cosmjs/proto-signing@0.37.1", "", { "dependencies": { "@cosmjs/amino": "^0.37.1", "@cosmjs/crypto": "^0.37.1", "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "cosmjs-types": "^0.10.1" } }, "sha512-cCUfejHOfjx6L/noF9QnXIy4dKoTKl56NFIqz2cizx+kZKszdL0yOtQlu0dD9nR+uMafRHU7aok6v5HH4RZIDw=="],
 
-    "@swapkit/toolboxes/@cosmjs/proto-signing/@cosmjs/crypto": ["@cosmjs/crypto@0.37.1", "", { "dependencies": { "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "@noble/ciphers": "^1.3.0", "@noble/curves": "^1.9.2", "@noble/hashes": "^1.8.0", "@scure/bip39": "^1.6.0", "hash-wasm": "^4.12.0" } }, "sha512-CdLOKQVJM422UegKpi4T/xkdNwvLZwJwSC7NyYi7tAyty0NzP67u+vNqar7Ok22ECkKLj6N9uRcIl4g62oZThA=="],
-
-    "@swapkit/toolboxes/@radixdlt/radix-dapp-toolkit/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
-
-    "@swapkit/toolboxes/@radixdlt/radix-dapp-toolkit/rxjs": ["rxjs@7.8.1", "", { "dependencies": { "tslib": "^2.1.0" } }, "sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg=="],
-
-    "@swapkit/toolboxes/xrpl/@scure/bip32": ["@scure/bip32@1.7.0", "", { "dependencies": { "@noble/curves": "~1.9.0", "@noble/hashes": "~1.8.0", "@scure/base": "~1.2.5" } }, "sha512-E4FFX/N3f4B80AKWp5dP6ow+flD1LQZo/w8UnLGYZO674jS6YnYeepycOOksv+vLPSpgN35wgKgy+ybfTb2SMw=="],
-
-    "@swapkit/toolboxes/xrpl/@scure/bip39": ["@scure/bip39@1.6.0", "", { "dependencies": { "@noble/hashes": "~1.8.0", "@scure/base": "~1.2.5" } }, "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A=="],
-
-    "@swapkit/toolboxes/xrpl/ripple-binary-codec": ["ripple-binary-codec@2.5.1", "", { "dependencies": { "@xrplf/isomorphic": "^1.0.1", "bignumber.js": "^9.0.0", "ripple-address-codec": "^5.0.0" } }, "sha512-rzN4GTorLRH0bQD7Tccgn6Eq4aunMhZaUTXDEUJ+3xrjo0m1Av5AY1Doc/jsCIaxPIAnyoVg5rWlmI93U7pGdg=="],
+    "@swapkit/ui/@swapkit/wallets/@swapkit/wallet-hardware": ["@swapkit/wallet-hardware@4.9.6", "", { "dependencies": { "@cosmjs/amino": "~0.37.0", "@cosmjs/crypto": "0.37.0", "@cosmjs/proto-signing": "~0.37.0", "@keepkey/keepkey-sdk": "~0.2.62", "@ledgerhq/devices": "~8.10.0", "@ledgerhq/errors": "~6.29.0", "@ledgerhq/hw-app-btc": "~10.17.0", "@ledgerhq/hw-app-cosmos": "~6.33.0", "@ledgerhq/hw-app-eth": "~7.4.2", "@ledgerhq/hw-app-near": "~6.32.0", "@ledgerhq/hw-app-sui": "~1.5.0", "@ledgerhq/hw-app-trx": "~6.32.0", "@ledgerhq/hw-app-xrp": "~6.33.0", "@ledgerhq/hw-transport": "~6.32.0", "@ledgerhq/hw-transport-webhid": "~6.31.0", "@ledgerhq/hw-transport-webusb": "~6.30.0", "@ledgerhq/wallet-api-client": "~1.13.1", "@near-js/crypto": "~2.5.0", "@near-js/transactions": "~2.5.0", "@scure/base": "2.2.0", "@swapkit/helpers": "^4.13.6", "@swapkit/toolboxes": "^4.15.9", "@swapkit/utxo-signer": "^2.1.2", "@swapkit/wallet-core": "^4.2.6", "@trezor/connect-web": "~9.7.3", "cosmjs-types": "~0.10.1", "ethers": "^6.14.0", "ledger-bitcoin": "~0.3.0", "ripple-binary-codec": "2.7.0", "ts-pattern": "^5.9.0", "xrpl": "~4.6.0" } }, "sha512-oX7dH3YuYTIRMVq81SRqGFuY14r0IT58AWqFlNdzU2cv8NX11eW4s7ZxRgwdu/oy7o+IrJO2HPjmqznwLX3PNw=="],
 
     "@swapkit/ui/react-dom/scheduler": ["scheduler@0.26.0", "", {}, "sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA=="],
 
@@ -3261,7 +3223,19 @@
 
     "@swapkit/wallet-hardware/@cosmjs/proto-signing/@cosmjs/crypto": ["@cosmjs/crypto@0.37.1", "", { "dependencies": { "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "@noble/ciphers": "^1.3.0", "@noble/curves": "^1.9.2", "@noble/hashes": "^1.8.0", "@scure/bip39": "^1.6.0", "hash-wasm": "^4.12.0" } }, "sha512-CdLOKQVJM422UegKpi4T/xkdNwvLZwJwSC7NyYi7tAyty0NzP67u+vNqar7Ok22ECkKLj6N9uRcIl4g62oZThA=="],
 
-    "@swapkit/wallet-keystore/@scure/bip39/@scure/base": ["@scure/base@2.0.0", "", {}, "sha512-3E1kpuZginKkek01ovG8krQ0Z44E3DHPjc5S2rjJw9lZn3KSQOs8S7wqikF/AH7iRanHypj85uGyxk0XAyC37w=="],
+    "@swapkit/wallet-hardware/@near-js/crypto/@near-js/types": ["@near-js/types@2.5.0", "", {}, "sha512-U0HgAnRwN/XKJ1O4Htac+G5bvkMalBJ8i/kwAPJpoOI1MUtP9dhbCG4GBErADCpczukhrAWlDBHHdfhPnhgyzQ=="],
+
+    "@swapkit/wallet-hardware/@near-js/crypto/@near-js/utils": ["@near-js/utils@2.5.0", "", { "dependencies": { "@near-js/types": "2.5.0", "@scure/base": "^1.2.4", "depd": "2.0.0", "mustache": "4.0.0" } }, "sha512-hifdeZVzV9TFcgLNekRVVnB6q7zxdCQPmC9cybT1SjfeiIP/5jPabOZXGWNJPSloRcrTMluCTtaWinIw1HXanQ=="],
+
+    "@swapkit/wallet-hardware/@near-js/crypto/@noble/curves": ["@noble/curves@1.8.1", "", { "dependencies": { "@noble/hashes": "1.7.1" } }, "sha512-warwspo+UYUPep0Q+vtdVB4Ugn8GGQj8iyB3gnRWsztmUHTI3S1nhdiWNsPUGL0vud7JlRRk1XEu7Lq1KGTnMQ=="],
+
+    "@swapkit/wallet-hardware/@near-js/crypto/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
+
+    "@swapkit/wallet-hardware/@near-js/transactions/@near-js/types": ["@near-js/types@2.5.0", "", {}, "sha512-U0HgAnRwN/XKJ1O4Htac+G5bvkMalBJ8i/kwAPJpoOI1MUtP9dhbCG4GBErADCpczukhrAWlDBHHdfhPnhgyzQ=="],
+
+    "@swapkit/wallet-hardware/@near-js/transactions/@near-js/utils": ["@near-js/utils@2.5.0", "", { "dependencies": { "@near-js/types": "2.5.0", "@scure/base": "^1.2.4", "depd": "2.0.0", "mustache": "4.0.0" } }, "sha512-hifdeZVzV9TFcgLNekRVVnB6q7zxdCQPmC9cybT1SjfeiIP/5jPabOZXGWNJPSloRcrTMluCTtaWinIw1HXanQ=="],
+
+    "@swapkit/wallet-hardware/@near-js/transactions/@noble/hashes": ["@noble/hashes@1.7.1", "", {}, "sha512-B8XBPsn4vT/KJAGqDzbwztd+6Yte3P4V7iafm24bxgDe/mlRuK6xmWPuCNrKt2vDafZ8MfJLlchDG/vYafQEjQ=="],
 
     "@swapkit/wallets/@cosmjs/amino/@cosmjs/crypto": ["@cosmjs/crypto@0.37.1", "", { "dependencies": { "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "@noble/ciphers": "^1.3.0", "@noble/curves": "^1.9.2", "@noble/hashes": "^1.8.0", "@scure/bip39": "^1.6.0", "hash-wasm": "^4.12.0" } }, "sha512-CdLOKQVJM422UegKpi4T/xkdNwvLZwJwSC7NyYi7tAyty0NzP67u+vNqar7Ok22ECkKLj6N9uRcIl4g62oZThA=="],
 
@@ -3435,35 +3409,11 @@
 
     "@starknet-io/get-starknet-wallet-standard/ox/@scure/bip39/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
 
-    "@swapkit/plugins/@near-js/transactions/@near-js/crypto/@noble/curves": ["@noble/curves@1.8.1", "", { "dependencies": { "@noble/hashes": "1.7.1" } }, "sha512-warwspo+UYUPep0Q+vtdVB4Ugn8GGQj8iyB3gnRWsztmUHTI3S1nhdiWNsPUGL0vud7JlRRk1XEu7Lq1KGTnMQ=="],
+    "@swapkit/toolboxes/@cosmjs/crypto/@scure/bip39/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
 
-    "@swapkit/plugins/@near-js/transactions/@near-js/crypto/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/amino/@cosmjs/crypto": ["@cosmjs/crypto@0.37.1", "", { "dependencies": { "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "@noble/ciphers": "^1.3.0", "@noble/curves": "^1.9.2", "@noble/hashes": "^1.8.0", "@scure/bip39": "^1.6.0", "hash-wasm": "^4.12.0" } }, "sha512-CdLOKQVJM422UegKpi4T/xkdNwvLZwJwSC7NyYi7tAyty0NzP67u+vNqar7Ok22ECkKLj6N9uRcIl4g62oZThA=="],
 
-    "@swapkit/plugins/@near-js/transactions/@near-js/utils/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
-
-    "@swapkit/toolboxes/@cosmjs/amino/@cosmjs/crypto/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
-
-    "@swapkit/toolboxes/@cosmjs/amino/@cosmjs/crypto/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
-
-    "@swapkit/toolboxes/@cosmjs/amino/@cosmjs/crypto/@scure/bip39": ["@scure/bip39@1.6.0", "", { "dependencies": { "@noble/hashes": "~1.8.0", "@scure/base": "~1.2.5" } }, "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A=="],
-
-    "@swapkit/toolboxes/@cosmjs/proto-signing/@cosmjs/crypto/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
-
-    "@swapkit/toolboxes/@cosmjs/proto-signing/@cosmjs/crypto/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
-
-    "@swapkit/toolboxes/@cosmjs/proto-signing/@cosmjs/crypto/@scure/bip39": ["@scure/bip39@1.6.0", "", { "dependencies": { "@noble/hashes": "~1.8.0", "@scure/base": "~1.2.5" } }, "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A=="],
-
-    "@swapkit/toolboxes/@radixdlt/radix-dapp-toolkit/@noble/curves/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
-
-    "@swapkit/toolboxes/xrpl/@scure/bip32/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
-
-    "@swapkit/toolboxes/xrpl/@scure/bip32/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
-
-    "@swapkit/toolboxes/xrpl/@scure/bip32/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
-
-    "@swapkit/toolboxes/xrpl/@scure/bip39/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
-
-    "@swapkit/toolboxes/xrpl/@scure/bip39/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/proto-signing/@cosmjs/crypto": ["@cosmjs/crypto@0.37.1", "", { "dependencies": { "@cosmjs/encoding": "^0.37.1", "@cosmjs/math": "^0.37.1", "@cosmjs/utils": "^0.37.1", "@noble/ciphers": "^1.3.0", "@noble/curves": "^1.9.2", "@noble/hashes": "^1.8.0", "@scure/bip39": "^1.6.0", "hash-wasm": "^4.12.0" } }, "sha512-CdLOKQVJM422UegKpi4T/xkdNwvLZwJwSC7NyYi7tAyty0NzP67u+vNqar7Ok22ECkKLj6N9uRcIl4g62oZThA=="],
 
     "@swapkit/wallet-extensions/@cosmjs/amino/@cosmjs/crypto/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
 
@@ -3488,6 +3438,12 @@
     "@swapkit/wallet-hardware/@cosmjs/proto-signing/@cosmjs/crypto/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
 
     "@swapkit/wallet-hardware/@cosmjs/proto-signing/@cosmjs/crypto/@scure/bip39": ["@scure/bip39@1.6.0", "", { "dependencies": { "@noble/hashes": "~1.8.0", "@scure/base": "~1.2.5" } }, "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A=="],
+
+    "@swapkit/wallet-hardware/@near-js/crypto/@near-js/utils/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
+
+    "@swapkit/wallet-hardware/@near-js/crypto/@noble/curves/@noble/hashes": ["@noble/hashes@1.7.1", "", {}, "sha512-B8XBPsn4vT/KJAGqDzbwztd+6Yte3P4V7iafm24bxgDe/mlRuK6xmWPuCNrKt2vDafZ8MfJLlchDG/vYafQEjQ=="],
+
+    "@swapkit/wallet-hardware/@near-js/transactions/@near-js/utils/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
 
     "@swapkit/wallets/@cosmjs/amino/@cosmjs/crypto/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
 
@@ -3553,11 +3509,17 @@
 
     "@near-js/keystores-node/@near-js/crypto/@near-js/utils/bs58/base-x": ["base-x@2.0.6", "", { "dependencies": { "safe-buffer": "^5.0.1" } }, "sha512-UAmjxz9KbK+YIi66xej+pZVo/vxUOh49ubEvZW5egCbxhur05pBb+hwuireQwKO4nDpsNm64/jEei17LEpsr5g=="],
 
-    "@swapkit/plugins/@near-js/transactions/@near-js/crypto/@noble/curves/@noble/hashes": ["@noble/hashes@1.7.1", "", {}, "sha512-B8XBPsn4vT/KJAGqDzbwztd+6Yte3P4V7iafm24bxgDe/mlRuK6xmWPuCNrKt2vDafZ8MfJLlchDG/vYafQEjQ=="],
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/amino/@cosmjs/crypto/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
 
-    "@swapkit/toolboxes/@cosmjs/amino/@cosmjs/crypto/@scure/bip39/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/amino/@cosmjs/crypto/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
 
-    "@swapkit/toolboxes/@cosmjs/proto-signing/@cosmjs/crypto/@scure/bip39/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/amino/@cosmjs/crypto/@scure/bip39": ["@scure/bip39@1.6.0", "", { "dependencies": { "@noble/hashes": "~1.8.0", "@scure/base": "~1.2.5" } }, "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A=="],
+
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/proto-signing/@cosmjs/crypto/@noble/curves": ["@noble/curves@1.9.7", "", { "dependencies": { "@noble/hashes": "1.8.0" } }, "sha512-gbKGcRUYIjA3/zCCNaWDciTMFI0dCkvou3TL8Zmy5Nc7sJ47a0jtOeZoTaMxkuqRo9cRhjOdZJXegxYE5FN/xw=="],
+
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/proto-signing/@cosmjs/crypto/@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
+
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/proto-signing/@cosmjs/crypto/@scure/bip39": ["@scure/bip39@1.6.0", "", { "dependencies": { "@noble/hashes": "~1.8.0", "@scure/base": "~1.2.5" } }, "sha512-+lF0BbLiJNwVlev4eKelw1WWLaiKXw7sSl8T6FvBlWkdX+94aGJ4o8XjUdlyhTCjd8c+B3KT3JfS8P0bLRNU6A=="],
 
     "@swapkit/wallet-extensions/@cosmjs/amino/@cosmjs/crypto/@scure/bip39/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
 
@@ -3576,5 +3538,9 @@
     "@trezor/device-authenticity/@trezor/protobuf/protobufjs/@types/node/undici-types": ["undici-types@7.16.0", "", {}, "sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw=="],
 
     "pkg-dir/find-up/locate-path/p-locate/p-limit": ["p-limit@3.1.0", "", { "dependencies": { "yocto-queue": "^0.1.0" } }, "sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ=="],
+
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/amino/@cosmjs/crypto/@scure/bip39/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
+
+    "@swapkit/ui/@swapkit/wallets/@cosmjs/proto-signing/@cosmjs/crypto/@scure/bip39/@scure/base": ["@scure/base@1.2.6", "", {}, "sha512-g/nm5FgUa//MCj1gV09zTJTaM6KBAHqLN907YVQqf7zC49+DcO4B1so4ZX07Ef10Twr6nuqYEH9GEggFXA4Fmg=="],
   }
 }
