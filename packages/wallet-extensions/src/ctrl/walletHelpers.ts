@@ -114,7 +114,10 @@ export async function getCtrlAddress(chain: Chain) {
       }
       const { BrowserProvider } = await import("ethers");
       const provider = new BrowserProvider(eipProvider, "any");
-      const [response] = await providerRequest({ method: "eth_requestAccounts", params: [], provider });
+      const [response] = (await providerRequest({ method: "eth_requestAccounts", params: [], provider })) as [
+        string,
+        ...string[],
+      ];
       return response;
     }
 

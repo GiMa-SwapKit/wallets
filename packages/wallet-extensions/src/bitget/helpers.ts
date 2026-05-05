@@ -33,7 +33,7 @@ export async function getWalletMethods(chain: Chain): Promise<WalletMethodsWithA
 
         const wallet = bitget.ethereum;
 
-        const [address]: [string] = await wallet.send("eth_requestAccounts", []);
+        const [address] = (await wallet.request({ method: "eth_requestAccounts" })) as [string, ...string[]];
         const evmWallet = await getWeb3WalletMethods({ chain: chain as EVMChain, walletProvider: wallet });
 
         return { ...evmWallet, address };

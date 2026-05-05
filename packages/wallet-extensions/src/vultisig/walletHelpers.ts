@@ -125,7 +125,10 @@ export async function getVultisigAddress(chain: Chain) {
     if (EVMChains.includes(chain as EVMChain)) {
       const { BrowserProvider } = await import("ethers");
       const provider = new BrowserProvider(windowProvider, "any");
-      const [response] = await providerRequest({ method: "eth_requestAccounts", params: [], provider });
+      const [response] = (await providerRequest({ method: "eth_requestAccounts", params: [], provider })) as [
+        string,
+        ...string[],
+      ];
       return response;
     }
 

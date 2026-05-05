@@ -45,6 +45,7 @@ export type SKWallets = {
   [WalletOption.OKX_MOBILE]: typeof evmWallet;
   [WalletOption.ONEKEY]: typeof onekeyWallet;
   [WalletOption.PASSKEYS]: typeof passkeysWallet;
+  [WalletOption.PASSKEY_WALLET]: typeof passkeysWallet;
   [WalletOption.PETRA]: typeof petraWallet;
   [WalletOption.PHANTOM]: typeof phantomWallet;
   [WalletOption.POLKADOT_JS]: typeof polkadotWallet;
@@ -120,6 +121,7 @@ export type SKWalletsSupportedChains = {
   [WalletOption.OKX_MOBILE]: typeof evmWallet.connectEVMWallet.supportedChains;
   [WalletOption.ONEKEY]: typeof onekeyWallet.connectOnekeyWallet.supportedChains;
   [WalletOption.PASSKEYS]: typeof passkeysWallet.connectPasskeys.supportedChains;
+  [WalletOption.PASSKEY_WALLET]: typeof passkeysWallet.connectPasskeys.supportedChains;
   [WalletOption.PETRA]: typeof petraWallet.connectPetra.supportedChains;
   [WalletOption.PHANTOM]: typeof phantomWallet.connectPhantom.supportedChains;
   [WalletOption.POLKADOT_JS]: typeof polkadotWallet.connectPolkadotJs.supportedChains;

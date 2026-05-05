@@ -1,5 +1,13 @@
 import type { Keplr } from "@keplr-wallet/types";
-import { Chain, ChainId, ChainToChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
+import {
+  Chain,
+  ChainId,
+  ChainToChainId,
+  type EVMChain,
+  filterSupportedChains,
+  SwapKitError,
+  WalletOption,
+} from "@swapkit/helpers";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import type { ExtensionWallet } from "../walletTypes";
 
@@ -44,22 +52,25 @@ async function connectCosmosChains(chains: Chain[], addChain: any, keplrProvider
 }
 
 async function connectEvmChains(chains: Chain[], addChain: any) {
-  const provider = window.ethereum;
+  const walletProvider = window.ethereum;
 
-  if (!provider) {
+  if (!walletProvider) {
     throw new SwapKitError("wallet_cosmostation_evm_provider_not_found");
   }
 
-  const accounts = (await provider.request({ method: "eth_requestAccounts" })) as string[];
+  const accounts = (await walletProvider.request({ method: "eth_requestAccounts" })) as string[];
 
   if (!accounts || accounts.length === 0) {
     throw new SwapKitError("wallet_cosmostation_no_evm_accounts");
   }
 
   const { getEvmToolboxAsync } = await import("@swapkit/toolboxes/evm");
+  const { BrowserProvider } = await import("ethers");
+  const provider = new BrowserProvider(walletProvider, "any");
+  const signer = await provider.getSigner();
 
   for (const chain of chains) {
-    const toolbox = await getEvmToolboxAsync(chain as any, { provider });
+    const toolbox = await getEvmToolboxAsync(chain as EVMChain, { provider, signer });
     const [address] = accounts;
 
     if (!address) {

@@ -1,7 +1,7 @@
 import { WalletOption } from "@swapkit/helpers";
 import type { SKWallets } from "./types";
 
-export async function loadWallet<W extends WalletOption>(walletOption: W): Promise<SKWallets[W]> {
+export async function loadWallet<W extends keyof SKWallets>(walletOption: W): Promise<SKWallets[W]> {
   const { match } = await import("ts-pattern");
 
   const wallet = await match(walletOption as WalletOption)
@@ -43,7 +43,7 @@ export async function loadWallet<W extends WalletOption>(walletOption: W): Promi
     .with(WalletOption.KEYSTORE, async () => (await import("./keystore")).keystoreWallet)
     .with(WalletOption.TREZOR, async () => (await import("@swapkit/wallet-hardware/trezor")).trezorWallet)
     .with(WalletOption.LEDGER, async () => (await import("@swapkit/wallet-hardware/ledger")).ledgerWallet)
-    .with(WalletOption.PASSKEYS, async () => (await import("./passkeys")).passkeysWallet)
+    .with(WalletOption.PASSKEYS, WalletOption.PASSKEY_WALLET, async () => (await import("./passkeys")).passkeysWallet)
     .with(WalletOption.PETRA, async () => (await import("@swapkit/wallet-extensions/petra")).petraWallet)
     .with(WalletOption.PHANTOM, async () => (await import("@swapkit/wallet-extensions/phantom")).phantomWallet)
     .with(WalletOption.POLKADOT_JS, async () => (await import("@swapkit/wallet-extensions/polkadotjs")).polkadotWallet)

@@ -100,7 +100,7 @@ async function getWalletMethods(chain: Chain) {
       }
 
       const evmWallet = await getWeb3WalletMethods({ chain, walletProvider: window.talismanEth });
-      const address: string = (await window.talismanEth.send("eth_requestAccounts", []))[0];
+      const [address] = (await window.talismanEth.request({ method: "eth_requestAccounts" })) as [string, ...string[]];
 
       return { ...evmWallet, address };
     }

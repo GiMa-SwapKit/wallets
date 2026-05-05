@@ -13,6 +13,9 @@ import { Transaction } from "@swapkit/utxo-signer";
 import type { Eip1193Provider } from "ethers";
 
 type WalletMethodsWithAddress = Record<string, unknown> & { address: string };
+type OkxEvmProvider = Eip1193Provider & {
+  send?: (method: string, params: unknown[]) => Promise<{ result?: string[] } | string[]>;
+};
 
 const cosmosTransfer =
   (sender: string) =>
@@ -74,12 +77,22 @@ export async function getWalletMethods(chain: Chain): Promise<WalletMethodsWithA
           Chain.XLayer,
         ),
         async () => {
-          if (!(window.okxwallet && "send" in window.okxwallet)) {
+          if (!(window.okxwallet && ("request" in window.okxwallet || "send" in window.okxwallet))) {
             throw new SwapKitError("wallet_okx_not_found", { chain });
           }
 
-          const evmWallet = await getWeb3WalletMethods({ chain: chain as EVMChain, walletProvider: window.okxwallet });
-          const address: string = (await window.okxwallet.send("eth_requestAccounts", [])).result[0];
+          const walletProvider = window.okxwallet as OkxEvmProvider;
+          const evmWallet = await getWeb3WalletMethods({ chain: chain as EVMChain, walletProvider });
+          const response =
+            "request" in walletProvider && typeof walletProvider.request === "function"
+              ? await walletProvider.request({ method: "eth_requestAccounts" })
+              : await walletProvider.send?.("eth_requestAccounts", []);
+          const accounts = Array.isArray(response) ? response : response?.result;
+          const [address] = accounts ?? [];
+
+          if (!address) {
+            throw new SwapKitError("wallet_okx_no_accounts", { chain });
+          }
 
           return { ...evmWallet, address };
         },
