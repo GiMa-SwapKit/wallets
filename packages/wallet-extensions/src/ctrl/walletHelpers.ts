@@ -7,6 +7,7 @@ import {
   type EVMChain,
   EVMChains,
   type FeeOption,
+  getChainConfig,
   providerRequest,
   SwapKitError,
   type TCLikeChain,
@@ -22,8 +23,45 @@ type TransactionParams = {
   asset: string | { chain: string; symbol: string; ticker: string };
   amount: number | string | { amount: number; decimals?: number };
   decimal?: number;
+  from?: string;
+  gasLimit?: string | bigint;
   recipient: string;
   memo?: string;
+};
+
+type CtrlRequestProvider = {
+  request(
+    args: { method: string; params: unknown[] | Record<string, unknown> },
+    cb?: (err: unknown, result: unknown) => void,
+  ): unknown;
+};
+
+type ThorchainTransferMessage = {
+  typeUrl?: string;
+  type?: string;
+  value: {
+    amount: { amount: string; denom: string }[];
+    fromAddress?: string;
+    from_address?: string;
+    toAddress?: string;
+    to_address?: string;
+  };
+};
+
+type ThorchainDepositMessage = {
+  typeUrl?: string;
+  type?: string;
+  value: {
+    coins: { amount: string; asset: string | { chain?: string; symbol?: string; ticker?: string } }[];
+    memo?: string;
+    signer: string;
+  };
+};
+
+type ThorchainToolboxTransaction = {
+  fee?: { gas?: string };
+  memo?: string;
+  msgs: Array<ThorchainTransferMessage | ThorchainDepositMessage>;
 };
 
 export type WalletTxParams = {
@@ -41,7 +79,9 @@ type CtrlProviderType<T> = T extends typeof Chain.Solana
     ? Keplr
     : T extends EVMChain
       ? Eip1193Provider
-      : undefined;
+      : T extends TCLikeChain
+        ? CtrlRequestProvider
+        : undefined;
 
 export function getCtrlProvider<T extends Chain>(chain: T): CtrlProviderType<T> {
   if (!window.ctrl) throw new SwapKitError("wallet_ctrl_not_found");
@@ -72,13 +112,92 @@ async function transaction({
   const client = await getCtrlProvider(chain);
 
   return new Promise<string>((resolve, reject) => {
-    if (client && "request" in client) {
-      // @ts-expect-error
-      client.request({ method, params }, (err: string, tx: string) => {
-        err ? reject(err) : resolve(tx);
-      });
+    if (!(client && "request" in client)) {
+      reject(new SwapKitError({ errorKey: "wallet_provider_not_found", info: { chain, wallet: WalletOption.CTRL } }));
+      return;
     }
+
+    client.request({ method, params }, (err, tx) => {
+      err ? reject(err) : resolve(tx as string);
+    });
   });
+}
+
+function getCtrlAssetFromThorchainAsset(
+  asset: ThorchainDepositMessage["value"]["coins"][number]["asset"],
+  chain: Chain,
+) {
+  if (typeof asset === "string") {
+    const [, symbol = asset] = asset.split(".");
+    return { chain, symbol, ticker: symbol.split("-")[0] || symbol };
+  }
+
+  const symbol = asset.symbol || asset.ticker || chain;
+  return { chain: asset.chain || chain, symbol, ticker: asset.ticker || symbol.split("-")[0] || symbol };
+}
+
+function getCtrlAssetFromThorchainDenom(denom: string, chain: Chain) {
+  const symbol = denom.includes(".") ? denom.split(".").at(-1) || denom : denom;
+  const ticker = symbol.split("-")[0] || symbol;
+
+  return { chain, symbol: symbol.toUpperCase(), ticker: ticker.toUpperCase() };
+}
+
+function getCtrlTransactionMethod(tx: ThorchainToolboxTransaction): TransactionMethod {
+  const [msg] = tx.msgs;
+  if (!msg) throw new SwapKitError("plugin_swapkit_invalid_transaction");
+
+  const messageType = msg.typeUrl || msg.type;
+  if (messageType?.includes("MsgDeposit") || "coins" in msg.value) return "deposit";
+  if (messageType?.includes("MsgSend") || "amount" in msg.value) return "transfer";
+
+  throw new SwapKitError("plugin_swapkit_invalid_transaction", { messageType });
+}
+
+export function convertThorchainTransactionToCtrlParams(
+  tx: ThorchainToolboxTransaction,
+  chain: Chain.THORChain | Chain.Maya,
+): TransactionParams {
+  const [msg] = tx.msgs;
+  if (!msg) throw new SwapKitError("plugin_swapkit_invalid_transaction");
+
+  if (getCtrlTransactionMethod(tx) === "deposit") {
+    const { coins, memo = tx.memo || "", signer } = (msg as ThorchainDepositMessage).value;
+    const [coin] = coins;
+    if (!coin) throw new SwapKitError("plugin_swapkit_invalid_transaction");
+
+    return {
+      amount: { amount: Number(coin.amount), decimals: getChainConfig(chain).baseDecimal },
+      asset: getCtrlAssetFromThorchainAsset(coin.asset, chain),
+      from: signer,
+      gasLimit: tx.fee?.gas,
+      memo,
+      recipient: "",
+    };
+  }
+
+  const { amount, fromAddress, from_address, toAddress, to_address } = (msg as ThorchainTransferMessage).value;
+  const [coin] = amount;
+  const from = fromAddress || from_address;
+  const recipient = toAddress || to_address;
+
+  if (!(coin && from && recipient)) throw new SwapKitError("plugin_swapkit_invalid_transaction");
+
+  return {
+    amount: { amount: Number(coin.amount), decimals: getChainConfig(chain).baseDecimal },
+    asset: getCtrlAssetFromThorchainDenom(coin.denom, chain),
+    from,
+    gasLimit: tx.fee?.gas,
+    memo: tx.memo || "",
+    recipient,
+  };
+}
+
+export function signCtrlThorchainTransaction(tx: ThorchainToolboxTransaction, chain: Chain.THORChain | Chain.Maya) {
+  const method = getCtrlTransactionMethod(tx);
+  const params = [convertThorchainTransactionToCtrlParams(tx, chain)];
+
+  return transaction({ chain, method, params });
 }
 
 export async function getCtrlAddress(chain: Chain) {

@@ -1,14 +1,7 @@
-import {
-  Chain,
-  ChainToChainId,
-  filterSupportedChains,
-  type GenericTransferParams,
-  SwapKitError,
-  WalletOption,
-} from "@swapkit/helpers";
+import { Chain, ChainToChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
 import type { ExtensionWallet } from "../walletTypes";
-import { getCtrlAddress, getCtrlProvider, walletTransfer } from "./walletHelpers";
+import { getCtrlAddress, getCtrlProvider, signCtrlThorchainTransaction, walletTransfer } from "./walletHelpers";
 
 export const ctrlWallet: ExtensionWallet<"connectCtrl"> = createWallet({
   connect: ({ addChain, walletType, supportedChains }) =>
@@ -38,14 +31,16 @@ export const ctrlWallet: ExtensionWallet<"connectCtrl"> = createWallet({
     [Chain.Ethereum]: true,
     [Chain.Gnosis]: true,
     [Chain.Kujira]: true,
+    [Chain.Maya]: true,
     [Chain.Monad]: true,
     [Chain.Near]: true,
     [Chain.Noble]: true,
     [Chain.Optimism]: true,
     [Chain.Polygon]: true,
     [Chain.Solana]: true,
+    [Chain.THORChain]: true,
     [Chain.XLayer]: true,
-    // BCH/DOGE/LTC/THORChain/Maya: blocked on CTRL provider — no raw signing RPC
+    // BCH/DOGE/LTC: blocked on CTRL provider — no raw signing RPC
   },
   name: "connectCtrl",
   supportedChains: [
@@ -93,15 +88,25 @@ async function getWalletMethods(chain: (typeof CTRL_SUPPORTED_CHAINS)[number]) {
 
     case Chain.Maya:
     case Chain.THORChain: {
-      const { getCosmosToolbox, THORCHAIN_GAS_VALUE, MAYA_GAS_VALUE } = await import("@swapkit/toolboxes/cosmos");
+      const { getCosmosToolbox } = await import("@swapkit/toolboxes/cosmos");
 
-      const gasLimit = chain === Chain.Maya ? MAYA_GAS_VALUE : THORCHAIN_GAS_VALUE;
       const toolbox = await getCosmosToolbox(chain);
 
       return {
         ...toolbox,
-        deposit: (tx: GenericTransferParams) => walletTransfer({ ...tx, recipient: "" }, "deposit"),
-        transfer: (tx: GenericTransferParams) => walletTransfer({ ...tx, gasLimit }, "transfer"),
+        signAndBroadcastTransaction: (tx: Parameters<typeof signCtrlThorchainTransaction>[0]) =>
+          signCtrlThorchainTransaction(tx, chain),
+        signTransaction: () =>
+          Promise.reject(
+            new SwapKitError({
+              errorKey: "wallet_walletconnect_method_not_supported",
+              info: {
+                method: "signTransaction",
+                reason: "CTRL THORChain provider only supports signAndBroadcastTransaction",
+                wallet: WalletOption.CTRL,
+              },
+            }),
+          ),
       };
     }
 
