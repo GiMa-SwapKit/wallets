@@ -43,6 +43,7 @@ type TrezorExtendedPublicKeyInfo = {
 const TREZOR_CORE_MODES = new Set<TrezorCoreMode>(["auto", "iframe", "popup", "suite-desktop", "suite-web"]);
 const TREZOR_TRANSPORTS = new Set<TrezorTransport>(["BridgeTransport", "WebUsbTransport", "NodeUsbTransport"]);
 const DEFAULT_TREZOR_MANIFEST = { appName: "SwapKit", appUrl: "https://swapkit.dev", email: "support@swapkit.dev" };
+const DEFAULT_TREZOR_TRANSPORTS = ["WebUsbTransport" as const];
 const trezorXpubCache = new Map<string, TrezorExtendedPublicKeyInfo>();
 let trezorSessionDispose: Promise<void> | undefined;
 
@@ -1092,8 +1093,8 @@ export const trezorWallet = createWallet({
       };
       const isLocalhost =
         typeof globalThis.location !== "undefined" && ["localhost", "127.0.0.1"].includes(globalThis.location.hostname);
-      const resolvedCoreMode = isLocalhost ? "popup" : normalizeTrezorCoreMode(coreMode);
-      const resolvedTransports = isLocalhost ? ["WebUsbTransport" as const] : normalizeTrezorTransports(transports);
+      const resolvedCoreMode = normalizeTrezorCoreMode(coreMode) ?? "popup";
+      const resolvedTransports = normalizeTrezorTransports(transports) ?? DEFAULT_TREZOR_TRANSPORTS;
 
       if (trezorSessionDispose) {
         await trezorSessionDispose;
@@ -1108,10 +1109,10 @@ export const trezorWallet = createWallet({
         coreMode: resolvedCoreMode,
         debug: debug as boolean | undefined,
         interactionTimeout: interactionTimeout as number | undefined,
-        lazyLoad: isLocalhost ? false : ((lazyLoad as boolean | undefined) ?? true),
+        lazyLoad: (lazyLoad as boolean | undefined) ?? false,
         manifest,
         pendingTransportEvent: pendingTransportEvent as boolean | undefined,
-        popup: isLocalhost ? true : (popup as boolean | undefined),
+        popup: (popup as boolean | undefined) ?? true,
         transportReconnect: transportReconnect as boolean | undefined,
         transports: resolvedTransports,
       });
