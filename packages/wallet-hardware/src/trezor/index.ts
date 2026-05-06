@@ -42,6 +42,7 @@ type TrezorExtendedPublicKeyInfo = {
 
 const TREZOR_CORE_MODES = new Set<TrezorCoreMode>(["auto", "iframe", "popup", "suite-desktop", "suite-web"]);
 const TREZOR_TRANSPORTS = new Set<TrezorTransport>(["BridgeTransport", "WebUsbTransport", "NodeUsbTransport"]);
+const DEFAULT_TREZOR_MANIFEST = { appName: "SwapKit", appUrl: "https://swapkit.dev", email: "support@swapkit.dev" };
 const trezorXpubCache = new Map<string, TrezorExtendedPublicKeyInfo>();
 let trezorSessionDispose: Promise<void> | undefined;
 
@@ -80,6 +81,16 @@ function normalizeTrezorTransports(transports: unknown): TrezorTransport[] | und
   );
 
   return normalized.length > 0 ? normalized : undefined;
+}
+
+function getTrezorManifestValue(value: unknown, fallback: string) {
+  return typeof value === "string" && value.trim() ? value : fallback;
+}
+
+function getDefaultTrezorAppUrl() {
+  return typeof globalThis.location !== "undefined" && globalThis.location.origin
+    ? globalThis.location.origin
+    : DEFAULT_TREZOR_MANIFEST.appUrl;
 }
 
 function decodeOpReturnData(script: Uint8Array): string | null {
@@ -1075,9 +1086,9 @@ export const trezorWallet = createWallet({
       } = trezorConfig ?? {};
       const manifest = {
         ...manifestConfig,
-        appName: String(trezorConfig?.appName || "SwapKit"),
-        appUrl: String(trezorConfig?.appUrl || ""),
-        email: String(trezorConfig?.email || ""),
+        appName: getTrezorManifestValue(trezorConfig?.appName, DEFAULT_TREZOR_MANIFEST.appName),
+        appUrl: getTrezorManifestValue(trezorConfig?.appUrl, getDefaultTrezorAppUrl()),
+        email: getTrezorManifestValue(trezorConfig?.email, DEFAULT_TREZOR_MANIFEST.email),
       };
       const isLocalhost =
         typeof globalThis.location !== "undefined" && ["localhost", "127.0.0.1"].includes(globalThis.location.hostname);
