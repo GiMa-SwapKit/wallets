@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { Chain } from "@swapkit/helpers";
+import { ctrlWallet } from "../src/ctrl";
 import { convertThorchainTransactionToCtrlParams, signCtrlThorchainTransaction } from "../src/ctrl/walletHelpers";
 
 describe("convertThorchainTransactionToCtrlParams", () => {
@@ -57,6 +58,35 @@ describe("convertThorchainTransactionToCtrlParams", () => {
     );
 
     expect(params.from).toBe("thor1netlwzujapw8qlt80xhpfr0nqavt49407zwr5f");
+  });
+
+  test("converts base64 Maya deposit signer bytes to bech32", () => {
+    const params = convertThorchainTransactionToCtrlParams(
+      {
+        fee: { gas: "500000000" },
+        memo: "=:b:bc1qeemjtfyru0gn9gcu3zu066zjrtun7yjuy2tfe4:10359:-_/nc:15/0",
+        msgs: [
+          {
+            typeUrl: "/types.MsgDeposit",
+            value: {
+              coins: [{ amount: "1800000000", asset: { chain: "MAYA", symbol: "CACAO", ticker: "CACAO" } }],
+              memo: "=:b:bc1qeemjtfyru0gn9gcu3zu066zjrtun7yjuy2tfe4:10359:-_/nc:15/0",
+              signer: "nlf3C5LoXHB9Z3muFI3zB1i6lq8=",
+            },
+          },
+        ],
+      },
+      Chain.Maya,
+    );
+
+    expect(params).toEqual({
+      amount: { amount: 1800000000, decimals: 8 },
+      asset: { chain: "MAYA", symbol: "CACAO", ticker: "CACAO" },
+      from: "maya1netlwzujapw8qlt80xhpfr0nqavt494074s0ze",
+      gasLimit: "500000000",
+      memo: "=:b:bc1qeemjtfyru0gn9gcu3zu066zjrtun7yjuy2tfe4:10359:-_/nc:15/0",
+      recipient: "",
+    });
   });
 
   test("converts THORChain transfer transactions for CTRL", () => {
@@ -145,5 +175,66 @@ describe("convertThorchainTransactionToCtrlParams", () => {
         ],
       },
     ]);
+  });
+
+  test("submits Maya deposits through the documented xfi mayachain provider", async () => {
+    const requests: unknown[] = [];
+
+    // @ts-expect-error test window shim
+    globalThis.window = {
+      xfi: {
+        mayachain: {
+          request: (request: unknown, cb: (err: unknown, result: unknown) => void) => {
+            requests.push(request);
+            if ((request as { method?: string }).method === "request_accounts") {
+              cb(null, ["maya1sender"]);
+              return;
+            }
+            cb(null, "0xmaya");
+          },
+        },
+      },
+    };
+
+    await expect(
+      signCtrlThorchainTransaction(
+        {
+          fee: { gas: "500000000" },
+          memo: "=:BTC.BTC:bc1qrecipient",
+          msgs: [
+            {
+              typeUrl: "/types.MsgDeposit",
+              value: {
+                coins: [{ amount: "1234567890", asset: { chain: "MAYA", symbol: "CACAO", ticker: "CACAO" } }],
+                memo: "=:BTC.BTC:bc1qrecipient",
+                signer: "maya1sender",
+              },
+            },
+          ],
+        },
+        Chain.Maya,
+      ),
+    ).resolves.toBe("0xmaya");
+
+    expect(requests).toEqual([
+      { method: "request_accounts", params: [] },
+      {
+        method: "deposit",
+        params: [
+          {
+            amount: { amount: 1234567890, decimals: 8 },
+            asset: { chain: "MAYA", symbol: "CACAO", ticker: "CACAO" },
+            from: "maya1sender",
+            gasLimit: "500000000",
+            memo: "=:BTC.BTC:bc1qrecipient",
+            recipient: "",
+          },
+        ],
+      },
+    ]);
+  });
+
+  test("marks CTRL Maya direct signing as supported", () => {
+    expect(ctrlWallet.connectCtrl.directSigningSupport[Chain.Maya]).toBe(true);
   });
 });

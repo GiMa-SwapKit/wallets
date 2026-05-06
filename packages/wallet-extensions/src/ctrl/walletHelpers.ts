@@ -86,19 +86,20 @@ type CtrlProviderType<T> = T extends typeof Chain.Solana
         : undefined;
 
 export function getCtrlProvider<T extends Chain>(chain: T): CtrlProviderType<T> {
-  if (!window.ctrl) throw new SwapKitError("wallet_ctrl_not_found");
+  const ctrl = window.ctrl || window.xfi;
+  if (!ctrl) throw new SwapKitError("wallet_ctrl_not_found");
 
   // @ts-expect-error
   return match(chain as Chain)
-    .with(...EVMChains, () => window.ctrl?.ethereum)
-    .with(Chain.Cosmos, Chain.Kujira, Chain.Noble, () => window.ctrl?.keplr)
-    .with(Chain.Bitcoin, () => window.ctrl?.bitcoin)
-    .with(Chain.BitcoinCash, () => window.ctrl?.bitcoincash)
-    .with(Chain.Dogecoin, () => window.ctrl?.dogecoin)
-    .with(Chain.Litecoin, () => window.ctrl?.litecoin)
-    .with(Chain.Solana, () => window.ctrl?.solana)
-    .with(Chain.THORChain, () => window.ctrl?.thorchain)
-    .with(Chain.Maya, () => window.ctrl?.mayachain)
+    .with(...EVMChains, () => ctrl.ethereum)
+    .with(Chain.Cosmos, Chain.Kujira, Chain.Noble, () => ctrl.keplr)
+    .with(Chain.Bitcoin, () => ctrl.bitcoin)
+    .with(Chain.BitcoinCash, () => ctrl.bitcoincash)
+    .with(Chain.Dogecoin, () => ctrl.dogecoin)
+    .with(Chain.Litecoin, () => ctrl.litecoin)
+    .with(Chain.Solana, () => ctrl.solana)
+    .with(Chain.THORChain, () => ctrl.thorchain)
+    .with(Chain.Maya, () => ctrl.mayachain)
     .otherwise(() => undefined);
 }
 
