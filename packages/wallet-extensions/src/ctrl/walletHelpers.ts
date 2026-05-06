@@ -4,6 +4,7 @@ import {
   Chain,
   ChainToChainId,
   type CosmosChain,
+  CosmosChainPrefixes,
   type EVMChain,
   EVMChains,
   type FeeOption,
@@ -13,6 +14,7 @@ import {
   type TCLikeChain,
   WalletOption,
 } from "@swapkit/helpers";
+import { base64ToBech32 } from "@swapkit/toolboxes/cosmos";
 import type { SolanaProvider } from "@swapkit/toolboxes/solana";
 import type { Eip1193Provider } from "ethers";
 import { match } from "ts-pattern";
@@ -143,6 +145,13 @@ function getCtrlAssetFromThorchainDenom(denom: string, chain: Chain) {
   return { chain, symbol: symbol.toUpperCase(), ticker: ticker.toUpperCase() };
 }
 
+function normalizeTCLikeAddress(address: string, chain: Chain.THORChain | Chain.Maya) {
+  const prefix = CosmosChainPrefixes[chain];
+  if (address.startsWith(`${prefix}1`)) return address;
+
+  return base64ToBech32(address, prefix);
+}
+
 function getCtrlTransactionMethod(tx: ThorchainToolboxTransaction): TransactionMethod {
   const [msg] = tx.msgs;
   if (!msg) throw new SwapKitError("plugin_swapkit_invalid_transaction");
@@ -187,7 +196,7 @@ export function convertThorchainTransactionToCtrlParams(
     return {
       amount: { amount: Number(coin.amount), decimals: getChainConfig(chain).baseDecimal },
       asset: getCtrlAssetFromThorchainAsset(coin.asset, chain),
-      from: signer,
+      from: normalizeTCLikeAddress(signer, chain),
       gasLimit: tx.fee?.gas,
       memo,
       recipient: "",

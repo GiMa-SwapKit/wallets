@@ -37,6 +37,28 @@ describe("convertThorchainTransactionToCtrlParams", () => {
     });
   });
 
+  test("converts base64 THORChain deposit signer bytes to bech32", () => {
+    const params = convertThorchainTransactionToCtrlParams(
+      {
+        fee: { gas: "500000000" },
+        memo: "=:b:bc1qeemjtfyru0gn9gcu3zu066zjrtun7yjuy2tfe4:10359:-_/nc:15/0",
+        msgs: [
+          {
+            typeUrl: "/types.MsgDeposit",
+            value: {
+              coins: [{ amount: "1800000000", asset: { chain: "THOR", symbol: "RUNE", synth: false, ticker: "RUNE" } }],
+              memo: "=:b:bc1qeemjtfyru0gn9gcu3zu066zjrtun7yjuy2tfe4:10359:-_/nc:15/0",
+              signer: "nlf3C5LoXHB9Z3muFI3zB1i6lq8=",
+            },
+          },
+        ],
+      },
+      Chain.THORChain,
+    );
+
+    expect(params.from).toBe("thor1netlwzujapw8qlt80xhpfr0nqavt49407zwr5f");
+  });
+
   test("converts THORChain transfer transactions for CTRL", () => {
     const params = convertThorchainTransactionToCtrlParams(
       {
