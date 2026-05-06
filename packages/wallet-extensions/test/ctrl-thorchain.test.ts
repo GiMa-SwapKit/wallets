@@ -75,6 +75,10 @@ describe("convertThorchainTransactionToCtrlParams", () => {
         thorchain: {
           request: (request: unknown, cb: (err: unknown, result: unknown) => void) => {
             requests.push(request);
+            if ((request as { method?: string }).method === "request_accounts") {
+              cb(null, ["thor1sender"]);
+              return;
+            }
             cb(null, "0xhash");
           },
         },
@@ -104,6 +108,7 @@ describe("convertThorchainTransactionToCtrlParams", () => {
     ).resolves.toBe("0xhash");
 
     expect(requests).toEqual([
+      { method: "request_accounts", params: [] },
       {
         method: "deposit",
         params: [

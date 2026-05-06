@@ -154,6 +154,24 @@ function getCtrlTransactionMethod(tx: ThorchainToolboxTransaction): TransactionM
   throw new SwapKitError("plugin_swapkit_invalid_transaction", { messageType });
 }
 
+async function getCtrlTCLikeAddress(chain: Chain.THORChain | Chain.Maya) {
+  const provider = await getCtrlProvider(chain);
+  if (!(provider && "request" in provider)) {
+    throw new SwapKitError({ errorKey: "wallet_provider_not_found", info: { chain, wallet: WalletOption.CTRL } });
+  }
+
+  return new Promise<string | undefined>((resolve, reject) => {
+    provider.request({ method: "request_accounts", params: [] }, (err, accounts) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(Array.isArray(accounts) ? accounts[0] : undefined);
+    });
+  });
+}
+
 export function convertThorchainTransactionToCtrlParams(
   tx: ThorchainToolboxTransaction,
   chain: Chain.THORChain | Chain.Maya,
@@ -193,9 +211,18 @@ export function convertThorchainTransactionToCtrlParams(
   };
 }
 
-export function signCtrlThorchainTransaction(tx: ThorchainToolboxTransaction, chain: Chain.THORChain | Chain.Maya) {
+export async function signCtrlThorchainTransaction(
+  tx: ThorchainToolboxTransaction,
+  chain: Chain.THORChain | Chain.Maya,
+) {
   const method = getCtrlTransactionMethod(tx);
   const params = [convertThorchainTransactionToCtrlParams(tx, chain)];
+  const expectedAddress = params[0]?.from;
+  const activeAddress = expectedAddress ? await getCtrlTCLikeAddress(chain) : undefined;
+
+  if (activeAddress && expectedAddress && activeAddress !== expectedAddress) {
+    throw new SwapKitError("wallet_ctrl_not_found", { activeAddress, chain, expectedAddress, reason: "Wrong account" });
+  }
 
   return transaction({ chain, method, params });
 }
