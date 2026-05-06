@@ -1,6 +1,5 @@
 import { Chain, ChainToChainId, filterSupportedChains, SwapKitError, WalletOption } from "@swapkit/helpers";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
-import { getPsbtBase64, getSignInputsByAddress, transactionFromPsbtBase64 } from "../helpers/utxo";
 import type { ExtensionWallet } from "../walletTypes";
 import { getCtrlAddress, getCtrlProvider, signCtrlThorchainTransaction, walletTransfer } from "./walletHelpers";
 
@@ -203,16 +202,12 @@ async function getWalletMethods(chain: (typeof CTRL_SUPPORTED_CHAINS)[number]) {
       };
 
       const signPsbt = (tx: InstanceType<typeof Transaction>, broadcast: boolean) => {
+        const psbt = Buffer.from(tx.toPSBT()).toString("base64");
+        const signingIndexes = Array.from({ length: tx.inputsLength }, (_, i) => i);
+
         return ctrlRequest<SignPsbtResponse>({
           method: "sign_psbt",
-          params: [
-            {
-              allowedSignHash: 1,
-              broadcast,
-              psbt: getPsbtBase64(tx),
-              signInputs: getSignInputsByAddress({ address, tx }),
-            },
-          ],
+          params: [{ allowedSignHash: 1, broadcast, psbt, signInputs: { [address]: signingIndexes } }],
         });
       };
 
@@ -229,7 +224,7 @@ async function getWalletMethods(chain: (typeof CTRL_SUPPORTED_CHAINS)[number]) {
             });
           }
 
-          return transactionFromPsbtBase64(signedPsbt);
+          return Transaction.fromPSBT(new Uint8Array(Buffer.from(signedPsbt, "base64")));
         },
       };
 
