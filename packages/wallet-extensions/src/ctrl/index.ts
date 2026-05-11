@@ -9,14 +9,36 @@ export const ctrlWallet: ExtensionWallet<"connectCtrl"> = createWallet({
     async function connectCtrl(chains: Chain[]) {
       const filteredChains = filterSupportedChains({ chains, supportedChains, walletType });
 
-      const promises = filteredChains.map(async (chain) => {
+      const connectChain = async (chain: (typeof filteredChains)[number]) => {
         const address = await getCtrlAddress(chain);
         const walletMethods = await getWalletMethods(chain);
 
         addChain({ ...walletMethods, address, chain, walletType });
-      });
+      };
 
-      await Promise.all(promises);
+      if (filteredChains.length <= 1) {
+        await Promise.all(filteredChains.map(connectChain));
+        return true;
+      }
+
+      const results = await Promise.allSettled(filteredChains.map(connectChain));
+      const connectedCount = results.filter((result) => result.status === "fulfilled").length;
+
+      if (connectedCount === 0) {
+        const rejected = results.find((result) => result.status === "rejected");
+        throw (
+          rejected?.reason || new SwapKitError({ errorKey: "wallet_provider_not_found", info: { wallet: walletType } })
+        );
+      }
+
+      for (const [index, result] of results.entries()) {
+        if (result.status === "rejected") {
+          console.warn("[SwapKit] CTRL failed to connect chain", {
+            chain: filteredChains[index],
+            error: result.reason,
+          });
+        }
+      }
 
       return true;
     },

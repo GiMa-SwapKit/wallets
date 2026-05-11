@@ -294,7 +294,7 @@ export async function getCtrlAddress(chain: Chain) {
     if (chain === Chain.Solana) {
       const provider = await getCtrlProvider(Chain.Solana);
 
-      const accounts = await provider.connect();
+      const accounts = await provider.connect({ onlyIfTrusted: false });
       return accounts.publicKey.toString();
     }
 
