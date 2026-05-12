@@ -29,6 +29,7 @@ type TransactionParams = {
   to: string;
   data?: string;
   from?: string;
+  gasLimit?: string | bigint;
 };
 
 export type WalletTxParams = {
@@ -71,7 +72,7 @@ export async function getVultisigProvider<T extends Chain>(chain: T): Promise<Vu
     .otherwise(() => undefined) as VultisigProviderType<T>;
 }
 
-async function transaction({
+export async function submitVultisigTransaction({
   method,
   params,
   chain,
@@ -175,7 +176,7 @@ export async function walletTransfer(
     },
   ];
 
-  return transaction({ chain: assetValue.chain, method, params });
+  return submitVultisigTransaction({ chain: assetValue.chain, method, params });
 }
 
 export function getVultisigMethods(provider: BrowserProvider, chain: EVMChain) {
