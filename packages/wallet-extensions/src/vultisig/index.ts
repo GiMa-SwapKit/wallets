@@ -63,6 +63,7 @@ export const vultisigWallet: ExtensionWallet<"connectVultisig"> = createWallet({
     [Chain.Avalanche]: true,
     [Chain.Base]: true,
     [Chain.BinanceSmartChain]: true,
+    [Chain.Bitcoin]: true,
     [Chain.BitcoinCash]: true,
     [Chain.Dash]: true,
     [Chain.Dogecoin]: true,
@@ -73,7 +74,7 @@ export const vultisigWallet: ExtensionWallet<"connectVultisig"> = createWallet({
     [Chain.Polygon]: true,
     [Chain.THORChain]: true,
     [Chain.XLayer]: true,
-    // BTC/ZEC/Cosmos/Kujira/Solana/Ripple: blocked on Vultisig provider — no raw-sign RPC
+    // ZEC/Cosmos/Kujira/Solana/Ripple: blocked on Vultisig provider — no raw-sign RPC
   },
   name: "connectVultisig",
   supportedChains: [
@@ -162,7 +163,7 @@ async function getWalletMethods(chain: (typeof VULTISIG_SUPPORTED_CHAINS)[number
     .with(...UTXOChains, async () => {
       const { getUtxoToolbox } = await import("@swapkit/toolboxes/utxo");
       const toolbox = await getUtxoToolbox(chain as UTXOChain);
-      if (chain === Chain.Zcash || chain === Chain.Bitcoin) {
+      if (chain === Chain.Zcash) {
         return { ...toolbox, transfer: walletTransfer };
       }
 

@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 import { Chain } from "@swapkit/helpers";
+import { getNetworkForChain } from "@swapkit/toolboxes/utxo";
+import { Transaction } from "@swapkit/utxo-signer";
 import { extractTCLikeTransferIntent } from "../src/helpers/tclikeTransferIntent";
 import { keepkeyBexWallet } from "../src/keepkey-bex";
 import { vultisigWallet } from "../src/vultisig";
@@ -18,6 +20,19 @@ const thorDepositTx = {
     },
   ],
 };
+
+const btcSender = "1BoatSLRHtKNngkdXEeobR76b53LETtpyT";
+const btcRecipient = "1dice8EMZmqKvrGE4Qc9bUFf9PX3xaYDp";
+
+function createBtcSwapTx() {
+  const tx = new Transaction({ allowUnknownOutputs: true });
+  const network = getNetworkForChain(Chain.Bitcoin);
+
+  tx.addOutputAddress(btcRecipient, 12_345n, network);
+  tx.addOutputAddress(btcSender, 67_890n, network);
+
+  return tx;
+}
 
 describe("extractTCLikeTransferIntent", () => {
   afterEach(() => {
@@ -191,9 +206,60 @@ describe("extractTCLikeTransferIntent", () => {
     ]);
   });
 
+  test("submits Vultisig BTC transactions through signAndBroadcastTransaction", async () => {
+    const requests: unknown[] = [];
+
+    // @ts-expect-error test window shim
+    globalThis.window = {
+      vultisig: {
+        bitcoin: {
+          request: (request: unknown, cb?: (err: unknown, result: unknown) => void) => {
+            requests.push(request);
+            if (cb) {
+              cb(null, "btcHash");
+              return;
+            }
+
+            return Promise.resolve([btcSender]);
+          },
+        },
+      },
+    };
+
+    const addChain = mock(() => {});
+    const connectVultisig = vultisigWallet.connectVultisig.connectWallet({ addChain });
+
+    await connectVultisig([Chain.Bitcoin]);
+
+    const walletMethods = addChain.mock.calls[0]?.[0] as
+      | { signAndBroadcastTransaction?: (tx: Transaction) => Promise<string> }
+      | undefined;
+
+    await expect(walletMethods?.signAndBroadcastTransaction?.(createBtcSwapTx())).resolves.toBe("btcHash");
+
+    expect(requests).toEqual([
+      { method: "request_accounts", params: [] },
+      { method: "request_accounts", params: [] },
+      {
+        method: "send_transaction",
+        params: [
+          {
+            amount: { amount: 12345, decimals: 8 },
+            asset: { chain: "BTC", symbol: "BTC", ticker: "BTC" },
+            data: "",
+            from: btcSender,
+            gasLimit: undefined,
+            to: btcRecipient,
+          },
+        ],
+      },
+    ]);
+  });
+
   test("marks KeepKey BEX and Vultisig THORChain and Maya direct signing as available", () => {
     expect(keepkeyBexWallet.connectKeepkeyBex.directSigningSupport[Chain.THORChain]).toBe(true);
     expect(keepkeyBexWallet.connectKeepkeyBex.directSigningSupport[Chain.Maya]).toBe(true);
+    expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.Bitcoin]).toBe(true);
     expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.THORChain]).toBe(true);
     expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.Maya]).toBe(true);
   });

@@ -5,4 +5,4 @@
 "@swapkit/sdk": patch
 ---
 
-Enable KeepKey BEX and Vultisig THORChain/Maya direct swap submission by translating provided toolbox transactions into provider sign-and-broadcast requests. Add KeepKey SDK UTXO direct swap submission by signing the provided PSBT transaction and broadcasting the serialized transaction returned by KeepKey.
+Enable KeepKey BEX and Vultisig THORChain/Maya direct swap submission by translating provided toolbox transactions into provider sign-and-broadcast requests. Enable Vultisig BTC direct swap submission through UTXO intent extraction. Add KeepKey SDK UTXO direct swap submission by signing the provided PSBT transaction and broadcasting the serialized transaction returned by KeepKey.
