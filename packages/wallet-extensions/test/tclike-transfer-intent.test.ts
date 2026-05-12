@@ -23,6 +23,10 @@ const thorDepositTx = {
 
 const btcSender = "1BoatSLRHtKNngkdXEeobR76b53LETtpyT";
 const btcRecipient = "1dice8EMZmqKvrGE4Qc9bUFf9PX3xaYDp";
+const cosmosSender = "cosmos1sender";
+const cosmosRecipient = "cosmos1recipient";
+const rippleSender = "rSender";
+const rippleRecipient = "rRecipient";
 
 function createBtcSwapTx() {
   const tx = new Transaction({ allowUnknownOutputs: true });
@@ -256,10 +260,118 @@ describe("extractTCLikeTransferIntent", () => {
     ]);
   });
 
-  test("marks KeepKey BEX and Vultisig THORChain and Maya direct signing as available", () => {
+  test("submits Vultisig Cosmos transactions through signAndBroadcastTransaction", async () => {
+    const requests: unknown[] = [];
+
+    // @ts-expect-error test window shim
+    globalThis.window = {
+      vultisig: {
+        cosmos: {
+          request: (request: unknown, cb?: (err: unknown, result: unknown) => void) => {
+            requests.push(request);
+            const method = (request as { method?: string }).method;
+
+            if (method === "get_accounts" || method === "request_accounts") return Promise.resolve([cosmosSender]);
+            if (cb) {
+              cb(null, "cosmosHash");
+              return;
+            }
+
+            return Promise.resolve("cosmosHash");
+          },
+        },
+      },
+    };
+
+    const addChain = mock(() => {});
+    const connectVultisig = vultisigWallet.connectVultisig.connectWallet({ addChain });
+
+    await connectVultisig([Chain.Cosmos]);
+
+    const walletMethods = addChain.mock.calls[0]?.[0] as
+      | { signAndBroadcastTransaction?: (tx: { memo: string; msgs: unknown[] }) => Promise<string> }
+      | undefined;
+
+    await expect(
+      walletMethods?.signAndBroadcastTransaction?.({
+        memo: "cosmosMemo",
+        msgs: [
+          {
+            typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+            value: {
+              amount: [{ amount: "123456", denom: "uatom" }],
+              fromAddress: cosmosSender,
+              toAddress: cosmosRecipient,
+            },
+          },
+        ],
+      }),
+    ).resolves.toBe("cosmosHash");
+
+    expect(requests).toEqual([
+      { method: "wallet_switch_chain", params: [{ chainId: "cosmoshub-4" }] },
+      { method: "get_accounts" },
+      { method: "wallet_switch_chain", params: [{ chainId: "cosmoshub-4" }] },
+      {
+        method: "send_transaction",
+        params: [{ data: "cosmosMemo", from: cosmosSender, to: cosmosRecipient, value: "123456" }],
+      },
+    ]);
+  });
+
+  test("submits Vultisig Ripple transactions through signAndBroadcastTransaction", async () => {
+    const requests: unknown[] = [];
+
+    // @ts-expect-error test window shim
+    globalThis.window = {
+      vultisig: {
+        ripple: {
+          request: (request: unknown) => {
+            requests.push(request);
+            const method = (request as { method?: string }).method;
+
+            if (method === "request_accounts") return Promise.resolve([rippleSender]);
+            return Promise.resolve("rippleHash");
+          },
+        },
+      },
+    };
+
+    const addChain = mock(() => {});
+    const connectVultisig = vultisigWallet.connectVultisig.connectWallet({ addChain });
+
+    await connectVultisig([Chain.Ripple]);
+
+    const walletMethods = addChain.mock.calls[0]?.[0] as
+      | { signAndBroadcastTransaction?: (tx: { [key: string]: unknown }) => Promise<string> }
+      | undefined;
+
+    await expect(
+      walletMethods?.signAndBroadcastTransaction?.({
+        Account: rippleSender,
+        Amount: "1000000",
+        Destination: rippleRecipient,
+        Memos: [{ Memo: { MemoData: Buffer.from("xrpMemo").toString("hex").toUpperCase() } }],
+        TransactionType: "Payment",
+      }),
+    ).resolves.toBe("rippleHash");
+
+    expect(requests).toEqual([
+      { method: "request_accounts", params: [] },
+      {
+        method: "send_transaction",
+        params: [{ data: "xrpMemo", from: rippleSender, to: rippleRecipient, value: "1000000" }],
+      },
+    ]);
+  });
+
+  test("marks KeepKey BEX and Vultisig direct signing as available", () => {
     expect(keepkeyBexWallet.connectKeepkeyBex.directSigningSupport[Chain.THORChain]).toBe(true);
     expect(keepkeyBexWallet.connectKeepkeyBex.directSigningSupport[Chain.Maya]).toBe(true);
     expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.Bitcoin]).toBe(true);
+    expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.Cosmos]).toBe(true);
+    expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.Kujira]).toBe(true);
+    expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.Ripple]).toBe(true);
     expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.THORChain]).toBe(true);
     expect(vultisigWallet.connectVultisig.directSigningSupport[Chain.Maya]).toBe(true);
   });

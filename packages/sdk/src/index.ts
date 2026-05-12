@@ -25,7 +25,6 @@ import { okxWallet } from "@swapkit/wallets/okx";
 import { onekeyWallet } from "@swapkit/wallets/onekey";
 import { passkeysWallet } from "@swapkit/wallets/passkeys";
 import { phantomWallet } from "@swapkit/wallets/phantom";
-import { radixWallet } from "@swapkit/wallets/radix";
 import { talismanWallet } from "@swapkit/wallets/talisman";
 import { trezorWallet } from "@swapkit/wallets/trezor";
 import { tronlinkWallet } from "@swapkit/wallets/tronlink";
@@ -70,7 +69,6 @@ export {
   onekeyWallet,
   passkeysWallet,
   phantomWallet,
-  radixWallet,
   talismanWallet,
   trezorWallet,
   tronlinkWallet,
@@ -107,7 +105,6 @@ export const defaultWallets = {
   ...onekeyWallet,
   ...phantomWallet,
   ...passkeysWallet,
-  ...radixWallet,
   ...talismanWallet,
   ...trezorWallet,
   ...tronlinkWallet,

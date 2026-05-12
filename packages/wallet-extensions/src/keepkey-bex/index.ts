@@ -48,7 +48,6 @@ export const keepkeyBexWallet: ExtensionWallet<"connectKeepkeyBex"> = createWall
     [Chain.Polygon]: true,
     [Chain.THORChain]: true,
     [Chain.XLayer]: true,
-    // Ripple/Solana: provider lacks raw-sign RPC
   },
   name: "connectKeepkeyBex",
   supportedChains: [
@@ -67,8 +66,6 @@ export const keepkeyBexWallet: ExtensionWallet<"connectKeepkeyBex"> = createWall
     Chain.Maya,
     Chain.Optimism,
     Chain.Polygon,
-    Chain.Ripple,
-    Chain.Solana,
     Chain.THORChain,
     Chain.XLayer,
   ],
