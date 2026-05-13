@@ -23,7 +23,7 @@ import {
   type UTXOType,
 } from "@swapkit/toolboxes/utxo";
 import type { BTCNetwork, PCZT, Transaction, ZcashTransaction } from "@swapkit/utxo-signer";
-import { BCHSigHash, NETWORKS, ZcashConsensusBranchId, ZcashVersionGroupId } from "@swapkit/utxo-signer";
+import { BCHSigHash, NETWORKS } from "@swapkit/utxo-signer";
 import { createWallet, getWalletSupportedChains, type HardwareExtendedPublicKeyInfo } from "@swapkit/wallet-core";
 
 type TrezorBip32Derivation = [Uint8Array, { fingerprint: number; path: number[] }];
@@ -333,14 +333,13 @@ async function decodeOutputAddress(script: Uint8Array): Promise<string | undefin
   return undefined;
 }
 
-async function extractSignaturesFromSignedTx(signedTxHex: string, pczt: PCZT): Promise<PCZT> {
-  const { ZcashTransaction: ZcashTx, Script } = await import("@swapkit/utxo-signer");
-  const signedTx = ZcashTx.fromHex(signedTxHex, { allowUnknownOutputs: true });
+export async function extractSignaturesFromSignedZcashTx(signedTxHex: string, pczt: PCZT): Promise<PCZT> {
+  const { Script } = await import("@swapkit/utxo-signer");
   const signedPczt = pczt.clone();
+  const inputScripts = extractTransparentZcashInputScripts(signedTxHex, pczt.getGlobal().txVersion);
 
-  for (let i = 0; i < signedTx.inputsLength; i++) {
-    const signedInput = signedTx.getInput(i);
-    const script = signedInput.script;
+  for (let i = 0; i < inputScripts.length; i++) {
+    const script = inputScripts[i];
     if (script && script.length > 0) {
       const scriptParts = Script.decode(script);
       if (scriptParts.length >= 2) {
@@ -349,6 +348,69 @@ async function extractSignaturesFromSignedTx(signedTxHex: string, pczt: PCZT): P
     }
   }
   return signedPczt;
+}
+
+function extractTransparentZcashInputScripts(signedTxHex: string, txVersion: number) {
+  const buffer = Buffer.from(signedTxHex, "hex");
+  let offset = 0;
+  const versionHeader = readUInt32LE(buffer, offset);
+  offset += 4;
+  const actualVersion = versionHeader & 0x7fffffff;
+  offset += 4; // versionGroupId
+
+  if (actualVersion === 5 || txVersion === 5) {
+    offset += 12; // consensusBranchId + lockTime + expiryHeight
+  }
+
+  const inputCount = readCompactSize(buffer, offset);
+  offset = inputCount.offset;
+  const scripts: Uint8Array[] = [];
+
+  for (let i = 0; i < inputCount.value; i++) {
+    offset += 36; // txid + prevout index
+    const script = readCompactBytes(buffer, offset);
+    offset = script.offset;
+    offset += 4; // sequence
+    scripts.push(script.value);
+  }
+
+  return scripts;
+}
+
+function readCompactBytes(buffer: Buffer, offset: number) {
+  const length = readCompactSize(buffer, offset);
+  const start = length.offset;
+  const end = start + length.value;
+
+  return { offset: end, value: new Uint8Array(buffer.subarray(start, end)) };
+}
+
+function readCompactSize(buffer: Buffer, offset: number): { offset: number; value: number } {
+  const first = buffer[offset];
+  if (first === undefined) {
+    throw new SwapKitError({
+      errorKey: "wallet_trezor_failed_to_sign_transaction",
+      info: { error: "Unexpected end of Zcash transaction" },
+    });
+  }
+
+  if (first < 0xfd) return { offset: offset + 1, value: first };
+  if (first === 0xfd) return { offset: offset + 3, value: buffer.readUInt16LE(offset + 1) };
+  if (first === 0xfe) return { offset: offset + 5, value: buffer.readUInt32LE(offset + 1) };
+
+  const value = buffer.readBigUInt64LE(offset + 1);
+  if (value > BigInt(Number.MAX_SAFE_INTEGER)) {
+    throw new SwapKitError({
+      errorKey: "wallet_trezor_failed_to_sign_transaction",
+      info: { error: "Zcash varint too large" },
+    });
+  }
+
+  return { offset: offset + 9, value: Number(value) };
+}
+
+function readUInt32LE(buffer: Buffer, offset: number) {
+  return buffer.readUInt32LE(offset);
 }
 
 function buildZcashTxInputsForTrezor(
@@ -550,7 +612,7 @@ async function getTrezorWallet<T extends Chain>({
             });
           }
 
-          return extractSignaturesFromSignedTx(result.payload.serializedTx, pczt);
+          return extractSignaturesFromSignedZcashTx(result.payload.serializedTx, pczt);
         },
 
         signTransaction: async (tx: ZcashTransaction, utxoInputs: UTXOType[]) => {
@@ -562,15 +624,15 @@ async function getTrezorWallet<T extends Chain>({
           const outputs = buildZcashTxOutputsForTrezor(tx, address_n, address, chain);
 
           const result = await TrezorConnect.signTransaction({
-            branchId: ZcashConsensusBranchId.NU6,
+            branchId: tx.consensusBranchId,
             coin: "zcash",
-            expiry: 0,
+            expiry: tx.expiryHeight,
             inputs,
-            locktime: 0,
+            locktime: tx.lockTime,
             outputs: outputs as any,
             overwintered: true,
-            version: 4,
-            versionGroupId: ZcashVersionGroupId.SAPLING,
+            version: tx.version,
+            versionGroupId: tx.versionGroupId,
           });
 
           if (result.success) {
