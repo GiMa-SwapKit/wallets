@@ -118,7 +118,7 @@ const BaseLedgerUTXO = ({
     }
 
     async function getBtcApp() {
-      return btcApp || createTransportWebUSB();
+      return btcApp || (await createTransportWebUSB());
     }
 
     async function disconnect() {
