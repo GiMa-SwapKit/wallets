@@ -17,19 +17,11 @@ import {
 
 import { getLedgerTransport } from "../helpers/getLedgerTransport";
 
-function parseLedgerSignatureV(v: number | string) {
-  if (typeof v === "number") return v;
-
-  const hex = v.startsWith("0x") ? v.slice(2) : v;
-  return Number.parseInt(hex || "0", 16);
-}
-
 class EVMLedgerInterface extends AbstractSigner {
   chainId: ChainId = ChainId.Ethereum;
   derivationPath = "";
   ledgerApp: InstanceType<typeof EthereumApp> | null = null;
   ledgerTimeout = 50000;
-  private transport?: Transport;
   private readonly injectedTransport?: Transport;
 
   constructor({
@@ -52,20 +44,19 @@ class EVMLedgerInterface extends AbstractSigner {
       chainId: this.chainId,
       derivationPath: this.derivationPath,
       provider,
-      transport: this.transport ?? this.injectedTransport,
+      transport: this.injectedTransport,
     });
 
   checkOrCreateTransportAndLedger = async () => {
+    if (this.ledgerApp) return;
     await this.createTransportAndLedger();
   };
 
   createTransportAndLedger = async () => {
-    if (this.ledgerApp) return;
-
-    this.transport ||= this.injectedTransport ?? (await getLedgerTransport());
+    const transport = this.injectedTransport ?? (await getLedgerTransport());
     const EthereumApp = (await import("@ledgerhq/hw-app-eth")).default;
 
-    this.ledgerApp = new EthereumApp(this.transport);
+    this.ledgerApp = new EthereumApp(transport);
   };
 
   getAddress = async () => {
@@ -150,10 +141,7 @@ class EVMLedgerInterface extends AbstractSigner {
     const { Transaction } = await import("ethers");
     await this.createTransportAndLedger();
 
-    const transactionCount =
-      tx.nonce === undefined
-        ? await this.provider?.getTransactionCount(tx.from || (await this.getAddress()))
-        : undefined;
+    const transactionCount = await this.provider?.getTransactionCount(tx.from || (await this.getAddress()));
 
     const baseTx = {
       chainId: tx.chainId || this.chainId,
@@ -162,7 +150,7 @@ class EVMLedgerInterface extends AbstractSigner {
       ...(tx.gasPrice && { gasPrice: tx.gasPrice }),
       ...(!tx.gasPrice &&
         tx.maxFeePerGas && { maxFeePerGas: tx.maxFeePerGas, maxPriorityFeePerGas: tx.maxPriorityFeePerGas }),
-      nonce: tx.nonce !== undefined ? Number(tx.nonce.toString()) : transactionCount,
+      nonce: tx.nonce !== undefined ? Number((tx.nonce || transactionCount || 0).toString()) : transactionCount,
       to: tx.to?.toString(),
       type: tx.type && !Number.isNaN(tx.type) ? tx.type : tx.maxFeePerGas ? 2 : 0,
       value: tx.value,
@@ -181,8 +169,7 @@ class EVMLedgerInterface extends AbstractSigner {
 
     const { r, s, v } = signature;
 
-    return Transaction.from({ ...baseTx, signature: { r: `0x${r}`, s: `0x${s}`, v: parseLedgerSignatureV(v) } })
-      .serialized;
+    return Transaction.from({ ...baseTx, signature: { r: `0x${r}`, s: `0x${s}`, v: Number(BigInt(v)) } }).serialized;
   };
 }
 
