@@ -28,6 +28,7 @@ import { phantomWallet } from "@swapkit/wallets/phantom";
 import { talismanWallet } from "@swapkit/wallets/talisman";
 import { trezorWallet } from "@swapkit/wallets/trezor";
 import { tronlinkWallet } from "@swapkit/wallets/tronlink";
+import { vultisigWallet } from "@swapkit/wallets/vultisig";
 import { walletconnectWallet } from "@swapkit/wallets/walletconnect";
 import { xamanWallet } from "@swapkit/wallets/xaman";
 
@@ -72,6 +73,7 @@ export {
   talismanWallet,
   trezorWallet,
   tronlinkWallet,
+  vultisigWallet,
   walletconnectWallet,
   walletSelectorWallet,
   xamanWallet,
@@ -108,6 +110,7 @@ export const defaultWallets = {
   ...talismanWallet,
   ...trezorWallet,
   ...tronlinkWallet,
+  ...vultisigWallet,
   ...walletSelectorWallet,
   ...walletconnectWallet,
   ...xamanWallet,
