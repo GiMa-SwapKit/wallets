@@ -150,10 +150,9 @@ class EVMLedgerInterface extends AbstractSigner {
     const { Transaction } = await import("ethers");
     await this.createTransportAndLedger();
 
+    const nonce = tx.nonce ?? undefined;
     const transactionCount =
-      tx.nonce === undefined
-        ? await this.provider?.getTransactionCount(tx.from || (await this.getAddress()))
-        : undefined;
+      nonce === undefined ? await this.provider?.getTransactionCount(tx.from || (await this.getAddress())) : undefined;
 
     const baseTx = {
       chainId: tx.chainId || this.chainId,
@@ -162,7 +161,7 @@ class EVMLedgerInterface extends AbstractSigner {
       ...(tx.gasPrice && { gasPrice: tx.gasPrice }),
       ...(!tx.gasPrice &&
         tx.maxFeePerGas && { maxFeePerGas: tx.maxFeePerGas, maxPriorityFeePerGas: tx.maxPriorityFeePerGas }),
-      nonce: tx.nonce !== undefined ? Number(tx.nonce.toString()) : transactionCount,
+      nonce: nonce !== undefined ? Number(nonce.toString()) : transactionCount,
       to: tx.to?.toString(),
       type: tx.type && !Number.isNaN(tx.type) ? tx.type : tx.maxFeePerGas ? 2 : 0,
       value: tx.value,
