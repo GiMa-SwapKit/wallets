@@ -28,7 +28,6 @@ import { createWallet, getWalletSupportedChains, type HardwareExtendedPublicKeyI
 
 type TrezorBip32Derivation = [Uint8Array, { fingerprint: number; path: number[] }];
 type TrezorCoreMode = "auto" | "iframe" | "popup" | "suite-desktop" | "suite-web";
-type TrezorConnectEnv = "electron" | "node" | "react-native" | "web" | "webextension";
 type TrezorTransport = "BridgeTransport" | "WebUsbTransport" | "NodeUsbTransport";
 type ConnectTrezorOptions = { address?: string };
 type TrezorAccountRefTransaction = { details: Record<string, never>; hex: string; txid: string };
@@ -44,7 +43,6 @@ type TrezorExtendedPublicKeyInfo = {
 };
 
 const TREZOR_CORE_MODES = new Set<TrezorCoreMode>(["auto", "iframe", "popup", "suite-desktop", "suite-web"]);
-const TREZOR_CONNECT_ENVS = new Set<TrezorConnectEnv>(["electron", "node", "react-native", "web", "webextension"]);
 const TREZOR_TRANSPORTS = new Set<TrezorTransport>(["BridgeTransport", "WebUsbTransport", "NodeUsbTransport"]);
 const DEFAULT_TREZOR_MANIFEST = { appName: "SwapKit", appUrl: "https://swapkit.dev", email: "support@swapkit.dev" };
 const DEFAULT_TREZOR_TRANSPORTS = ["WebUsbTransport" as const];
@@ -85,12 +83,6 @@ function normalizeTrezorCoreMode(coreMode: unknown): TrezorCoreMode | undefined 
     : undefined;
 }
 
-function normalizeTrezorConnectEnv(env: unknown): TrezorConnectEnv | undefined {
-  return typeof env === "string" && TREZOR_CONNECT_ENVS.has(env as TrezorConnectEnv)
-    ? (env as TrezorConnectEnv)
-    : undefined;
-}
-
 function normalizeTrezorTransports(transports: unknown): TrezorTransport[] | undefined {
   if (!Array.isArray(transports)) return undefined;
 
@@ -120,7 +112,6 @@ async function initTrezorConnect() {
     connectSrc,
     coreMode,
     debug,
-    env,
     interactionTimeout,
     lazyLoad,
     pendingTransportEvent,
@@ -138,7 +129,6 @@ async function initTrezorConnect() {
   const isLocalhost =
     typeof globalThis.location !== "undefined" && ["localhost", "127.0.0.1"].includes(globalThis.location.hostname);
   const resolvedCoreMode = normalizeTrezorCoreMode(coreMode) ?? "popup";
-  const resolvedEnv = normalizeTrezorConnectEnv(env) ?? (isLocalhost ? "web" : undefined);
   const resolvedTransports = normalizeTrezorTransports(transports) ?? DEFAULT_TREZOR_TRANSPORTS;
 
   if (trezorSessionDispose) {
@@ -153,7 +143,6 @@ async function initTrezorConnect() {
     connectSrc: connectSrc as string | undefined,
     coreMode: resolvedCoreMode,
     debug: debug as boolean | undefined,
-    ...(resolvedEnv ? ({ env: resolvedEnv } as Record<string, unknown>) : {}),
     interactionTimeout: interactionTimeout as number | undefined,
     lazyLoad: (lazyLoad as boolean | undefined) ?? false,
     manifest,
@@ -1335,7 +1324,6 @@ export const trezorWallet = createWallet({
         connectSrc,
         coreMode,
         debug,
-        env,
         interactionTimeout,
         lazyLoad,
         pendingTransportEvent,
@@ -1353,7 +1341,6 @@ export const trezorWallet = createWallet({
       const isLocalhost =
         typeof globalThis.location !== "undefined" && ["localhost", "127.0.0.1"].includes(globalThis.location.hostname);
       const resolvedCoreMode = normalizeTrezorCoreMode(coreMode) ?? "popup";
-      const resolvedEnv = normalizeTrezorConnectEnv(env) ?? (isLocalhost ? "web" : undefined);
       const resolvedTransports = normalizeTrezorTransports(transports) ?? DEFAULT_TREZOR_TRANSPORTS;
 
       if (trezorSessionDispose) {
@@ -1368,7 +1355,6 @@ export const trezorWallet = createWallet({
         connectSrc: connectSrc as string | undefined,
         coreMode: resolvedCoreMode,
         debug: debug as boolean | undefined,
-        ...(resolvedEnv ? ({ env: resolvedEnv } as Record<string, unknown>) : {}),
         interactionTimeout: interactionTimeout as number | undefined,
         lazyLoad: (lazyLoad as boolean | undefined) ?? false,
         manifest,
