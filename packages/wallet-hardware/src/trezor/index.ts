@@ -150,7 +150,7 @@ async function initTrezorConnect() {
     popup: (popup as boolean | undefined) ?? true,
     transportReconnect: transportReconnect as boolean | undefined,
     transports: resolvedTransports,
-  } as Parameters<typeof TrezorConnect.init>[0]);
+  });
 
   return { coreMode: resolvedCoreMode, isLocalhost, popup: (popup as boolean | undefined) ?? true, TrezorConnect };
 }
@@ -1362,7 +1362,7 @@ export const trezorWallet = createWallet({
         popup: (popup as boolean | undefined) ?? true,
         transportReconnect: transportReconnect as boolean | undefined,
         transports: resolvedTransports,
-      } as Parameters<typeof TrezorConnect.init>[0]);
+      });
 
       const wallet = await getTrezorWallet({ address, chain, derivationPath });
 
