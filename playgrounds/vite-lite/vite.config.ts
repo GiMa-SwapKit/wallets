@@ -76,6 +76,8 @@ export default defineConfig({
   plugins: [nodePolyfills({ globals: { Buffer: true, global: true, process: true } }), react()],
   resolve: {
     alias: [
+      { find: "@noble/curves/ed25519", replacement: resolve(workspaceRoot, "node_modules/@noble/curves/ed25519.js") },
+      { find: "@noble/hashes/utils", replacement: resolve(workspaceRoot, "node_modules/@noble/hashes/utils.js") },
       { find: "@swapkit/ui/swapkit.css", replacement: swapkitUiCss },
       { find: /^@swapkit\/helpers\/api$/, replacement: swapkitHelpersApi },
       { find: /^@swapkit\/helpers$/, replacement: swapkitHelpers },
