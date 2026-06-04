@@ -1,11 +1,11 @@
 name: Setup
 description: 'Setup JS workflow, install dependencies and cache them'
-author: 'swapkit-dev'
+author: 'swapkit'
 
 inputs:
   npm-token:
-    description: 'NPM token for private @swapkit-dev packages'
-    required: true
+    description: 'NPM token for publishing or private package installs'
+    required: false
 
 runs:
   using: 'composite'
@@ -20,6 +20,7 @@ runs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Configure npm auth
+      if: inputs.npm-token != ''
       shell: bash
       run: echo "//registry.npmjs.org/:_authToken=${{ inputs.npm-token }}" >> .npmrc
 

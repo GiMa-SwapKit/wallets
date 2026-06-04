@@ -1,0 +1,58 @@
+steps:
+  # 1. Install dependencies and build widget
+  - name: 'oven/bun:1'
+    entrypoint: 'bash'
+    env:
+      - 'SWAPKIT_USE_DEV_API=${_USE_DEV_API}'
+    args:
+      - '-c'
+      - |
+        bun install
+        bun run build
+        bun --cwd=packages/ui run build:widget
+
+  # 2. Extract version from package.json
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        VERSION=$$(python3 -c "import json; print(json.load(open('packages/ui/package.json'))['version'])")
+        echo "Deploying widget v$$VERSION"
+        echo "$$VERSION" > /workspace/version.txt
+
+  # 3. Upload to /widget/latest/ (mutable, no cache)
+  - name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gsutil -m rsync -r -d packages/ui/dist/widget gs://${_BUCKET_NAME}/widget/latest
+        gsutil -m setmeta -h "Cache-Control:public, max-age=0, must-revalidate" \
+          "gs://${_BUCKET_NAME}/widget/latest/**"
+
+  # 4. Upload to /widget/v{version}/ (immutable, 1-year cache)
+  - name: 'gcr.io/cloud-builders/gsutil'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        VERSION=$$(cat /workspace/version.txt)
+        if gsutil ls "gs://${_BUCKET_NAME}/widget/v$$VERSION/" >/dev/null 2>&1; then
+          echo "v$$VERSION already exists — skipping (immutable)"
+        else
+          gsutil -m cp -r packages/ui/dist/widget/* "gs://${_BUCKET_NAME}/widget/v$$VERSION/"
+          gsutil -m setmeta -h "Cache-Control:public, immutable, max-age=31536000" \
+            "gs://${_BUCKET_NAME}/widget/v$$VERSION/**"
+          echo "Deployed v$$VERSION"
+        fi
+
+substitutions:
+  _BUCKET_NAME: 'swapkit-widget-cdn-dev'
+  _USE_DEV_API: 'true'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_32'
+
+timeout: '1200s'

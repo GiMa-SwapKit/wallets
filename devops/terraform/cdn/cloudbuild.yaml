@@ -1,0 +1,45 @@
+# Deploy Widget CDN infrastructure
+# Manages GCS bucket, Cloud CDN, load balancer, and SSL
+
+steps:
+  # Initialize Terraform
+  - name: 'hashicorp/terraform:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        cd devops/terraform/cdn/${_PROJECT_ID}
+        terraform init
+    env:
+      - 'TF_IN_AUTOMATION=true'
+
+  # Refresh Terraform state to sync with GCP actual resources
+  - name: 'hashicorp/terraform:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        cd devops/terraform/cdn/${_PROJECT_ID}
+        terraform apply -refresh-only -auto-approve
+    env:
+      - 'TF_IN_AUTOMATION=true'
+
+  # Apply Terraform configuration
+  - name: 'hashicorp/terraform:latest'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        cd devops/terraform/cdn/${_PROJECT_ID}
+        terraform apply -auto-approve
+    env:
+      - 'TF_IN_AUTOMATION=true'
+
+substitutions:
+  _PROJECT_ID: 'sk-ui-dev'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+timeout: '900s'

@@ -1,0 +1,116 @@
+name: Update SwapKit Dependencies
+env:
+  SWAPKIT_DEV_AUTH_TOKEN: ${{ secrets.SWAPKIT_DEV_AUTH_TOKEN }}
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Every weekday at 10:00 UTC
+    - cron: "0 10 * * 1-5"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Setup Repo
+        uses: ./tools/github/setup-repo
+
+      - name: Update @swapkit/* packages
+        id: update
+        run: |
+          # Collect workspace package names so we can exclude them from the update
+          workspace_names=$(jq -r '.name // empty' packages/*/package.json | grep '^@swapkit/' || true)
+
+          # Collect all @swapkit/* dependency names, excluding workspace packages themselves
+          all_deps=$(grep -roh '"@swapkit/[^"]*"' packages/*/package.json | tr -d '"' | sort -u)
+          if [ -n "$workspace_names" ]; then
+            packages=$(echo "$all_deps" | grep -vxFf <(echo "$workspace_names") | tr '\n' ' ')
+          else
+            packages=$(echo "$all_deps" | tr '\n' ' ')
+          fi
+
+          if [ -z "$packages" ]; then
+            echo "No @swapkit/* packages found"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "Updating: $packages"
+
+          # bun update doesn't support globs, pass explicit package names
+          # shellcheck disable=SC2086
+          bun update --latest $packages
+
+          # Check if anything changed
+          if git diff --quiet -- packages/*/package.json bun.lock; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No @swapkit/* updates available"
+            exit 0
+          fi
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+          # Build a summary of what changed
+          {
+            echo "summary<<SUMMARY_EOF"
+            for pkg_json in packages/*/package.json; do
+              pkg_diff=$(git diff -- "$pkg_json" | grep '@swapkit/' || true)
+              if [ -n "$pkg_diff" ]; then
+                pkg_name=$(basename "$(dirname "$pkg_json")")
+                echo "**$pkg_name:**"
+                echo '```diff'
+                echo "$pkg_diff"
+                echo '```'
+                echo ""
+              fi
+            done
+            echo "SUMMARY_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create PR
+        if: steps.update.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          branch="chore/update-swapkit-deps-$(date +%Y%m%d)"
+
+          git config user.email "swapkit@users.noreply.github.com"
+          git config user.name "swapkit"
+
+          git checkout -b "$branch"
+          git add packages/*/package.json bun.lock
+          git commit -m "chore(deps): update @swapkit/* packages"
+          git push -u origin "$branch"
+
+          # Close any stale update PRs
+          existing_prs=$(gh pr list --search "chore/update-swapkit-deps- in:title" --state open --json number --jq '.[].number' || true)
+          for pr in $existing_prs; do
+            gh pr close "$pr" --comment "Superseded by newer dependency update"
+          done
+
+          gh pr create \
+            --base develop \
+            --head "$branch" \
+            --title "chore(deps): update @swapkit/* packages" \
+            --body "$(cat <<'PREOF'
+          ## SwapKit Dependency Update
+
+          Automated bump of `@swapkit/*` packages to latest versions.
+
+          ### Changes
+
+          ${{ steps.update.outputs.summary }}
+
+          ---
+          > CI will validate build, lint, and types on this PR.
+          PREOF
+          )"

@@ -1,0 +1,15 @@
+name: widget-cdn-deploy-prod
+description: Build and deploy widget assets to CDN (production)
+filename: devops/cloudbuild/widget-cdn-deploy.yaml
+substitutions:
+  _BUCKET_NAME: swapkit-widget-cdn-prod
+  _USE_DEV_API: 'false'
+repositoryEventConfig:
+  repository: projects/sk-ui-prod/locations/us-central1/connections/sk/repositories/swapkit-wallets
+  repositoryType: GITHUB
+  push:
+    branch: ^main$
+includedFiles:
+  - packages/ui/**
+  - devops/cloudbuild/widget-cdn-deploy.yaml
+serviceAccount: projects/sk-ui-prod/serviceAccounts/cloudbuild@sk-ui-prod.iam.gserviceaccount.com

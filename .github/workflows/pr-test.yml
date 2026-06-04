@@ -1,0 +1,30 @@
+name: PR Test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build-lint-test:
+    if: github.event_name != 'pull_request' || contains(github.event.pull_request.title, ':tada:') == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Repo
+        uses: ./tools/github/setup-repo
+
+      - run: bun build:ci
+      - run: bun lint
+      - run: bun type-check:ci
+
+      # - name: Test
+      #   run: bun test:ci

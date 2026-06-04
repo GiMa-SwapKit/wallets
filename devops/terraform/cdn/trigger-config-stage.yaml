@@ -1,0 +1,14 @@
+name: widget-cdn-infrastructure-stage
+description: Deploy Widget CDN infrastructure (staging) on Terraform changes
+filename: devops/terraform/cdn/cloudbuild.yaml
+substitutions:
+  _PROJECT_ID: sk-ui-stage
+repositoryEventConfig:
+  repository: projects/sk-ui-stage/locations/us-central1/connections/sk/repositories/swapkit-wallets
+  repositoryType: GITHUB
+  push:
+    branch: ^staging$
+includedFiles:
+  - devops/terraform/cdn/sk-ui-stage/**
+  - devops/terraform/cdn/cloudbuild.yaml
+serviceAccount: projects/sk-ui-stage/serviceAccounts/cloudbuild@sk-ui-stage.iam.gserviceaccount.com

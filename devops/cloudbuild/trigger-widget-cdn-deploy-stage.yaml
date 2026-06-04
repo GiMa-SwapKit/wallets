@@ -1,0 +1,15 @@
+name: widget-cdn-deploy-stage
+description: Build and deploy widget assets to CDN (staging)
+filename: devops/cloudbuild/widget-cdn-deploy.yaml
+substitutions:
+  _BUCKET_NAME: swapkit-widget-cdn-stage
+  _USE_DEV_API: 'false'
+repositoryEventConfig:
+  repository: projects/sk-ui-stage/locations/us-central1/connections/sk/repositories/swapkit-wallets
+  repositoryType: GITHUB
+  push:
+    branch: ^staging$
+includedFiles:
+  - packages/ui/**
+  - devops/cloudbuild/widget-cdn-deploy.yaml
+serviceAccount: projects/sk-ui-stage/serviceAccounts/cloudbuild@sk-ui-stage.iam.gserviceaccount.com

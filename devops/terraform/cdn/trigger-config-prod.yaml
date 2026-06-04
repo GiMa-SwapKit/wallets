@@ -1,0 +1,14 @@
+name: widget-cdn-infrastructure-prod
+description: Deploy Widget CDN infrastructure (production) on Terraform changes
+filename: devops/terraform/cdn/cloudbuild.yaml
+substitutions:
+  _PROJECT_ID: sk-ui-prod
+repositoryEventConfig:
+  repository: projects/sk-ui-prod/locations/us-central1/connections/sk/repositories/swapkit-wallets
+  repositoryType: GITHUB
+  push:
+    branch: ^main$
+includedFiles:
+  - devops/terraform/cdn/sk-ui-prod/**
+  - devops/terraform/cdn/cloudbuild.yaml
+serviceAccount: projects/sk-ui-prod/serviceAccounts/cloudbuild@sk-ui-prod.iam.gserviceaccount.com
