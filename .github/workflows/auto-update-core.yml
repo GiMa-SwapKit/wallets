@@ -72,36 +72,10 @@ jobs:
 
       - name: Create changeset
         shell: bash
-        run: |
-          UPDATES=$(echo '${{ toJson(github.event.client_payload.packages) }}' | jq -r '.[] | "\(.name)@\(.version)"' | tr '\n' ', ' | sed 's/,$//')
-
-          mkdir -p .changeset
-          CHANGESET_ID="core-update-$(date +%s)"
-
-          # Determine which packages need a patch bump
-          BUMPS=""
-          for pkg_json in packages/*/package.json; do
-            PKG_NAME=$(jq -r '.name' "$pkg_json")
-            # Check if any updated core dep is in this package
-            for row in $(echo '${{ toJson(github.event.client_payload.packages) }}' | jq -c '.[]'); do
-              DEP=$(echo "$row" | jq -r '.name')
-              if jq -e ".dependencies[\"$DEP\"] // .devDependencies[\"$DEP\"]" "$pkg_json" > /dev/null 2>&1; then
-                BUMPS="$BUMPS
-          '$PKG_NAME': patch"
-                break
-              fi
-            done
-          done
-
-          cat > ".changeset/$CHANGESET_ID.md" << EOF
-          ---
-          $BUMPS
-          ---
-
-          Update core dependencies: $UPDATES
-          EOF
-
-          echo "📝 Created changeset for: $BUMPS"
+        env:
+          # Read the (enriched) SDK CHANGELOGs to describe the real underlying changes.
+          SDK_READ_TOKEN: ${{ secrets.SDK_READ_TOKEN }}
+        run: bun run tools/generate-dep-changeset.ts
 
       - name: Check for changes
         id: changes
