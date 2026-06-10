@@ -21,7 +21,9 @@
     "zod": "4.4.3"
   },
   "name": "swapkit-wallets",
-  "overrides": { "nuqs": "2.8.9" },
+  "overrides": {
+    "nuqs": "2.8.9"
+  },
   "packageManager": "bun@1.3.4",
   "private": true,
   "scripts": {
@@ -29,7 +31,9 @@
     "build:ci": "bun run build && bun run build:dts",
     "build:clean": "bun run --filter './packages/*' build:clean",
     "build:dts": "bun run ./tools/builder/dts.ts",
+    "announce:release": "bun run ./tools/announce-release.ts",
     "changeset": "bunx changeset",
+    "generate:dep-changeset": "bun run ./tools/generate-dep-changeset.ts",
     "lint": "bun biome check --fix .",
     "lint:ws": "bunx sherif@latest",
     "postinstall": "bun lint:ws",
@@ -39,5 +43,9 @@
     "type-check:ci": "bun run --filter './packages/*' type-check",
     "version-bump": "bunx changeset version && bun install"
   },
-  "workspaces": ["packages/*", "playgrounds/*", "tools/*"]
+  "workspaces": [
+    "packages/*",
+    "playgrounds/*",
+    "tools/*"
+  ]
 }
