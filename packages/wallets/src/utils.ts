@@ -52,6 +52,7 @@ export async function loadWallet<W extends keyof SKWallets>(walletOption: W): Pr
     .with(WalletOption.TRONLINK, async () => (await import("@swapkit/wallet-extensions/tronlink")).tronlinkWallet)
     .with(WalletOption.WALLET_SELECTOR, async () => (await import("./near-wallet-selector")).walletSelectorWallet)
     .with(WalletOption.XAMAN, async () => (await import("./xaman")).xamanWallet)
+    .with(WalletOption.TON_CONNECT, async () => (await import("./tonconnect")).tonConnectWallet)
     .exhaustive();
 
   return wallet as SKWallets[W];
