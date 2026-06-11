@@ -26,9 +26,13 @@
         "zod": "4.4.3",
       },
     },
+    "packages/cardano-extensions": {
+      "name": "@swapkit/cardano-extensions",
+      "version": "0.1.0",
+    },
     "packages/sdk": {
       "name": "@swapkit/sdk",
-      "version": "4.6.32",
+      "version": "4.6.33",
       "dependencies": {
         "@stricahq/typhonjs": "~3.0.1",
         "@swapkit/core": "^4.4.37",
@@ -44,7 +48,7 @@
     },
     "packages/wallet-extensions": {
       "name": "@swapkit/wallet-extensions",
-      "version": "4.5.18",
+      "version": "4.5.19",
       "dependencies": {
         "@aptos-labs/ts-sdk": "~1.34.0",
         "@cosmjs/amino": "~0.37.0",
@@ -84,7 +88,7 @@
     },
     "packages/wallet-hardware": {
       "name": "@swapkit/wallet-hardware",
-      "version": "4.9.19",
+      "version": "4.9.20",
       "dependencies": {
         "@cosmjs/amino": "~0.37.0",
         "@cosmjs/crypto": "0.37.0",
@@ -152,7 +156,7 @@
     },
     "packages/wallet-mobile": {
       "name": "@swapkit/wallet-mobile",
-      "version": "4.3.12",
+      "version": "4.3.13",
       "dependencies": {
         "@swapkit/helpers": "^4.14.1",
         "@swapkit/toolboxes": "^4.17.5",
@@ -161,7 +165,7 @@
     },
     "packages/wallets": {
       "name": "@swapkit/wallets",
-      "version": "4.8.24",
+      "version": "4.8.25",
       "dependencies": {
         "@coinbase/wallet-sdk": "~4.3.7",
         "@cosmjs/amino": "~0.37.0",
@@ -1085,6 +1089,8 @@
     "@substrate/light-client-extension-helpers": ["@substrate/light-client-extension-helpers@1.0.0", "", { "dependencies": { "@polkadot-api/json-rpc-provider": "^0.0.1", "@polkadot-api/json-rpc-provider-proxy": "^0.1.0", "@polkadot-api/observable-client": "^0.3.0", "@polkadot-api/substrate-client": "^0.1.2", "@substrate/connect-extension-protocol": "^2.0.0", "@substrate/connect-known-chains": "^1.1.5", "rxjs": "^7.8.1" }, "peerDependencies": { "smoldot": "2.x" } }, "sha512-TdKlni1mBBZptOaeVrKnusMg/UBpWUORNDv5fdCaJklP4RJiFOzBCrzC+CyVI5kQzsXBisZ+2pXm+rIjS38kHg=="],
 
     "@substrate/ss58-registry": ["@substrate/ss58-registry@1.51.0", "", {}, "sha512-TWDurLiPxndFgKjVavCniytBIw+t4ViOi7TYp9h/D0NMmkEc9klFTo+827eyEJ0lELpqO207Ey7uGxUa+BS1jQ=="],
+
+    "@swapkit/cardano-extensions": ["@swapkit/cardano-extensions@workspace:packages/cardano-extensions"],
 
     "@swapkit/contracts": ["@swapkit/contracts@4.1.5", "", {}, "sha512-0OZ+A4d68XIoqXWxZL10ahF+MKuT2J215oeeJZB1bAk5mu9oBfl1qeBl6IWbp1RnKMcpecm5K2hTGlCsKpR+TQ=="],
 
