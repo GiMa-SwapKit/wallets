@@ -19,8 +19,6 @@ jobs:
 
       - name: Setup Repo
         uses: ./tools/github/setup-repo
-        with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
 
       - run: bun build:ci
       - run: bun lint
@@ -46,8 +44,6 @@ jobs:
 
       - name: Setup Repo
         uses: ./tools/github/setup-repo
-        with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Setup Node with working npm
         uses: actions/setup-node@v4
