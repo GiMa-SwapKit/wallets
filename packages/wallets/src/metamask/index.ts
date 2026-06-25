@@ -94,6 +94,13 @@ const makeEip1193ForScope = (client: MultichainClient, scope: string, address: s
           return Promise.resolve([address]);
         case "eth_chainId":
           return Promise.resolve(chainIdHex);
+        // In a CAIP-25 session the scope already pins the chain; there is no
+        // single "active chain" to switch. prepareNetworkSwitch (always applied
+        // by getWeb3WalletMethods) must never forward a switch/add into the
+        // multichain session, so answer these locally as no-ops.
+        case "wallet_switchEthereumChain":
+        case "wallet_addEthereumChain":
+          return Promise.resolve(null);
         default:
           return client.invokeMethod({ scope, request: { method, params: params as unknown[] } });
       }
