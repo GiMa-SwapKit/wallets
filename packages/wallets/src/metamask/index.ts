@@ -1,5 +1,5 @@
 import {
-  type Chain,
+  Chain,
   type EVMChain,
   EVMChains,
   filterSupportedChains,
@@ -25,7 +25,7 @@ import type { Eip1193Provider } from "ethers";
 // Solana mainnet CAIP-2 id (MetaMask multichain "supported chains").
 const SOLANA_MAINNET_CAIP2 = "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp";
 
-const EVM_CHAIN_SET = new Set<Chain>(EVMChains as Chain[]);
+const EVM_CHAIN_SET = new Set<Chain>(EVMChains);
 const isEVMChain = (chain: Chain): chain is EVMChain => EVM_CHAIN_SET.has(chain);
 
 // SwapKit Chain -> CAIP-2 scope.
@@ -34,7 +34,7 @@ const chainToScope = (chain: Chain): string => {
     return `eip155:${Number.parseInt(getChainConfig(chain).chainIdHex, 16)}`;
   }
   switch (chain) {
-    case ("Solana" as Chain):
+    case Chain.Solana:
       return SOLANA_MAINNET_CAIP2;
     default:
       throw new SwapKitError("wallet_chain_not_supported", { chain });
@@ -200,8 +200,10 @@ export const metamaskWallet = createWallet({
 
       return true;
     },
+  directSigningSupport: Object.fromEntries([...EVMChains, Chain.Solana].map((chain) => [chain, true])),
+  name: "connectMetamask",
   // EVM + Solana under one session. Widen further as non-EVM adapters land.
-  supportedChains: [...EVMChains, "Solana" as Chain] as EVMChain[],
+  supportedChains: [...EVMChains, Chain.Solana],
   walletType: WalletOption.METAMASK,
 });
 
