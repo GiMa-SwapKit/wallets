@@ -1,12 +1,18 @@
 import { SwapKitError } from "@swapkit/helpers";
 import type { TONTransactionInput } from "@swapkit/toolboxes/ton";
-import { type Account, CHAIN, type TonConnectUI, toUserFriendlyAddress } from "@tonconnect/ui";
+// Type-only: @tonconnect/ui's module init requires localStorage/DOM, so every
+// value import from it must stay behind a dynamic import (SSR/node consumers
+// and the bun test runner crash on an eager load).
+import type { Account, CHAIN, TonConnectUI } from "@tonconnect/ui";
 import type { TonConnectConfig } from "./types";
 
 const DEFAULT_VALID_SECONDS = 300;
 // SendMode.CARRY_ALL_REMAINING_BALANCE — cannot be expressed over TON Connect,
 // where the wallet chooses the send mode (typically PAY_GAS_SEPARATELY + IGNORE_ERRORS).
 const CARRY_ALL_REMAINING_BALANCE = 128;
+// CHAIN.MAINNET from @tonconnect/protocol; inlined so this module never loads
+// @tonconnect/ui at evaluation time.
+const TON_MAINNET = "-239" as CHAIN.MAINNET;
 
 let sharedInstance: TonConnectUI | undefined;
 
@@ -29,7 +35,7 @@ export async function getTonConnectInstance(config: TonConnectConfig = {}): Prom
   try {
     // Abort connections coming from a non-mainnet wallet early. Only possible
     // before a connection is established, hence the try/catch around restore races.
-    tonConnectUI.setConnectionNetwork(CHAIN.MAINNET);
+    tonConnectUI.setConnectionNetwork(TON_MAINNET);
   } catch {
     // A session was already restored — the network is validated in connectTonConnect instead.
   }
@@ -76,14 +82,16 @@ export async function connectTonConnect(tonConnectUI: TonConnectUI): Promise<str
           });
         });
 
-  if (account.chain !== CHAIN.MAINNET) {
+  if (account.chain !== TON_MAINNET) {
     await tonConnectUI.disconnect().catch(() => undefined);
     throw new SwapKitError("wallet_chain_not_supported", { chain: account.chain, wallet: "TON Connect" });
   }
 
   // TON Connect exposes the address in raw `<workchain>:<hex>` form;
-  // convert to the user-friendly non-bounceable base64url form (UQ…).
-  return toUserFriendlyAddress(account.address);
+  // convert to the user-friendly non-bounceable base64url form (UQ…) —
+  // wallet (account) addresses are non-bounceable by TEP-2 convention.
+  const { Address } = await import("@ton/core");
+  return Address.parse(account.address).toString({ bounceable: false, urlSafe: true });
 }
 
 // TON Connect wallets reject raw `0:<hex>` destinations — normalize to TEP-2 friendly form.
@@ -136,7 +144,7 @@ export async function sendTonConnectTransaction({
       payload,
       stateInit,
     })),
-    network: CHAIN.MAINNET,
+    network: TON_MAINNET,
     validUntil: Math.floor(Date.now() / 1000) + validSeconds,
   });
 
