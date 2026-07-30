@@ -11,7 +11,12 @@ const CARRY_ALL_REMAINING_BALANCE = 128;
 let sharedInstance: TonConnectUI | undefined;
 
 export async function getTonConnectInstance(config: TonConnectConfig = {}): Promise<TonConnectUI> {
-  if (config.instance) return config.instance;
+  if (config.instance) {
+    // Remember injected instances (e.g. from @tonconnect/ui-react) so later
+    // config-less calls reuse them instead of demanding a manifestUrl.
+    sharedInstance = config.instance;
+    return config.instance;
+  }
   if (sharedInstance) return sharedInstance;
 
   if (!config.manifestUrl) {
@@ -82,8 +87,15 @@ export async function connectTonConnect(tonConnectUI: TonConnectUI): Promise<str
 }
 
 // TON Connect wallets reject raw `0:<hex>` destinations — normalize to TEP-2 friendly form.
-function toFriendlyAddress(address: string) {
-  return address.includes(":") ? toUserFriendlyAddress(address) : address;
+// The bounce flag travels inside the friendly address, so the conversion must preserve the
+// TON toolbox's convention (raw-form destinations default to bounceable=true, refunding
+// failed contract sends). @tonconnect/sdk's toUserFriendlyAddress can only emit the
+// non-bounceable form and must not be used here; already-friendly addresses keep the
+// caller's explicit flag untouched.
+export function toFriendlyDestination(address: string, AddressCtor: typeof import("@ton/core").Address) {
+  return AddressCtor.isFriendly(address)
+    ? address
+    : AddressCtor.parse(address).toString({ bounceable: true, urlSafe: true });
 }
 
 export async function sendTonConnectTransaction({
@@ -96,7 +108,9 @@ export async function sendTonConnectTransaction({
   validSeconds?: number;
 }): Promise<string> {
   const messages = Array.isArray(transaction) ? transaction : transaction.messages;
-  const sendMode = Array.isArray(transaction) ? undefined : transaction.sendMode;
+  // The legacy bare-array shape carries sendMode per message (the toolbox reads
+  // messages[0].sendMode the same way) — the sweep guard must see it too.
+  const sendMode = Array.isArray(transaction) ? transaction[0]?.sendMode : transaction.sendMode;
 
   if (!messages.length) {
     throw new SwapKitError("wallet_missing_params", { param: "messages", wallet: "TON Connect" });
@@ -113,9 +127,11 @@ export async function sendTonConnectTransaction({
     throw new SwapKitError("core_wallet_connection_not_found");
   }
 
+  const { Address, Cell } = await import("@ton/core");
+
   const { boc } = await tonConnectUI.sendTransaction({
     messages: messages.map(({ address, amount, payload, stateInit }) => ({
-      address: toFriendlyAddress(address),
+      address: toFriendlyDestination(address, Address),
       amount,
       payload,
       stateInit,
@@ -126,6 +142,5 @@ export async function sendTonConnectTransaction({
 
   // Same hash the TON toolbox returns from broadcastTransaction:
   // the hash of the signed external message cell.
-  const { Cell } = await import("@ton/core");
   return Cell.fromBase64(boc).hash().toString("hex");
 }

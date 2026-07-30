@@ -1,5 +1,8 @@
 import { Chain, filterSupportedChains, WalletOption } from "@swapkit/helpers";
 import { createWallet, getWalletSupportedChains } from "@swapkit/wallet-core";
+// Deep importers of @swapkit/wallets/tonconnect need the registration too;
+// the module cache keeps this idempotent with the eager import in utils.ts.
+import "./register";
 import { getWalletForChain } from "./helpers";
 import type { TonConnectConfig } from "./types";
 import { connectTonConnect, getTonConnectInstance } from "./walletMethods";

@@ -1,4 +1,4 @@
-import { Chain, type GenericTransferParams, SwapKitError } from "@swapkit/helpers";
+import { AssetValue, Chain, type GenericTransferParams, SwapKitError } from "@swapkit/helpers";
 import type { TONTransactionInput } from "@swapkit/toolboxes/ton";
 import type { TonConnectUI } from "@tonconnect/ui";
 import { match } from "ts-pattern";
@@ -28,8 +28,13 @@ export function getWalletForChain({ address, chain, config, tonConnectUI }: GetW
         return signAndBroadcastTransaction(transaction);
       };
 
-      const estimateTransactionFee = (params: GenericTransferParams) =>
-        toolbox.estimateTransactionFee({ ...params, sender: address });
+      const estimateTransactionFee = ({ assetValue }: GenericTransferParams) => {
+        // The signerless toolbox's estimateTransactionFee needs a configured wallet
+        // and silently falls back to a flat 0.01 TON when getWallet() throws — badly
+        // underestimating jettons. Mirror the toolbox's own transfer budget instead:
+        // jettons attach ~0.05 TON gas + 0.01 TON forward, native transfers ~0.01 TON.
+        return Promise.resolve(AssetValue.from({ chain: Chain.Ton, value: assetValue.isGasAsset ? "0.01" : "0.06" }));
+      };
 
       return {
         ...toolbox,
